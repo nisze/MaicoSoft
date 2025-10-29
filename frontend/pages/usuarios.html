@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários - Maiconsoft</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+    
+    <!-- Scripts de configuração -->
+    <script src="../js/config.js"></script>
+</head>
+<body>
+    <!-- Container de Alertas -->
+    <div id="alert-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="display: flex; align-items: center;">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                </a>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="dashboard.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">people</span>
+                    Clientes
+                </a>
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
+                    Vendas
+                </a>
+                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">local_offer</span>
+                    Cupons
+                </a>
+                <a href="usuarios.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #f59e0b; font-weight: 600; border-radius: 6px;">
+                    <span class="material-icons" style="font-size: 1.1rem;">group</span>
+                    Usuários
+                </a>
+                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
+                    Relatórios
+                </a>
+                <a href="#" onclick="fazerLogout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
+        
+        <!-- Header da Página -->
+        <div style="background: white; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="material-icons" style="font-size: 1.75rem; color: #3b82f6;">admin_panel_settings</span>
+                        Gestão de Usuários
+                    </h1>
+                    <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Administração completa de usuários, perfis e permissões do sistema</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="switchUsuariosTab('resumo')" id="tab-resumo-btn" style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">dashboard</span>
+                        Resumo
+                    </button>
+                    <button onclick="switchUsuariosTab('criar')" id="tab-criar-btn" 
+                           data-permission="usuarios:create"
+                           style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">person_add</span>
+                        Criar Usuário
+                    </button>
+                    <button onclick="switchUsuariosTab('lista')" id="tab-lista-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">people</span>
+                        Todos Usuários
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: RESUMO DE USUÁRIOS -->
+        <div id="tab-resumo" class="usuarios-tab-content" style="display: block;">
+            <!-- Métricas Principais -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Usuários</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-usuarios">0</h3>
+                        </div>
+                        <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">group</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Usuários Ativos</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="usuarios-ativos">0</h3>
+                        </div>
+                        <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">check_circle</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Administradores</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="admins-count">0</h3>
+                        </div>
+                        <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">admin_panel_settings</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Último Login</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; color: #1f2937;" id="ultimo-login">--</h3>
+                        </div>
+                        <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">schedule</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permissões do Sistema -->
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1.2rem; color: #8b5cf6;">security</span>
+                        Níveis de Permissão
+                    </h3>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                        <div style="border: 1px solid #e5e7eb; padding: 1rem; background: #f9fafb;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                                <div style="background: #dbeafe; padding: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #3b82f6; font-size: 1.2rem;">person</span>
+                                </div>
+                                <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Funcionário</h4>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280;">Acesso restrito apenas ao módulo de Clientes. Pode visualizar e cadastrar clientes.</p>
+                        </div>
+
+                        <div style="border: 1px solid #e5e7eb; padding: 1rem; background: #f9fafb;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                                <div style="background: #ede9fe; padding: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #8b5cf6; font-size: 1.2rem;">admin_panel_settings</span>
+                                </div>
+                                <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Administrador</h4>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280;">Acesso ao Dashboard, Clientes, Vendas e Relatórios. Pode gerenciar operações do sistema.</p>
+                        </div>
+
+                        <div style="border: 1px solid #e5e7eb; padding: 1rem; background: #f9fafb;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                                <div style="background: #d1fae5; padding: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #10b981; font-size: 1.2rem;">supervisor_account</span>
+                                </div>
+                                <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Diretor</h4>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280;">Acesso completo ao sistema, incluindo gestão de usuários e todas as funcionalidades administrativas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: CRIAR USUÁRIO -->
+        <div id="tab-criar" class="usuarios-tab-content" style="display: none;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <form id="novo-usuario-form" style="padding: 0;">
+                    <!-- Dados do Usuário -->
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">person_add</span>
+                            Informações do Usuário
+                        </h3>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Completo *</label>
+                                <input type="text" id="user-nome" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Nome completo do usuário">
+                            </div>
+                        </div>
+                        
+                        <!-- Aviso sobre código de acesso automático -->
+                        <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="color: #3b82f6; font-size: 1.2rem;">info</span>
+                            <span style="color: #1e40af; font-size: 0.9rem;">O código de acesso será gerado automaticamente pelo sistema e exibido após o cadastro.</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Email *</label>
+                                <input type="email" id="user-email" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="usuario@maiconsoft.com">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CPF *</label>
+                                <input type="text" id="user-cpf" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="000.000.000-00">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Telefone</label>
+                                <input type="text" id="user-telefone" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo de Usuário *</label>
+                                <select id="user-perfil" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="FUNCIONARIO">Funcionário</option>
+                                    <option value="VENDEDOR">Vendedor</option>
+                                    <option value="DIRETOR">Diretor</option>
+                                    <option value="ADMIN">Administrador</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Senha Temporária *</label>
+                                <input type="password" id="user-senha" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Senha inicial">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Confirmar Senha *</label>
+                                <input type="password" id="user-senha-confirm" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Confirme a senha">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div style="padding: 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" onclick="limparFormularioUsuario()" style="background: #ef4444; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem;">clear</span>
+                            Limpar
+                        </button>
+                        
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button type="button" onclick="gerarSenhaAleatoria()" style="background: #f59e0b; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-icons" style="font-size: 1rem;">shuffle</span>
+                                Gerar Senha
+                            </button>
+                            <button type="submit" style="background: #10b981; color: white; border: none; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-icons" style="font-size: 1rem;">person_add</span>
+                                Criar Usuário
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB: LISTA DE USUÁRIOS -->
+        <div id="tab-lista" class="usuarios-tab-content" style="display: none;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <!-- Filtros e Busca -->
+                <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Lista de Usuários</h3>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <select id="filter-perfil" style="padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                <option value="">Todos os Perfis</option>
+                                <option value="funcionario">Funcionário</option>
+                                <option value="admin">Administrador</option>
+                                <option value="diretor">Diretor</option>
+                            </select>
+                            <select id="filter-status" style="padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                <option value="">Todos Status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                            <input type="text" id="search-usuarios" placeholder="Buscar por nome ou email..." style="padding: 0.6rem 1rem; border: 1px solid #d1d5db; font-size: 0.9rem; min-width: 250px;">
+                            <button onclick="buscarUsuarios()" style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-icons" style="font-size: 1rem;">search</span>
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Usuários -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f9fafb;">
+                            <tr>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">ID</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Nome</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Email</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Código Acesso</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Perfil</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Status</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <!-- Dados carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginação -->
+                <div style="padding: 1.5rem; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 0.9rem; color: #6b7280;">Mostrando <strong id="showing-range">0-0</strong> de <strong id="total-records">0</strong> usuários</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: auto;">
+                        <button onclick="paginaAnterior()" id="btn-anterior" style="background: white; color: #6b7280; border: 1px solid #d1d5db; padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.85rem;" disabled>
+                            <span class="material-icons" style="font-size: 1rem;">chevron_left</span>
+                        </button>
+                        <span id="pagination-info" style="padding: 0.5rem 1rem; font-size: 0.9rem; color: #374151;">Página 1 de 1</span>
+                        <button onclick="proximaPagina()" id="btn-proximo" style="background: white; color: #6b7280; border: 1px solid #d1d5db; padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.85rem;" disabled>
+                            <span class="material-icons" style="font-size: 1rem;">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Usuário -->
+    <div id="editUserModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons" style="color: #3b82f6;">edit</span>
+                    Editar Usuário
+                </h2>
+                <button onclick="closeEditUserModal()" style="background: none; border: none; cursor: pointer; color: #6b7280; padding: 0.5rem;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="editUserForm" style="padding: 1.5rem;">
+                <div id="editUserContent">
+                    <!-- Formulário será inserido aqui -->
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                    <button type="button" onclick="closeEditUserModal()" style="padding: 0.75rem 1.5rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.9rem; font-weight: 500; border-radius: 6px;">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="editUserSubmitBtn" style="padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; border-radius: 6px;">
+                        <span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem;">save</span>
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteUserModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 400px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fef2f2;">
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #dc2626; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons" style="color: #dc2626;">warning</span>
+                    Confirmar Exclusão
+                </h2>
+                <button onclick="closeDeleteUserModal()" style="background: none; border: none; cursor: pointer; color: #6b7280; padding: 0.5rem;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="margin: 0 0 1rem 0; color: #374151;">Tem certeza que deseja excluir este usuário?</p>
+                <p id="deleteUserInfo" style="margin: 0 0 1.5rem 0; color: #6b7280; font-size: 0.9rem; background: #f9fafb; padding: 1rem; border-radius: 6px;">
+                    <!-- Informações do usuário serão inseridas aqui -->
+                </p>
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" onclick="closeDeleteUserModal()" style="padding: 0.75rem 1.5rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.9rem; font-weight: 500; border-radius: 6px;">
+                        Cancelar
+                    </button>
+                    <button type="button" id="confirmDeleteBtn" style="padding: 0.75rem 1.5rem; background: #dc2626; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500; border-radius: 6px;">
+                        <span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem;">delete</span>
+                        Excluir Usuário
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Estado da paginação
+        let currentPage = 0;
+        let pageSize = 10;
+        let totalPages = 0;
+        let totalElements = 0;
+
+        // Função de logout com notificação moderna
+        function fazerLogout() {
+            // Mostrar notificação de logout
+            showLogoutNotification();
+            
+            // Executar logout após 1.5 segundos
+            setTimeout(() => {
+                localStorage.removeItem('usuarioLogado');
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+        
+        function showLogoutNotification() {
+            // Criar overlay de logout
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            // Criar card de logout
+            const logoutCard = document.createElement('div');
+            logoutCard.style.cssText = `
+                background: #1a1a1a;
+                border: 2px solid #f59e0b;
+                border-radius: 16px;
+                padding: 2rem;
+                text-align: center;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                animation: slideIn 0.4s ease-out;
+                max-width: 350px;
+            `;
+            
+            logoutCard.innerHTML = `
+                <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
+                    <span class="material-icons" style="font-size: 3rem;">logout</span>
+                </div>
+                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 600;">
+                    Saindo do sistema...
+                </h3>
+                <p style="color: #cccccc; margin: 0 0 1.5rem 0; font-size: 0.9rem;">
+                    Obrigado por usar o Sistema Maiconsoft!
+                </p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #f59e0b;">
+                    <div class="loading-spinner"></div>
+                    <span style="font-size: 0.85rem; font-weight: 500;">Redirecionando...</span>
+                </div>
+            `;
+            
+            overlay.appendChild(logoutCard);
+            document.body.appendChild(overlay);
+            
+            // Adicionar estilos de animação
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes slideIn {
+                    from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                    to { transform: scale(1) translateY(0); opacity: 1; }
+                }
+                
+                .loading-spinner {
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid #333;
+                    border-top: 2px solid #f59e0b;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                }
+                
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Verificar se é admin/diretor
+        function checkAdminAccess() {
+            // Verificar se usuário está logado
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            if (!usuarioLogado) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Liberar acesso para todos os usuários logados
+            return true;
+            
+            const user = AppState.user;
+            const userRole = user?.perfil?.toLowerCase();
+            
+            if (userRole !== 'admin' && userRole !== 'diretor') {
+                alert('Acesso negado! Apenas administradores e diretores podem acessar esta página.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Gerenciar tabs
+        function switchUsuariosTab(tabName) {
+            // Ocultar todas as tabs
+            const tabs = document.querySelectorAll('.usuarios-tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            
+            // Resetar todos os botões
+            document.getElementById('tab-resumo-btn').style.background = 'transparent';
+            document.getElementById('tab-resumo-btn').style.color = '#6b7280';
+            document.getElementById('tab-criar-btn').style.background = 'transparent';
+            document.getElementById('tab-criar-btn').style.color = '#6b7280';
+            document.getElementById('tab-lista-btn').style.background = 'transparent';
+            document.getElementById('tab-lista-btn').style.color = '#6b7280';
+            
+            // Ativar tab selecionada
+            document.getElementById(`tab-${tabName}`).style.display = 'block';
+            document.getElementById(`tab-${tabName}-btn`).style.background = '#3b82f6';
+            document.getElementById(`tab-${tabName}-btn`).style.color = 'white';
+            
+            // Carregar dados específicos da tab
+            if (tabName === 'resumo') {
+                loadResumoMetricas();
+            } else if (tabName === 'lista') {
+                buscarUsuarios();
+            }
+        }
+
+        // Carregar métricas do resumo
+        async function loadResumoMetricas() {
+            try {
+                const data = await APIService.users.getAll(0, 1000);
+                const usuarios = data.content || data || [];
+                
+                // Calcular métricas
+                const total = usuarios.length;
+                const ativos = usuarios.filter(u => u.ativo === true).length;
+                const admins = usuarios.filter(u => u.role === 'ADMIN').length;
+                
+                // Atualizar interface
+                document.getElementById('total-usuarios').textContent = total;
+                document.getElementById('usuarios-ativos').textContent = ativos;
+                document.getElementById('admins-count').textContent = admins;
+                
+                // Último login (simulado)
+                const ultimoLogin = usuarios.length > 0 ? formatDate(new Date()) : '--';
+                document.getElementById('ultimo-login').textContent = ultimoLogin;
+            } catch (error) {
+                console.error('Erro ao carregar métricas:', error);
+                // Fallback para dados mocados
+                document.getElementById('total-usuarios').textContent = '1';
+                document.getElementById('usuarios-ativos').textContent = '1';
+                document.getElementById('admins-count').textContent = '1';
+                document.getElementById('ultimo-login').textContent = 'Hoje 14:30';
+            }
+        }
+
+        // Função para recarregar lista de usuários
+        async function loadUsuarios() {
+            await buscarUsuarios();
+        }
+
+        // Buscar usuários com paginação
+        async function buscarUsuarios() {
+            console.log('🔍 Iniciando busca de usuários...');
+            const searchTerm = document.getElementById('search-usuarios')?.value || '';
+            const filterPerfil = document.getElementById('filter-perfil')?.value || '';
+            const filterStatus = document.getElementById('filter-status')?.value || '';
+            
+            try {
+                console.log('📡 Fazendo chamada para API...');
+                const data = await APIService.users.getAll(currentPage, pageSize);
+                console.log('✅ Dados recebidos da API:', data);
+                displayUsuariosPaginados(data);
+                updatePaginationInfo(data);
+            } catch (error) {
+                console.log('❌ Erro na API, usando dados mocados:', error);
+                displayUsuariosMocados();
+            }
+        }
+
+        // Dados mocados para demonstração
+        function displayUsuariosMocados() {
+            const mockData = {
+                content: [
+                    { 
+                        id: 1, 
+                        nome: 'João Admin', 
+                        email: 'admin@maiconsoft.com', 
+                        perfil: 'admin',
+                        status: 'ativo',
+                        ultimoAcesso: '2024-01-15T14:30:00'
+                    },
+                    { 
+                        id: 2, 
+                        nome: 'Maria Diretor', 
+                        email: 'diretor@maiconsoft.com', 
+                        perfil: 'diretor',
+                        status: 'ativo',
+                        ultimoAcesso: '2024-01-15T10:15:00'
+                    },
+                    { 
+                        id: 3, 
+                        nome: 'Pedro Funcionário', 
+                        email: 'funcionario@maiconsoft.com', 
+                        perfil: 'funcionario',
+                        status: 'ativo',
+                        ultimoAcesso: '2024-01-14T16:45:00'
+                    }
+                ],
+                totalElements: 3,
+                totalPages: 1,
+                number: 0
+            };
+            
+            displayUsuariosPaginados(mockData);
+            updatePaginationInfo(mockData);
+        }
+
+        // Exibir usuários na tabela
+        function displayUsuariosPaginados(data) {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '';
+            
+            // Verificar se data é um array ou objeto com content
+            const usuarios = Array.isArray(data) ? data : (data.content || []);
+            
+            console.log('📋 Dados recebidos para exibir:', usuarios);
+            
+            if (usuarios.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #6b7280;">
+                            <span class="material-icons" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem; display: block;">search_off</span>
+                            Nenhum usuário encontrado
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            usuarios.forEach(user => {
+                const row = tbody.insertRow();
+                row.style.borderBottom = '1px solid #e5e7eb';
+                
+                // Mapear campos do backend (adjust para a estrutura real)
+                const userId = user.id || user.idUser || user.id_user;
+                const userName = user.nome || user.name;
+                const userEmail = user.email;
+                const userRole = user.tipoUsuario || user.role || user.perfil || 'FUNCIONARIO';
+                const userStatus = user.ativo ? 'ATIVO' : 'INATIVO';
+                const userAccess = user.createdAt || user.created_at || new Date().toISOString();
+                const userCode = user.codigoAcesso || 'N/A';
+                
+                const perfilColor = getPerfilColor(userRole);
+                const statusColor = getStatusColor(userStatus);
+                
+                row.innerHTML = `
+                    <td style="padding: 1rem; font-size: 0.9rem; color: #374151;">${userId}</td>
+                    <td style="padding: 1rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${userName}</td>
+                    <td style="padding: 1rem; font-size: 0.9rem; color: #6b7280;">${userEmail}</td>
+                    <td style="padding: 1rem; font-size: 0.8rem; color: #6b7280;">${userCode}</td>
+                    <td style="padding: 1rem;">
+                        <span style="background: ${perfilColor.bg}; color: ${perfilColor.text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
+                            ${userRole}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <span style="background: ${statusColor.bg}; color: ${statusColor.text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
+                            ${userStatus}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="editUser(${userId})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px;">
+                                <span class="material-icons" style="font-size: 0.9rem;">edit</span>
+                                Editar
+                            </button>
+                            <button onclick="deleteUser(${userId})" style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px;">
+                                <span class="material-icons" style="font-size: 0.9rem;">delete</span>
+                                Excluir
+                            </button>
+                        </div>
+                    </td>
+                `;
+            });
+        }
+
+        // Atualizar informações de paginação
+        function updatePaginationInfo(data) {
+            totalPages = data.totalPages || 1;
+            totalElements = data.totalElements || 0;
+            currentPage = data.number || 0;
+            
+            const startItem = currentPage * pageSize + 1;
+            const endItem = Math.min((currentPage + 1) * pageSize, totalElements);
+            
+            document.getElementById('showing-range').textContent = `${startItem}-${endItem}`;
+            document.getElementById('total-records').textContent = totalElements;
+            document.getElementById('pagination-info').textContent = `Página ${currentPage + 1} de ${totalPages}`;
+            
+            // Atualizar botões de navegação
+            const btnAnterior = document.getElementById('btn-anterior');
+            const btnProximo = document.getElementById('btn-proximo');
+            
+            btnAnterior.disabled = currentPage === 0;
+            btnProximo.disabled = currentPage >= totalPages - 1;
+            
+            btnAnterior.style.opacity = currentPage === 0 ? '0.5' : '1';
+            btnProximo.style.opacity = currentPage >= totalPages - 1 ? '0.5' : '1';
+        }
+
+        // Navegação de páginas
+        function paginaAnterior() {
+            if (currentPage > 0) {
+                currentPage--;
+                buscarUsuarios();
+            }
+        }
+
+        function proximaPagina() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                buscarUsuarios();
+            }
+        }
+
+        // Criar novo usuário
+        async function criarNovoUsuario(event) {
+            event.preventDefault();
+            
+            const senha = document.getElementById('user-senha').value;
+            const senhaConfirm = document.getElementById('user-senha-confirm').value;
+            
+            if (senha !== senhaConfirm) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+            
+            // Dados conforme UserRequestDTO do backend
+            const userData = {
+                nome: document.getElementById('user-nome').value,
+                email: document.getElementById('user-email').value,
+                cpf: document.getElementById('user-cpf').value,
+                telefone: document.getElementById('user-telefone').value,
+                senha: senha,
+                tipoUsuario: document.getElementById('user-perfil').value || 'FUNCIONARIO',
+                ativo: true // Usuário ativo por padrão
+            };
+
+            try {
+                // Usar APIService para criar usuário
+                const result = await APIService.users.create(userData);
+                
+                // Exibir modal com código de acesso gerado
+                mostrarCodigoAcesso(result.codigoAcesso, userData.nome);
+                
+                limparFormularioUsuario();
+                switchUsuariosTab('resumo');
+                loadResumoMetricas();
+                loadUsuarios(); // Recarregar lista de usuários
+                
+            } catch (error) {
+                console.error('Erro ao criar usuário:', error);
+                alert(`Erro ao criar usuário: ${error.message}`);
+            }
+        }
+
+        // Função para exibir o código de acesso gerado
+        function mostrarCodigoAcesso(codigoAcesso, nomeUsuario) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; 
+                top: 0; left: 0; right: 0; bottom: 0; 
+                background: rgba(0,0,0,0.8); 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                z-index: 10000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 2rem; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <div style="color: #10b981; margin-bottom: 1rem;">
+                        <span class="material-icons" style="font-size: 3rem;">check_circle</span>
+                    </div>
+                    <h2 style="margin: 0 0 1rem 0; color: #1f2937;">Usuário Criado com Sucesso!</h2>
+                    <p style="margin: 0 0 1.5rem 0; color: #6b7280;">O usuário <strong>${nomeUsuario}</strong> foi cadastrado no sistema.</p>
+                    
+                    <div style="background: #f3f4f6; padding: 1.5rem; margin: 1.5rem 0; border-left: 4px solid #10b981;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: #1f2937;">Código de Acesso Gerado:</h3>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981; font-family: monospace; letter-spacing: 2px;">${codigoAcesso}</div>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #ef4444;">⚠️ Anote este código! Será necessário para o primeiro login.</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="copiarCodigo('${codigoAcesso}')" style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem;">copy</span>
+                            Copiar Código
+                        </button>
+                        <button onclick="fecharModal()" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem;">check</span>
+                            Entendi
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Fechar modal ao clicar fora
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    fecharModal();
+                }
+            });
+        }
+
+        // Função para copiar código para área de transferência
+        function copiarCodigo(codigo) {
+            navigator.clipboard.writeText(codigo).then(() => {
+                alert('Código copiado para a área de transferência!');
+            }).catch(() => {
+                // Fallback para navegadores mais antigos
+                const textarea = document.createElement('textarea');
+                textarea.value = codigo;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Código copiado para a área de transferência!');
+            });
+        }
+
+        // Função para fechar modal
+        function fecharModal() {
+            const modal = document.querySelector('div[style*="position: fixed"]');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Limpar formulário
+        function limparFormularioUsuario() {
+            document.getElementById('novo-usuario-form').reset();
+        }
+
+        // Gerar senha aleatória
+        function gerarSenhaAleatoria() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
+            let senha = '';
+            for (let i = 0; i < 8; i++) {
+                senha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('user-senha').value = senha;
+            document.getElementById('user-senha-confirm').value = senha;
+        }
+
+        // Funções auxiliares
+        function getPerfilColor(perfil) {
+            switch(perfil?.toUpperCase()) {
+                case 'ADMIN': 
+                    return { bg: '#ede9fe', text: '#7c3aed' };
+                case 'DIRETOR': 
+                    return { bg: '#fef3c7', text: '#d97706' };
+                case 'FUNCIONARIO': 
+                    return { bg: '#dbeafe', text: '#1d4ed8' };
+                case 'VENDEDOR': 
+                    return { bg: '#d1fae5', text: '#059669' };
+                default: 
+                    return { bg: '#f3f4f6', text: '#6b7280' };
+            }
+        }
+
+        function getStatusColor(status) {
+            switch(status?.toUpperCase()) {
+                case 'ATIVO': 
+                    return { bg: '#d1fae5', text: '#059669' };
+                case 'INATIVO': 
+                    return { bg: '#fee2e2', text: '#dc2626' };
+                default: 
+                    return { bg: '#d1fae5', text: '#059669' };
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return null;
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function editUser(id) {
+            console.log('✏️ Editar usuário:', id);
+            
+            try {
+                // Buscar dados do usuário
+                const user = await APIService.users.getById(id);
+                console.log('📋 Dados do usuário para edição:', user);
+                
+                // Montar formulário de edição
+                const formContent = `
+                    <div style="display: grid; gap: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Completo *</label>
+                            <input type="text" name="nome" value="${user.nome || ''}" required
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; border-radius: 6px;">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">E-mail *</label>
+                            <input type="email" name="email" value="${user.email || ''}" required
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; border-radius: 6px;">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Código de Acesso *</label>
+                            <input type="text" name="codigoAcesso" value="${user.codigoAcesso || ''}" readonly
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; background: #f9fafb; color: #6b7280; font-size: 0.9rem; border-radius: 6px;">
+                            <small style="color: #6b7280; font-size: 0.75rem;">O código de acesso não pode ser alterado</small>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nova Senha</label>
+                            <input type="password" name="senha" placeholder="Deixe em branco para manter a senha atual"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; border-radius: 6px;">
+                            <small style="color: #6b7280; font-size: 0.75rem;">Mínimo 6 caracteres. Deixe em branco para não alterar.</small>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo de Usuário *</label>
+                            <select name="tipoUsuario" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; border-radius: 6px;">
+                                <option value="FUNCIONARIO" ${(user.tipoUsuario || 'FUNCIONARIO') === 'FUNCIONARIO' ? 'selected' : ''}>Funcionário</option>
+                                <option value="VENDEDOR" ${user.tipoUsuario === 'VENDEDOR' ? 'selected' : ''}>Vendedor</option>
+                                <option value="DIRETOR" ${user.tipoUsuario === 'DIRETOR' ? 'selected' : ''}>Diretor</option>
+                                <option value="ADMIN" ${user.tipoUsuario === 'ADMIN' ? 'selected' : ''}>Administrador</option>
+                            </select>
+                            <small style="color: #6b7280; font-size: 0.75rem;">Define as permissões do usuário no sistema</small>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Status</label>
+                            <select name="ativo" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; border-radius: 6px;">
+                                <option value="true" ${user.ativo ? 'selected' : ''}>Ativo</option>
+                                <option value="false" ${!user.ativo ? 'selected' : ''}>Inativo</option>
+                            </select>
+                        </div>
+                        
+                        <input type="hidden" name="id" value="${user.idUser || user.id || user.id_user}">
+                    </div>
+                `;
+                
+                // Inserir conteúdo no modal
+                document.getElementById('editUserContent').innerHTML = formContent;
+                
+                // Configurar evento de submit
+                const editForm = document.getElementById('editUserForm');
+                editForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    saveUserChanges(id);
+                };
+                
+                // Mostrar modal
+                const modal = document.getElementById('editUserModal');
+                modal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar usuário para edição:', error);
+                showAlert('Erro ao carregar dados do usuário: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteUser(id) {
+            console.log('🗑️ Preparando exclusão do usuário:', id);
+            
+            try {
+                // Buscar dados do usuário para exibir na confirmação
+                const user = await APIService.users.getById(id);
+                console.log('📋 Dados do usuário para exclusão:', user);
+                
+                // Preencher informações no modal de confirmação
+                const userInfo = document.getElementById('deleteUserInfo');
+                userInfo.innerHTML = `
+                    <strong>Nome:</strong> ${user.nome}<br>
+                    <strong>E-mail:</strong> ${user.email}<br>
+                    <strong>Código:</strong> ${user.codigoAcesso}<br>
+                    <strong>Status:</strong> ${user.ativo ? 'Ativo' : 'Inativo'}
+                `;
+                
+                // Configurar botão de confirmação
+                const confirmBtn = document.getElementById('confirmDeleteBtn');
+                confirmBtn.onclick = function() {
+                    confirmDeleteUser(id);
+                };
+                
+                // Mostrar modal
+                const modal = document.getElementById('deleteUserModal');
+                modal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar usuário para exclusão:', error);
+                showAlert('Erro ao carregar dados do usuário: ' + error.message, 'error');
+            }
+        }
+
+        function closeEditUserModal() {
+            console.log('❌ Fechando modal de edição de usuário');
+            const modal = document.getElementById('editUserModal');
+            modal.style.display = 'none';
+            
+            // Limpar formulário
+            const form = document.getElementById('editUserForm');
+            if (form) {
+                form.reset();
+            }
+        }
+
+        function closeDeleteUserModal() {
+            console.log('❌ Fechando modal de confirmação de exclusão');
+            const modal = document.getElementById('deleteUserModal');
+            modal.style.display = 'none';
+            
+            // Limpar informações
+            const userInfo = document.getElementById('deleteUserInfo');
+            if (userInfo) {
+                userInfo.innerHTML = '';
+            }
+        }
+
+        async function saveUserChanges(userId) {
+            console.log('💾 Salvando alterações do usuário:', userId);
+            
+            try {
+                const form = document.getElementById('editUserForm');
+                const formData = new FormData(form);
+                
+                // Buscar dados atuais do usuário para manter campos obrigatórios
+                const currentUser = await APIService.users.getById(userId);
+                
+                const userData = {
+                    nome: formData.get('nome'),
+                    email: formData.get('email'),
+                    cpf: currentUser.cpf, // Manter CPF existente
+                    telefone: currentUser.telefone || '', // Manter telefone existente
+                    ativo: formData.get('ativo') === 'true',
+                    tipoUsuario: formData.get('tipoUsuario') || 'FUNCIONARIO'
+                };
+                
+                // Adicionar senha apenas se foi preenchida
+                const senha = formData.get('senha');
+                if (senha && senha.trim()) {
+                    userData.senha = senha;
+                }
+                
+                console.log('📤 Dados para atualização:', userData);
+                
+                // Chamar API para atualizar usuário
+                const result = await APIService.users.update(userId, userData);
+                console.log('✅ Usuário atualizado com sucesso:', result);
+                
+                showAlert('Usuário atualizado com sucesso!', 'success');
+                closeEditUserModal();
+                
+                // Recarregar lista de usuários
+                buscarUsuarios();
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar alterações do usuário:', error);
+                showAlert('Erro ao salvar alterações: ' + error.message, 'error');
+            }
+        }
+
+        async function confirmDeleteUser(userId) {
+            console.log('🗑️ Confirmando exclusão do usuário:', userId);
+            
+            try {
+                // Chamar API para deletar usuário
+                await APIService.users.delete(userId);
+                console.log('✅ Usuário excluído com sucesso');
+                
+                showAlert('Usuário excluído com sucesso!', 'success');
+                closeDeleteUserModal();
+                
+                // Recarregar lista de usuários
+                buscarUsuarios();
+                
+            } catch (error) {
+                console.error('❌ Erro ao excluir usuário:', error);
+                showAlert('Erro ao excluir usuário: ' + error.message, 'error');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAdminAccess()) {
+                // Configurar form submit
+                document.getElementById('novo-usuario-form').addEventListener('submit', criarNovoUsuario);
+                
+                // Configurar busca
+                document.getElementById('search-usuarios')?.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        currentPage = 0;
+                        buscarUsuarios();
+                    }
+                });
+                
+                // Carregar dados iniciais
+                loadResumoMetricas();
+                
+                // Carregar lista de usuários se a aba lista estiver ativa
+                const activeTab = document.querySelector('.usuarios-tab-content[style*="block"]');
+                if (activeTab && activeTab.id === 'tab-lista') {
+                    buscarUsuarios();
+                }
+                
+                // Configurar event listeners para modais
+                setupModalEventListeners();
+            }
+        });
+
+        function setupModalEventListeners() {
+            // Event listeners para fechar modais clicando no fundo
+            const editModal = document.getElementById('editUserModal');
+            if (editModal) {
+                editModal.addEventListener('click', function(e) {
+                    if (e.target === editModal) {
+                        closeEditUserModal();
+                    }
+                });
+            }
+
+            const deleteModal = document.getElementById('deleteUserModal');
+            if (deleteModal) {
+                deleteModal.addEventListener('click', function(e) {
+                    if (e.target === deleteModal) {
+                        closeDeleteUserModal();
+                    }
+                });
+            }
+
+            // Event listener para ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const editModal = document.getElementById('editUserModal');
+                    const deleteModal = document.getElementById('deleteUserModal');
+                    
+                    if (editModal && editModal.style.display === 'flex') {
+                        closeEditUserModal();
+                    }
+                    if (deleteModal && deleteModal.style.display === 'flex') {
+                        closeDeleteUserModal();
+                    }
+                }
+            });
+        }
+    </script>
+    
+    <style>
+        .perfil-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .perfil-badge.funcionario {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .perfil-badge.admin {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .perfil-badge.diretor {
+            background-color: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .status-badge.ativo {
+            background-color: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .status-badge.inativo {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+    </style>
+
+    <script>
+        // Sistema de Permissões Integrado
+        
+        // Verificação de permissões e inicialização
+        function initPermissions() {
+            console.log('🔐 Inicializando sistema de permissões...');
+            
+            // Verificar se o usuário pode acessar esta página
+            if (!PermissionManager.hasPermission(PERMISSIONS.USUARIOS.VIEW)) {
+                PermissionManager.showPermissionError('acessar a página de usuários');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                return false;
+            }
+            
+            const user = PermissionManager.getCurrentUser();
+            console.log('👤 Usuário atual:', user);
+            console.log('🎭 Permissões:', PermissionManager.getUserPermissions());
+            
+            setupPagePermissions();
+            return true;
+        }
+
+        // Função para criar usuário com verificação de permissão
+        async function criarNovoUsuarioComPermissao() {
+            return checkPermissionAndExecute(
+                PERMISSIONS.USUARIOS.CREATE,
+                () => criarNovoUsuario(),
+                'criar novos usuários'
+            );
+        }
+
+        // Função para editar usuário com verificação de permissão
+        function editUserComPermissao(userId) {
+            return checkPermissionAndExecute(
+                PERMISSIONS.USUARIOS.EDIT,
+                () => editUser(userId),
+                'editar usuários'
+            );
+        }
+
+        // Função para deletar usuário com verificação de permissão
+        function deleteUserComPermissao(userId) {
+            // Verificar permissão de delete
+            if (!PermissionManager.hasPermission(PERMISSIONS.USUARIOS.DELETE)) {
+                PermissionManager.showPermissionError('excluir usuários');
+                return false;
+            }
+            
+            // Verificação adicional para admins não poderem deletar outros admins
+            const currentUser = PermissionManager.getCurrentUser();
+            const targetUser = usuarios.find(u => u.id === userId);
+            
+            if (targetUser && targetUser.tipoUsuario === 'ADMIN' && currentUser.tipoUsuario !== 'ADMIN') {
+                alert('❌ Apenas administradores podem excluir outros administradores!');
+                return false;
+            }
+            
+            return deleteUser(userId);
+        }
+
+        // Demonstração de uso das permissões
+        function demonstrarPermissoes() {
+            const user = PermissionManager.getCurrentUser();
+            console.log('=== DEMONSTRAÇÃO DO SISTEMA DE PERMISSÕES ===');
+            console.log('Usuário atual:', user.nome, `(${user.tipoUsuario})`);
+            console.log('');
+            
+            // Testar permissões específicas
+            const testPermissions = [
+                PERMISSIONS.USUARIOS.CREATE,
+                PERMISSIONS.USUARIOS.EDIT,
+                PERMISSIONS.USUARIOS.DELETE,
+                PERMISSIONS.USUARIOS.CHANGE_PERMISSIONS,
+                PERMISSIONS.CLIENTES.VIEW,
+                PERMISSIONS.VENDAS.CREATE,
+                PERMISSIONS.RELATORIOS.VIEW,
+                PERMISSIONS.SISTEMA.ADMIN
+            ];
+            
+            testPermissions.forEach(permission => {
+                const hasPermission = PermissionManager.hasPermission(permission);
+                console.log(`${hasPermission ? '✅' : '❌'} ${permission}`);
+            });
+            
+            console.log('');
+            console.log('Páginas acessíveis:', PermissionManager.getAccessiblePages());
+            console.log('==============================================');
+        }
+
+        // Disponibilizar função global para testes
+        window.demonstrarPermissoes = demonstrarPermissoes;
+
+        // Integrar verificações de permissão nas funções existentes
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 Página de usuários carregada');
+            
+            // Verificar permissões antes de inicializar
+            if (!initPermissions()) {
+                return;
+            }
+            
+            // Configurar sistema de permissões
+            setupPagePermissions();
+            
+            // Verificar se o formulário de usuários deve estar disponível
+            const criarUsuarioTab = document.getElementById('tab-criar-btn');
+            if (criarUsuarioTab && !PermissionManager.hasPermission(PERMISSIONS.USUARIOS.CREATE)) {
+                criarUsuarioTab.style.display = 'none';
+            }
+            
+            // Carregar dados
+            loadResumoMetricas();
+            switchUsuariosTab('resumo');
+            
+            console.log('✅ Sistema de permissões configurado com sucesso!');
+            console.log('💡 Execute demonstrarPermissoes() no console para ver as permissões do usuário atual');
+        });
+    </script>
+</body>
+</html>

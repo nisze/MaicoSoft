@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo à Maiconsoft - Soluções em Construção</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #37474F;
+            background-color: #ECEFF1;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.9) 0%, rgba(0, 78, 137, 0.9) 100%), url('data:image/jpeg;base64,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');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: url('https://drive.google.com/uc?id=1C6lEzTLNaJ6D1846j_J5P5d9-Q60J1m5') center/cover;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 10px 0 5px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-message h2 {
+            color: #FF6B35;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .client-info {
+            background: linear-gradient(135deg, #ECEFF1 0%, #f8f9ff 100%);
+            border-left: 4px solid #FF6B35;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .client-info h3 {
+            color: #004E89;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 78, 137, 0.1);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #37474F;
+        }
+        
+        .info-value {
+            color: #004E89;
+            font-family: 'Courier New', monospace;
+            background-color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .services {
+            margin: 30px 0;
+        }
+        
+        .services h3 {
+            color: #004E89;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .service-item {
+            background: linear-gradient(135deg, #f8f9ff 0%, #ECEFF1 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .service-item h4 {
+            color: #004E89;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .service-item p {
+            color: #37474F;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .visual-section {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.85) 0%, rgba(0, 78, 137, 0.85) 100%), url('https://drive.google.com/uc?id=1JvVh3kg9pzKcdGjat3qFO5nVhbK3Fqxv');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .visual-section::before {
+            content: '';
+            font-size: 48px;
+            display: block;
+            margin-bottom: 15px;
+        }
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.85) 0%, rgba(0, 78, 137, 0.85) 100%), url('data:image/jpeg;base64,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');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 12px;
+        }
+        
+        .visual-section h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .visual-section p {
+            font-size: 16px;
+            opacity: 0.95;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #004E89 0%, #FF6B35 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 78, 137, 0.3);
+        }
+        
+        .cta-section h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        .footer {
+            background-color: #37474F;
+            color: #90A4AE;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .contact-info {
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .contact-item strong {
+            color: #FF6B35;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #FF6B35, transparent);
+            margin: 30px 0;
+            border-radius: 1px;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo"></div>
+            <h1>Maiconsoft</h1>
+            <p>Soluções em Construção & Engenharia</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="welcome-message">
+                <h2>Bem-vindo à nossa empresa!</h2>
+                <p>É com grande satisfação que confirmamos seu cadastro em nossa plataforma. Agora você faz parte da família Maiconsoft e terá acesso a nossas soluções especializadas em construção civil!</p>
+            </div>
+            
+            <div class="client-info">
+                <h3>Informações do seu cadastro</h3>
+                <div class="info-item">
+                    <span class="info-label">Nome:</span>
+                    <span class="info-value" th:text="${nomeCliente}">Nome do Cliente</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Código do Cliente:</span>
+                    <span class="info-value" th:text="${codigoCliente}">CLT001</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value">Ativo</span>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="services">
+                <h3>Nossos Serviços Especializados</h3>
+                <div class="services-grid">
+                    <div class="service-item">
+                        <div class="service-icon">🏗️</div>
+                        <h4>Gestão de Obras</h4>
+                        <p>Planejamento e acompanhamento completo de projetos de construção</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📋</div>
+                        <h4>Orçamentos</h4>
+                        <p>Elaboração detalhada de custos e cronogramas de execução</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">⚖️</div>
+                        <h4>Consultoria Técnica</h4>
+                        <p>Assessoria especializada em engenharia e construção civil</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">🔧</div>
+                        <h4>Manutenção</h4>
+                        <p>Serviços de manutenção predial e reformas especializadas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="visual-section">
+                <h3>Nossos Projetos em Ação</h3>
+                <p>Transformamos ideias em realidade com qualidade e excelência técnica</p>
+            </div>
+            
+            <div class="cta-section">
+                <h3>Pronto para construir seu projeto?</h3>
+                <p>Nossa equipe de engenheiros e especialistas entrará em contato em breve para apresentar nossas soluções personalizadas para suas necessidades de construção.</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="contact-info">
+                <div class="contact-item"><strong>Telefone:</strong> (11) 99999-9999</div>
+                <div class="contact-item"><strong>Email:</strong> contato@maiconsoft.com</div>
+                <div class="contact-item"><strong>Website:</strong> www.maiconsoft.com</div>
+                <div class="contact-item"><strong>Endereço:</strong> São Paulo - SP</div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <p>&copy; 2025 Maiconsoft - Soluções em Construção. Todos os direitos reservados.</p>
+            <p>Obrigado por confiar em nossos serviços de engenharia!</p>
+        </div>
+    </div>
+</body>
+</html>

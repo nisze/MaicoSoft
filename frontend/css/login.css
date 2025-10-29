@@ -1,0 +1,328 @@
+/* 
+ * Maiconsoft - Tela de Login
+ * Layout split-screen com imagem de construção (50/50)
+ * Baseado na especificação UX/UI
+ */
+
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: white;
+}
+
+/* === LADO ESQUERDO - IMAGEM DE CONSTRUÇÃO === */
+.login-image {
+    flex: 1;
+    position: relative;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMF8xKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzBfMSIgeDE9IjAiIHkxPSIwIiB4Mj0iODAiIHkyPSI4MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRkY2QjM1Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwNEU4OSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* Simulando imagem de construção com gradiente e padrão */
+    background: linear-gradient(135deg, 
+        var(--primary) 0%, 
+        var(--accent) 25%, 
+        var(--secondary) 50%, 
+        var(--neutral-dark) 100%
+    );
+}
+
+.login-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 78, 137, 0.8) 0%, 
+        rgba(255, 107, 53, 0.6) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+}
+
+.construction-info {
+    color: white;
+    text-align: center;
+    max-width: 400px;
+}
+
+.construction-info h2 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.construction-info p {
+    font-size: 18px;
+    margin-bottom: var(--spacing-xl);
+    opacity: 0.95;
+    line-height: 1.6;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.feature .material-icons {
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px;
+    border-radius: 50%;
+}
+
+/* === LADO DIREITO - FORMULÁRIO === */
+.login-form-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    background-color: white;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.logo .material-icons {
+    font-size: 40px;
+    color: var(--primary);
+}
+
+.logo h1 {
+    color: var(--secondary);
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.login-form h2 {
+    text-align: center;
+    color: var(--neutral-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.login-subtitle {
+    text-align: center;
+    color: var(--neutral-medium);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* === CAMPOS DE FORMULÁRIO === */
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: var(--neutral-dark);
+}
+
+.form-label .material-icons {
+    font-size: 20px;
+    color: var(--neutral-medium);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--neutral-medium);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+}
+
+.password-toggle:hover {
+    color: var(--primary);
+    background-color: rgba(255, 107, 53, 0.1);
+}
+
+/* === BOTÃO DE LOGIN === */
+#loginBtn {
+    position: relative;
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+#loginBtn.loading .btn-text {
+    opacity: 0;
+}
+
+#loginBtn.loading .btn-loading {
+    display: flex !important;
+    align-items: center;
+    gap: var(--spacing-xs);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* === FOOTER DO LOGIN === */
+.login-footer {
+    text-align: center;
+}
+
+.forgot-password {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    display: inline-block;
+    margin-bottom: var(--spacing-md);
+}
+
+.forgot-password:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.help-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    color: var(--neutral-medium);
+    font-size: 14px;
+}
+
+.help-text .material-icons {
+    font-size: 18px;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .login-image {
+        min-height: 40vh;
+        order: 2;
+    }
+    
+    .login-form-container {
+        order: 1;
+        padding: var(--spacing-md);
+    }
+    
+    .construction-info h2 {
+        font-size: 24px;
+    }
+    
+    .construction-info p {
+        font-size: 16px;
+    }
+    
+    .features {
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    
+    .feature {
+        flex-direction: column;
+        text-align: center;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-image {
+        min-height: 30vh;
+    }
+    
+    .login-form-container {
+        padding: var(--spacing-sm);
+    }
+    
+    .logo h1 {
+        font-size: 24px;
+    }
+    
+    .construction-info {
+        padding: var(--spacing-md);
+    }
+    
+    .construction-info h2 {
+        font-size: 20px;
+    }
+    
+    .features {
+        gap: var(--spacing-sm);
+    }
+}
+
+/* === ANIMAÇÕES ESPECÍFICAS === */
+.login-form {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.construction-info {
+    animation: slideInLeft 0.8s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

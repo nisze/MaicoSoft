@@ -1,0 +1,425 @@
+{
+  "info": {
+    "name": "Maiconsoft API Collection",
+    "description": "Coleção completa de endpoints da API Maiconsoft para testes e desenvolvimento",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Autenticação",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigoAcesso\": \"admin@maicosoft.com\",\n  \"senha\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    console.log('JWT Token saved:', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigoAcesso\": \"manager@maicosoft.com\",\n  \"senha\": \"manager123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Registrar Novo Usuário",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao.silva@maicosoft.com\",\n  \"cpf\": \"12345678901\",\n  \"telefone\": \"11987654321\",\n  \"senha\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Usuários",
+      "item": [
+        {
+          "name": "Listar Usuários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users?page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Filtrar Usuários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users?nome=João&email=joao&ativo=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"],
+              "query": [
+                {"key": "nome", "value": "João"},
+                {"key": "email", "value": "joao"},
+                {"key": "ativo", "value": "true"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Clientes",
+      "item": [
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Criar Cliente PF",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Santos\",\n  \"cpfCnpj\": \"12345678901\",\n  \"telefone\": \"11987654321\",\n  \"email\": \"maria@email.com\",\n  \"endereco\": {\n    \"cep\": \"01234567\",\n    \"logradouro\": \"Rua das Flores, 123\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"SP\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Criar Cliente PJ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Oliveira\",\n  \"nomeFantasia\": \"Empresa ABC Ltda\",\n  \"cpfCnpj\": \"12345678000199\",\n  \"telefone\": \"11987654321\",\n  \"email\": \"contato@empresaabc.com\",\n  \"endereco\": {\n    \"cep\": \"01234567\",\n    \"logradouro\": \"Av. Paulista, 1000\",\n    \"bairro\": \"Bela Vista\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"SP\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Buscar CEP",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/cep/01310-100",
+              "host": ["{{base_url}}"],
+              "path": ["api", "clientes", "cep", "01310-100"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Vendas",
+      "item": [
+        {
+          "name": "Listar Vendas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas?page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendas"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar Venda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 1,\n  \"servicoId\": 1,\n  \"valor\": 1500.00,\n  \"descricao\": \"Consultoria em projetos\",\n  \"observacoes\": \"Cliente interessado em expansão\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendas"]
+            }
+          }
+        },
+        {
+          "name": "Filtros Avançados - Vendas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas?nomeVendedor=João&valorMinimo=100.00&valorMaximo=1000.00&dataInicio=2024-01-01&dataFim=2024-12-31&status=ATIVA&nomeCliente=Maria&cpfCliente=12345678901&cidadeCliente=São Paulo&estadoCliente=SP",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendas"],
+              "query": [
+                {"key": "nomeVendedor", "value": "João"},
+                {"key": "valorMinimo", "value": "100.00"},
+                {"key": "valorMaximo", "value": "1000.00"},
+                {"key": "dataInicio", "value": "2024-01-01"},
+                {"key": "dataFim", "value": "2024-12-31"},
+                {"key": "status", "value": "ATIVA"},
+                {"key": "nomeCliente", "value": "Maria"},
+                {"key": "cpfCliente", "value": "12345678901"},
+                {"key": "cidadeCliente", "value": "São Paulo"},
+                {"key": "estadoCliente", "value": "SP"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Venda por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Venda",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 1,\n  \"servicoId\": 1,\n  \"valor\": 1800.00,\n  \"descricao\": \"Consultoria em projetos - Atualizada\",\n  \"observacoes\": \"Valor revisado após negociação\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendas", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏥 Health Check & Monitoring",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/actuator/health",
+              "host": ["{{base_url}}"],
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "Application Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/actuator/info",
+              "host": ["{{base_url}}"],
+              "path": ["actuator", "info"]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/actuator/metrics",
+              "host": ["{{base_url}}"],
+              "path": ["actuator", "metrics"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Log da requisição",
+          "console.log(`🚀 Executando: ${pm.info.requestName}`);",
+          "console.log(`📡 ${pm.request.method} ${pm.request.url}`);",
+          "",
+          "// Adiciona timestamp",
+          "pm.globals.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Testes globais para todas as requisições",
+          "pm.test('⏱️ Response time is reasonable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('📡 Content-Type is correct', function () {",
+          "    if (pm.response.code !== 204) {",
+          "        pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "    }",
+          "});",
+          "",
+          "pm.test('🔒 Security headers present', function () {",
+          "    if (pm.response.code === 200) {",
+          "        // Verifica se há headers de segurança básicos",
+          "        console.log('Response headers:', pm.response.headers);",
+          "    }",
+          "});",
+          "",
+          "// Log da resposta",
+          "console.log(`✅ Status: ${pm.response.code} ${pm.response.status}`);",
+          "console.log(`⏱️ Time: ${pm.response.responseTime}ms`);",
+          "",
+          "// Log de erro se houver",
+          "if (pm.response.code >= 400) {",
+          "    console.error(`❌ Error Response:`, pm.response.json());",
+          "}"
+        ]
+      }
+    }
+  ]
+}

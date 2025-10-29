@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Maiconsoft</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+</head>
+<body>
+    <!-- Container de Alertas -->
+    <div id="alert-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="display: flex; align-items: center;">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                </a>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="dashboard.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #f59e0b; font-weight: 600; border-radius: 6px;">
+                    <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">people</span>
+                    Clientes
+                </a>
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
+                    Vendas
+                </a>
+                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">local_offer</span>
+                    Cupons
+                </a>
+                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">group</span>
+                    Usuários
+                </a>
+                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
+                    Relatórios
+                </a>
+                <a href="#" onclick="fazerLogout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
+        
+        <!-- Header do Dashboard -->
+        <div style="background: white; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="material-icons" style="font-size: 2rem; color: #3b82f6;">dashboard</span>
+                        Dashboard Executivo
+                    </h1>
+                    <p style="margin: 0; color: #6b7280; font-size: 1rem;">Visão geral e métricas principais do negócio - <span id="dashboard-date" style="font-weight: 500; color: #3b82f6;"></span></p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="atualizarDados()" style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">refresh</span>
+                        Atualizar
+                    </button>
+                    <button onclick="window.location.href='relatorios.html'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">assessment</span>
+                        Relatórios
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas Principais (KPIs) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <!-- Total Clientes -->
+            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Total de Clientes</p>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="total-clientes">1.247</h3>
+                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                            +12 esta semana
+                        </p>
+                    </div>
+                    <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                        <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">people</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendas do Mês -->
+            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Vendas do Mês</p>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="vendas-mes">R$ 485.200</h3>
+                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                            +15% vs anterior
+                        </p>
+                    </div>
+                    <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                        <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">attach_money</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orçamentos Ativos -->
+            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Orçamentos Ativos</p>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="orcamentos-ativos">32</h3>
+                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #f59e0b; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                            <span class="material-icons" style="font-size: 0.9rem;">schedule</span>
+                            18 pendentes
+                        </p>
+                    </div>
+                    <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                        <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">assignment</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receita Total -->
+            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Receita Total</p>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="receita-total">R$ 2.340.000</h3>
+                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                            +22% este ano
+                        </p>
+                    </div>
+                    <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                        <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">account_balance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção Principal Simplificada -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+            
+            <!-- Coluna Esquerda: Atividades Recentes -->
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="padding: 1.25rem; border-bottom: 1px solid #e5e7eb;">
+                    <h2 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">history</span>
+                        Atividades Recentes
+                    </h2>
+                </div>
+                <div style="padding: 1.25rem;" id="atividades-recentes">
+                    <!-- Conteúdo carregado via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Coluna Direita: Resumo e Status -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                
+                <!-- Resumo do Dia -->
+                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #10b981;">today</span>
+                            Resumo do Dia
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem;" id="resumo-dia">
+                        <!-- Conteúdo carregado via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Meta de Vendas -->
+                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #f59e0b;">target</span>
+                            Meta Mensal
+                        </h3>
+                    </div>
+                    <div style="padding: 1rem;" id="meta-vendas">
+                        <!-- Conteúdo carregado via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        // Função de logout com notificação moderna
+        function fazerLogout() {
+            // Mostrar notificação de logout
+            showLogoutNotification();
+            
+            // Executar logout após 1.5 segundos
+            setTimeout(() => {
+                localStorage.removeItem('usuarioLogado');
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+        
+        function showLogoutNotification() {
+            // Criar overlay de logout
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            // Criar card de logout
+            const logoutCard = document.createElement('div');
+            logoutCard.style.cssText = `
+                background: #1a1a1a;
+                border: 2px solid #f59e0b;
+                border-radius: 16px;
+                padding: 2rem;
+                text-align: center;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                animation: slideIn 0.4s ease-out;
+                max-width: 350px;
+            `;
+            
+            logoutCard.innerHTML = `
+                <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
+                    <span class="material-icons" style="font-size: 3rem;">logout</span>
+                </div>
+                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 600;">
+                    Saindo do sistema...
+                </h3>
+                <p style="color: #cccccc; margin: 0 0 1.5rem 0; font-size: 0.9rem;">
+                    Obrigado por usar o Sistema Maiconsoft!
+                </p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #f59e0b;">
+                    <div class="loading-spinner"></div>
+                    <span style="font-size: 0.85rem; font-weight: 500;">Redirecionando...</span>
+                </div>
+            `;
+            
+            overlay.appendChild(logoutCard);
+            document.body.appendChild(overlay);
+            
+            // Adicionar estilos de animação
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes slideIn {
+                    from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                    to { transform: scale(1) translateY(0); opacity: 1; }
+                }
+                
+                .loading-spinner {
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid #333;
+                    border-top: 2px solid #f59e0b;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                }
+                
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Check authentication and permissions
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard carregado, verificando autenticação...'); // Debug
+            
+            // Verificar se usuário está logado
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            console.log('Dados do localStorage:', usuarioLogado); // Debug
+            
+            if (!usuarioLogado) {
+                console.log('Usuário não encontrado, redirecionando para login'); // Debug
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const usuario = JSON.parse(usuarioLogado);
+            console.log('Usuário logado com sucesso:', usuario); // Debug
+            
+            // Comentado para evitar erros - AppState não existe
+            // const user = AppState.user;
+            // const userRole = user?.perfil?.toLowerCase();
+            
+            // Check if user can access dashboard
+            if (userRole !== 'admin' && userRole !== 'diretor') {
+                window.location.href = 'clientes.html';
+                return;
+            }
+            
+            // Set current date
+            document.getElementById('dashboard-date').textContent = 
+                new Date().toLocaleDateString('pt-BR');
+                
+            // Load dashboard data
+            loadDashboardData();
+        });
+        
+
+        
+        async function loadDashboardData() {
+            // Load KPIs from backend or mock data
+            try {
+                // Mock data for now - replace with actual API calls
+                document.getElementById('total-clientes').textContent = '1,247';
+                document.getElementById('vendas-mes').textContent = 'R$ 89.543';
+                document.getElementById('receita-total').textContent = 'R$ 2.340.000';
+                document.getElementById('orcamentos-ativos').textContent = '23';
+                
+                // Load recent activities
+                loadAtividadesRecentes();
+                
+                // Load daily summary
+                loadResumoDia();
+                
+                // Load sales goals
+                loadMetaVendas();
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        }
+        
+        function loadAtividadesRecentes() {
+            const atividades = `
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #3b82f6;">
+                        <span class="material-icons" style="color: #3b82f6; font-size: 1rem;">person_add</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Cliente cadastrado</div>
+                            <div style="color: #9ca3af; font-size: 0.7rem;">14:30</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #10b981;">
+                        <span class="material-icons" style="color: #10b981; font-size: 1rem;">shopping_cart</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Venda R$ 125.400</div>
+                            <div style="color: #9ca3af; font-size: 0.7rem;">11:15</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #8b5cf6;">
+                        <span class="material-icons" style="color: #8b5cf6; font-size: 1rem;">assignment</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Orçamento enviado</div>
+                            <div style="color: #9ca3af; font-size: 0.7rem;">Ontem</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('atividades-recentes').innerHTML = atividades;
+        }
+        
+        function loadResumoDia() {
+            const resumo = `
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Vendas</span>
+                        <span style="color: #3b82f6; font-weight: 600; font-size: 0.9rem;">3</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Receita</span>
+                        <span style="color: #10b981; font-weight: 600; font-size: 0.9rem;">R$ 18.500</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Clientes</span>
+                        <span style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">+2</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('resumo-dia').innerHTML = resumo;
+        }
+        
+        function loadMetaVendas() {
+            const meta = `
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Meta R$ 150k</span>
+                        <span style="color: #3b82f6; font-weight: 600; font-size: 0.9rem;">59.7%</span>
+                    </div>
+                    <div style="background: #f0f9ff; height: 0.4rem;">
+                        <div style="background: #3b82f6; height: 100%; width: 59.7%; transition: width 0.3s ease;"></div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: #6b7280; font-size: 0.75rem;">R$ 89.543 alcançado</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('meta-vendas').innerHTML = meta;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maiconsoft - Sistema de Gestão</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+</head>
+<body>
+    <!-- Container de Alertas -->
+    <div id="alert-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="display: flex; align-items: center;">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                </a>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="dashboard.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">people</span>
+                    Clientes
+                </a>
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
+                    Vendas
+                </a>
+                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">group</span>
+                    Usuários
+                </a>
+                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
+                    Relatórios
+                </a>
+                <a href="#" onclick="AuthService.logout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Content will be injected here -->
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se usuário está logado
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            if (!usuarioLogado) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const usuario = JSON.parse(usuarioLogado);
+            console.log('Usuário logado:', usuario);
+            
+            // Update active navigation
+            const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.href.includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Maiconsoft</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Bibliotecas para Exportação -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+</head>
+<body>
+    <!-- Container de Alertas -->
+    <div id="alert-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="display: flex; align-items: center;">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                </a>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="dashboard.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">people</span>
+                    Clientes
+                </a>
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
+                    Vendas
+                </a>
+                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">local_offer</span>
+                    Cupons
+                </a>
+                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">group</span>
+                    Usuários
+                </a>
+                <a href="relatorios.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #f59e0b; font-weight: 600; border-radius: 6px;">
+                    <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
+                    Relatórios
+                </a>
+                <a href="#" onclick="fazerLogout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
+        
+        <!-- Header da Página -->
+        <div style="background: white; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="material-icons" style="font-size: 1.75rem; color: #3b82f6;">assessment</span>
+                        Relatórios e Análises
+                    </h1>
+                    <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Sistema avançado de relatórios com análise de dados e métricas de performance</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="switchRelatoriosTab('dashboard')" id="tab-dashboard-btn" style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">dashboard</span>
+                        Dashboard
+                    </button>
+                    <button onclick="switchRelatoriosTab('detalhado')" id="tab-detalhado-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">table_chart</span>
+                        Relatórios Detalhados
+                    </button>
+                    <button onclick="switchRelatoriosTab('exportar')" id="tab-exportar-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-icons" style="font-size: 1rem;">download</span>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros Globais -->
+        <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">filter_list</span>
+                    Filtros e Período
+                </h3>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Período Rápido</label>
+                        <select id="periodo-filter" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                            <option value="7d">Últimos 7 dias</option>
+                            <option value="30d" selected>Últimos 30 dias</option>
+                            <option value="90d">Últimos 90 dias</option>
+                            <option value="6m">Últimos 6 meses</option>
+                            <option value="1y">Último ano</option>
+                            <option value="custom">Período personalizado</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Data Inicial</label>
+                        <input type="date" id="data-inicio" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Data Final</label>
+                        <input type="date" id="data-fim" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo de Relatório</label>
+                        <select id="tipo-relatorio" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                            <option value="todos">Todos os dados</option>
+                            <option value="vendas">Apenas vendas</option>
+                            <option value="clientes">Apenas clientes</option>
+                            <option value="performance">Apenas performance</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; align-items: end; gap: 0.5rem;">
+                        <button onclick="aplicarFiltros()" style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem;">refresh</span>
+                            Atualizar
+                        </button>
+                        <button onclick="limparFiltros()" style="background: #6b7280; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem;">clear</span>
+                            Limpar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: DASHBOARD -->
+        <div id="tab-dashboard" class="relatorios-tab-content" style="display: block;">
+            <!-- Métricas Principais -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Vendas</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">156</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 600;">+15% este mês</p>
+                        </div>
+                        <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">trending_up</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Receita Total</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="receita-total">R$ 2.340.000</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #3b82f6; font-weight: 600;">+22% este mês</p>
+                        </div>
+                        <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">attach_money</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Novos Clientes</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="novos-clientes">43</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #8b5cf6; font-weight: 600;">+8% este mês</p>
+                        </div>
+                        <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">person_add</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Ticket Médio</p>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">R$ 15.000</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #f59e0b; font-weight: 600;">+5% este mês</p>
+                        </div>
+                        <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">local_offer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos Resumo -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Evolução de Vendas - Últimos 6 Meses</h3>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div id="vendas-chart" style="height: 250px; background: #f9fafb; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+                            <div style="text-align: center;">
+                                <span class="material-icons" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem; display: block;">bar_chart</span>
+                                <p style="margin: 0; font-size: 0.9rem;">Gráfico de evolução temporal das vendas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Top Performers</h3>
+                    </div>
+                    <div style="padding: 1.5rem;" id="top-performers">
+                        <!-- Dados carregados via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: RELATÓRIOS DETALHADOS -->
+        <div id="tab-detalhado" class="relatorios-tab-content" style="display: none;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <!-- Sub-navegação de relatórios -->
+                <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Relatórios Detalhados</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="showDetailTab('vendas')" id="detail-vendas-btn" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Vendas</button>
+                            <button onclick="showDetailTab('clientes')" id="detail-clientes-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Clientes</button>
+                            <button onclick="showDetailTab('performance')" id="detail-performance-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Performance</button>
+                            <button onclick="showDetailTab('comparativo')" id="detail-comparativo-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Comparativo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tab: Vendas Detalhadas -->
+                <div id="detail-vendas" class="detail-tab-content" style="display: block;">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Relatório Detalhado de Vendas</h4>
+                            <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                                <button onclick="exportarTabela('vendas')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#059669'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#10b981'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">download</span>
+                                    Excel
+                                </button>
+                                <button onclick="imprimirTabela('vendas')" class="export-button" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#4b5563'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#6b7280'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">print</span>
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="overflow-x: auto; border: 1px solid #e5e7eb;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead style="background: #f9fafb;">
+                                    <tr>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Período</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Qtd. Vendas</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Valor Total (R$)</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Ticket Médio (R$)</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Crescimento</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Status Meta</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vendas-detail-tbody">
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tab: Clientes Detalhados -->
+                <div id="detail-clientes" class="detail-tab-content" style="display: none;">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Análise Detalhada de Clientes</h4>
+                            <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                                <button onclick="exportarTabela('clientes')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#059669'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#10b981'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">download</span>
+                                    Excel
+                                </button>
+                                <button onclick="imprimirTabela('clientes')" class="export-button" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#4b5563'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#6b7280'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">print</span>
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="overflow-x: auto; border: 1px solid #e5e7eb;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead style="background: #f9fafb;">
+                                    <tr>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Período</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Novos Clientes</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Total Acumulado</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Taxa Retenção</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Crescimento</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">LTV Médio (R$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clientes-detail-tbody">
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tab: Performance Detalhada -->
+                <div id="detail-performance" class="detail-tab-content" style="display: none;">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Performance Individual por Colaborador</h4>
+                            <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                                <button onclick="exportarTabela('performance')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#059669'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#10b981'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">download</span>
+                                    Excel
+                                </button>
+                                <button onclick="imprimirTabela('performance')" class="export-button" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#4b5563'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#6b7280'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">print</span>
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="overflow-x: auto; border: 1px solid #e5e7eb;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead style="background: #f9fafb;">
+                                    <tr>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Colaborador</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Vendas</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Clientes</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Valor Total (R$)</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Comissão (R$)</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">% Meta</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="performance-detail-tbody">
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tab: Comparativo -->
+                <div id="detail-comparativo" class="detail-tab-content" style="display: none;">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Análise Comparativa - Período vs Período</h4>
+                            <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                                <button onclick="exportarTabela('comparativo')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#059669'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#10b981'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">download</span>
+                                    Excel
+                                </button>
+                                <button onclick="imprimirTabela('comparativo')" class="export-button" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 6px; transition: all 0.3s ease; font-weight: 600;" onmouseover="this.style.background='#4b5563'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#6b7280'; this.style.transform='translateY(0)'">
+                                    <span class="material-icons" style="font-size: 0.9rem;">print</span>
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="overflow-x: auto; border: 1px solid #e5e7eb;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead style="background: #f9fafb;">
+                                    <tr>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Métrica</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Período Atual</th>
+                                        <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Período Anterior</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Variação</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">% Variação</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">Tendência</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparativo-detail-tbody">
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: EXPORTAR -->
+        <div id="tab-exportar" class="relatorios-tab-content" style="display: none;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Exportação e Geração de Relatórios</h3>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        
+                        <!-- Relatório de Vendas -->
+                        <div style="border: 1px solid #e5e7eb; padding: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">trending_up</span>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Relatório de Vendas</h4>
+                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #6b7280;">Análise completa de vendas e receitas</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #374151; font-weight: 500;">Inclui:</p>
+                                <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #6b7280;">
+                                    <li>Total de vendas por período</li>
+                                    <li>Receita e ticket médio</li>
+                                    <li>Análise de crescimento</li>
+                                    <li>Comparação com metas</li>
+                                </ul>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="exportarRelatorio('vendas', 'excel')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                    <span class="material-icons" style="font-size: 1rem;">description</span>
+                                    Excel
+                                </button>
+                                <button onclick="exportarRelatorio('vendas', 'pdf')" class="export-button" style="background: #ef4444; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                                    <span class="material-icons" style="font-size: 1rem;">picture_as_pdf</span>
+                                    PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Relatório de Clientes -->
+                        <div style="border: 1px solid #e5e7eb; padding: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">people</span>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Relatório de Clientes</h4>
+                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #6b7280;">Base de clientes e análise de crescimento</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #374151; font-weight: 500;">Inclui:</p>
+                                <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #6b7280;">
+                                    <li>Novos clientes por período</li>
+                                    <li>Taxa de retenção</li>
+                                    <li>LTV (Lifetime Value)</li>
+                                    <li>Segmentação por região</li>
+                                </ul>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="exportarRelatorio('clientes', 'excel')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                    <span class="material-icons" style="font-size: 1rem;">description</span>
+                                    Excel
+                                </button>
+                                <button onclick="exportarRelatorio('clientes', 'pdf')" class="export-button" style="background: #ef4444; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                                    <span class="material-icons" style="font-size: 1rem;">picture_as_pdf</span>
+                                    PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Relatório de Performance -->
+                        <div style="border: 1px solid #e5e7eb; padding: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">analytics</span>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Relatório de Performance</h4>
+                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #6b7280;">Performance individual e da equipe</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #374151; font-weight: 500;">Inclui:</p>
+                                <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #6b7280;">
+                                    <li>Performance por colaborador</li>
+                                    <li>Atingimento de metas</li>
+                                    <li>Ranking de vendedores</li>
+                                    <li>Comissões calculadas</li>
+                                </ul>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="exportarRelatorio('performance', 'excel')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                    <span class="material-icons" style="font-size: 1rem;">description</span>
+                                    Excel
+                                </button>
+                                <button onclick="exportarRelatorio('performance', 'pdf')" class="export-button" style="background: #ef4444; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                                    <span class="material-icons" style="font-size: 1rem;">picture_as_pdf</span>
+                                    PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Relatório Executivo -->
+                        <div style="border: 1px solid #e5e7eb; padding: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">corporate_fare</span>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151;">Relatório Executivo</h4>
+                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #6b7280;">Resumo executivo completo</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #374151; font-weight: 500;">Inclui:</p>
+                                <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #6b7280;">
+                                    <li>Dashboard executivo</li>
+                                    <li>KPIs principais</li>
+                                    <li>Análise comparativa</li>
+                                    <li>Projeções e tendências</li>
+                                </ul>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="exportarRelatorio('executivo', 'excel')" class="export-button" style="background: #10b981; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                    <span class="material-icons" style="font-size: 1rem;">description</span>
+                                    Excel
+                                </button>
+                                <button onclick="exportarRelatorio('executivo', 'pdf')" class="export-button" style="background: #ef4444; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                                    <span class="material-icons" style="font-size: 1rem;">picture_as_pdf</span>
+                                    PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        // Função de logout com notificação moderna
+        function fazerLogout() {
+            // Mostrar notificação de logout
+            showLogoutNotification();
+            
+            // Executar logout após 1.5 segundos
+            setTimeout(() => {
+                localStorage.removeItem('usuarioLogado');
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+        
+        function showLogoutNotification() {
+            // Criar overlay de logout
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            // Criar card de logout
+            const logoutCard = document.createElement('div');
+            logoutCard.style.cssText = `
+                background: #1a1a1a;
+                border: 2px solid #f59e0b;
+                border-radius: 16px;
+                padding: 2rem;
+                text-align: center;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                animation: slideIn 0.4s ease-out;
+                max-width: 350px;
+            `;
+            
+            logoutCard.innerHTML = `
+                <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
+                    <span class="material-icons" style="font-size: 3rem;">logout</span>
+                </div>
+                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 600;">
+                    Saindo do sistema...
+                </h3>
+                <p style="color: #cccccc; margin: 0 0 1.5rem 0; font-size: 0.9rem;">
+                    Obrigado por usar o Sistema Maiconsoft!
+                </p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #f59e0b;">
+                    <div class="loading-spinner"></div>
+                    <span style="font-size: 0.85rem; font-weight: 500;">Redirecionando...</span>
+                </div>
+            `;
+            
+            overlay.appendChild(logoutCard);
+            document.body.appendChild(overlay);
+            
+            // Adicionar estilos de animação
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes slideIn {
+                    from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                    to { transform: scale(1) translateY(0); opacity: 1; }
+                }
+                
+                .loading-spinner {
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid #333;
+                    border-top: 2px solid #f59e0b;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                }
+                
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Verificar autenticação e permissões
+        function checkReportAccess() {
+            // Verificar se usuário está logado
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            if (!usuarioLogado) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Liberar acesso para todos os usuários logados
+            return true;
+            
+            const user = AppState.user;
+            const userRole = user?.perfil?.toLowerCase();
+            
+            if (userRole !== 'admin' && userRole !== 'diretor') {
+                alert('Acesso negado! Apenas administradores e diretores podem acessar os relatórios.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Gerenciar tabs principais
+        function switchRelatoriosTab(tabName) {
+            // Ocultar todas as tabs
+            const tabs = document.querySelectorAll('.relatorios-tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            
+            // Resetar todos os botões
+            document.getElementById('tab-dashboard-btn').style.background = 'transparent';
+            document.getElementById('tab-dashboard-btn').style.color = '#6b7280';
+            document.getElementById('tab-detalhado-btn').style.background = 'transparent';
+            document.getElementById('tab-detalhado-btn').style.color = '#6b7280';
+            document.getElementById('tab-exportar-btn').style.background = 'transparent';
+            document.getElementById('tab-exportar-btn').style.color = '#6b7280';
+            
+            // Ativar tab selecionada
+            document.getElementById(`tab-${tabName}`).style.display = 'block';
+            document.getElementById(`tab-${tabName}-btn`).style.background = '#3b82f6';
+            document.getElementById(`tab-${tabName}-btn`).style.color = 'white';
+            
+            // Carregar dados específicos da tab
+            if (tabName === 'dashboard') {
+                loadDashboardData();
+            } else if (tabName === 'detalhado') {
+                loadDetailedData();
+            }
+        }
+
+        // Gerenciar sub-tabs dos relatórios detalhados
+        function showDetailTab(tabName) {
+            // Ocultar todas as sub-tabs
+            const tabs = document.querySelectorAll('.detail-tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            
+            // Resetar todos os botões
+            document.getElementById('detail-vendas-btn').style.background = 'transparent';
+            document.getElementById('detail-vendas-btn').style.color = '#6b7280';
+            document.getElementById('detail-clientes-btn').style.background = 'transparent';
+            document.getElementById('detail-clientes-btn').style.color = '#6b7280';
+            document.getElementById('detail-performance-btn').style.background = 'transparent';
+            document.getElementById('detail-performance-btn').style.color = '#6b7280';
+            document.getElementById('detail-comparativo-btn').style.background = 'transparent';
+            document.getElementById('detail-comparativo-btn').style.color = '#6b7280';
+            
+            // Ativar sub-tab selecionada
+            document.getElementById(`detail-${tabName}`).style.display = 'block';
+            document.getElementById(`detail-${tabName}-btn`).style.background = '#3b82f6';
+            document.getElementById(`detail-${tabName}-btn`).style.color = 'white';
+            
+            // Carregar dados específicos da sub-tab
+            loadDetailTabData(tabName);
+        }
+
+        // Carregar dados do dashboard
+        function loadDashboardData() {
+            // Carregar top performers
+            const topPerformers = [
+                { nome: 'Maria Santos', vendas: 23, valor: 345000, rating: 'Excelente' },
+                { nome: 'João Silva', vendas: 18, valor: 270000, rating: 'Boa' },
+                { nome: 'Pedro Costa', vendas: 15, valor: 225000, rating: 'Regular' },
+                { nome: 'Ana Oliveira', vendas: 20, valor: 300000, rating: 'Boa' }
+            ];
+
+            document.getElementById('top-performers').innerHTML = topPerformers.map((performer, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: ${index < topPerformers.length - 1 ? '1px solid #e5e7eb' : 'none'};">
+                    <div>
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151;">${performer.nome}</p>
+                        <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #6b7280;">${performer.vendas} vendas</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151;">R$ ${performer.valor.toLocaleString('pt-BR')}</p>
+                        <span style="background: ${getRatingColor(performer.rating).bg}; color: ${getRatingColor(performer.rating).text}; padding: 0.2rem 0.5rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;">
+                            ${performer.rating}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Carregar dados detalhados
+        function loadDetailedData() {
+            loadDetailTabData('vendas');
+        }
+
+        // Carregar dados de sub-tabs detalhadas
+        function loadDetailTabData(tabName) {
+            switch(tabName) {
+                case 'vendas':
+                    loadVendasDetailData();
+                    break;
+                case 'clientes':
+                    loadClientesDetailData();
+                    break;
+                case 'performance':
+                    loadPerformanceDetailData();
+                    break;
+                case 'comparativo':
+                    loadComparativoDetailData();
+                    break;
+            }
+        }
+
+        // Dados detalhados de vendas
+        function loadVendasDetailData() {
+            const vendasData = [
+                { periodo: 'Janeiro 2024', vendas: 45, valor: 675000, ticket: 15000, crescimento: '+12%', meta: '92%' },
+                { periodo: 'Dezembro 2023', vendas: 38, valor: 570000, ticket: 15000, crescimento: '+8%', meta: '76%' },
+                { periodo: 'Novembro 2023', vendas: 42, valor: 630000, ticket: 15000, crescimento: '+15%', meta: '84%' },
+                { periodo: 'Outubro 2023', vendas: 36, valor: 540000, ticket: 15000, crescimento: '+5%', meta: '72%' },
+                { periodo: 'Setembro 2023', vendas: 41, valor: 615000, ticket: 15000, crescimento: '+18%', meta: '82%' },
+                { periodo: 'Agosto 2023', vendas: 35, valor: 525000, ticket: 15000, crescimento: '+3%', meta: '70%' }
+            ];
+
+            document.getElementById('vendas-detail-tbody').innerHTML = vendasData.map(item => `
+                <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.periodo}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.vendas}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${item.valor.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${item.ticket.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: #d1fae5; color: #059669; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.crescimento}
+                        </span>
+                    </td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: ${getMetaColor(item.meta).bg}; color: ${getMetaColor(item.meta).text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.meta}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Dados detalhados de clientes
+        function loadClientesDetailData() {
+            const clientesData = [
+                { periodo: 'Janeiro 2024', novos: 43, total: 1247, retencao: '89%', crescimento: '+12%', ltv: 25000 },
+                { periodo: 'Dezembro 2023', novos: 35, total: 1204, retencao: '87%', crescimento: '+8%', ltv: 24500 },
+                { periodo: 'Novembro 2023', novos: 38, total: 1169, retencao: '91%', crescimento: '+10%', ltv: 26000 },
+                { periodo: 'Outubro 2023', novos: 32, total: 1131, retencao: '85%', crescimento: '+6%', ltv: 23000 },
+                { periodo: 'Setembro 2023', novos: 40, total: 1099, retencao: '88%', crescimento: '+14%', ltv: 25500 },
+                { periodo: 'Agosto 2023', novos: 29, total: 1059, retencao: '83%', crescimento: '+4%', ltv: 22500 }
+            ];
+
+            document.getElementById('clientes-detail-tbody').innerHTML = clientesData.map(item => `
+                <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.periodo}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.novos}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.total.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 0.75rem; text-align: center; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.retencao}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: #d1fae5; color: #059669; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.crescimento}
+                        </span>
+                    </td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${item.ltv.toLocaleString('pt-BR')}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Dados detalhados de performance
+        function loadPerformanceDetailData() {
+            const performanceData = [
+                { usuario: 'Maria Santos', vendas: 23, clientes: 15, valor: 345000, comissao: 17250, meta: '115%', rating: 'Excelente' },
+                { usuario: 'João Silva', vendas: 18, clientes: 12, valor: 270000, comissao: 13500, meta: '90%', rating: 'Boa' },
+                { usuario: 'Pedro Costa', vendas: 15, clientes: 8, valor: 225000, comissao: 11250, meta: '75%', rating: 'Regular' },
+                { usuario: 'Ana Oliveira', vendas: 20, clientes: 14, valor: 300000, comissao: 15000, meta: '100%', rating: 'Boa' },
+                { usuario: 'Carlos Lima', vendas: 12, clientes: 6, valor: 180000, comissao: 9000, meta: '60%', rating: 'Baixa' }
+            ];
+
+            document.getElementById('performance-detail-tbody').innerHTML = performanceData.map(item => `
+                <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.usuario}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.vendas}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.clientes}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${item.valor.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${item.comissao.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: ${getMetaColor(item.meta).bg}; color: ${getMetaColor(item.meta).text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.meta}
+                        </span>
+                    </td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: ${getRatingColor(item.rating).bg}; color: ${getRatingColor(item.rating).text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.rating}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Dados comparativos
+        function loadComparativoDetailData() {
+            const comparativoData = [
+                { metrica: 'Total de Vendas', atual: '156', anterior: '135', variacao: '+21', percentual: '+15.6%', tendencia: 'up' },
+                { metrica: 'Receita Total (R$)', atual: '2.340.000', anterior: '1.920.000', variacao: '+420.000', percentual: '+21.9%', tendencia: 'up' },
+                { metrica: 'Novos Clientes', atual: '43', anterior: '35', variacao: '+8', percentual: '+22.9%', tendencia: 'up' },
+                { metrica: 'Ticket Médio (R$)', atual: '15.000', anterior: '14.222', variacao: '+778', percentual: '+5.5%', tendencia: 'up' },
+                { metrica: 'Taxa de Conversão', atual: '12.5%', anterior: '11.8%', variacao: '+0.7%', percentual: '+5.9%', tendencia: 'up' },
+                { metrica: 'Taxa de Retenção', atual: '89%', anterior: '87%', variacao: '+2%', percentual: '+2.3%', tendencia: 'up' }
+            ];
+
+            document.getElementById('comparativo-detail-tbody').innerHTML = comparativoData.map(item => `
+                <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.metrica}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.atual}</td>
+                    <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #6b7280;">${item.anterior}</td>
+                    <td style="padding: 0.75rem; text-align: center; font-size: 0.9rem; color: #10b981; font-weight: 600;">${item.variacao}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="background: #d1fae5; color: #059669; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                            ${item.percentual}
+                        </span>
+                    </td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <span style="color: #10b981;">
+                            <span class="material-icons" style="font-size: 1.2rem;">trending_up</span>
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Funções auxiliares para cores
+        function getRatingColor(rating) {
+            switch(rating.toLowerCase()) {
+                case 'excelente': return { bg: '#d1fae5', text: '#059669' };
+                case 'boa': return { bg: '#dbeafe', text: '#1d4ed8' };
+                case 'regular': return { bg: '#fef3c7', text: '#d97706' };
+                case 'baixa': return { bg: '#fee2e2', text: '#dc2626' };
+                default: return { bg: '#f3f4f6', text: '#6b7280' };
+            }
+        }
+
+        function getMetaColor(meta) {
+            const percent = parseInt(meta.replace('%', ''));
+            if (percent >= 100) return { bg: '#d1fae5', text: '#059669' };
+            if (percent >= 80) return { bg: '#dbeafe', text: '#1d4ed8' };
+            if (percent >= 60) return { bg: '#fef3c7', text: '#d97706' };
+            return { bg: '#fee2e2', text: '#dc2626' };
+        }
+
+        // Funções de filtros
+        function aplicarFiltros() {
+            const periodo = document.getElementById('periodo-filter').value;
+            const dataInicio = document.getElementById('data-inicio').value;
+            const dataFim = document.getElementById('data-fim').value;
+            const tipoRelatorio = document.getElementById('tipo-relatorio').value;
+            
+            console.log('Aplicando filtros:', { periodo, dataInicio, dataFim, tipoRelatorio });
+            alert('Filtros aplicados com sucesso! Dados atualizados conforme os critérios selecionados.');
+            
+            // Recarregar dados baseado na tab ativa
+            const activeTab = document.querySelector('.relatorios-tab-content[style*="block"]')?.id;
+            if (activeTab === 'tab-dashboard') {
+                loadDashboardData();
+            } else if (activeTab === 'tab-detalhado') {
+                loadDetailedData();
+            }
+        }
+
+        function limparFiltros() {
+            document.getElementById('periodo-filter').value = '30d';
+            document.getElementById('data-inicio').value = '';
+            document.getElementById('data-fim').value = '';
+            document.getElementById('tipo-relatorio').value = 'todos';
+            aplicarFiltros();
+        }
+
+        // Funções de exportação para Relatórios Detalhados
+        function exportarTabela(tipo) {
+            const loadingId = showLoading(`Exportando tabela de ${tipo} para Excel...`);
+            
+            setTimeout(() => {
+                try {
+                    const dadosTabela = getDadosTabelaDetalhada(tipo);
+                    exportarTabelaExcel(tipo, dadosTabela);
+                    hideLoading(loadingId);
+                    showSuccess(`Tabela de ${tipo} exportada com sucesso em Excel!`);
+                } catch (error) {
+                    hideLoading(loadingId);
+                    showError(`Erro ao exportar tabela: ${error.message}`);
+                }
+            }, 1000);
+        }
+
+        function imprimirTabela(tipo) {
+            const loadingId = showLoading(`Preparando impressão da tabela de ${tipo}...`);
+            
+            setTimeout(() => {
+                try {
+                    imprimirTabelaDetalhada(tipo);
+                    hideLoading(loadingId);
+                    showSuccess(`Tabela de ${tipo} enviada para impressão!`);
+                } catch (error) {
+                    hideLoading(loadingId);
+                    showError(`Erro ao imprimir tabela: ${error.message}`);
+                }
+            }, 800);
+        }
+
+        function getDadosTabelaDetalhada(tipo) {
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            const dados = {
+                titulo: '',
+                periodo: `${document.getElementById('data-inicio').value || '01/01/2024'} a ${document.getElementById('data-fim').value || dataAtual}`,
+                geradoEm: dataAtual,
+                cabecalho: [],
+                dados: []
+            };
+
+            switch (tipo) {
+                case 'vendas':
+                    dados.titulo = 'Relatório Detalhado de Vendas';
+                    dados.cabecalho = ['Período', 'Qtd. Vendas', 'Valor Total (R$)', 'Ticket Médio (R$)', 'Crescimento', 'Status Meta'];
+                    dados.dados = [
+                        ['Janeiro 2024', '23', 'R$ 45.230,00', 'R$ 1.966,09', '+12,5%', '✅ Atingida'],
+                        ['Fevereiro 2024', '28', 'R$ 52.680,00', 'R$ 1.881,43', '+16,5%', '✅ Atingida'],
+                        ['Março 2024', '19', 'R$ 38.420,00', 'R$ 2.022,11', '-27,1%', '❌ Não Atingida'],
+                        ['Abril 2024', '32', 'R$ 61.340,00', 'R$ 1.916,88', '+59,7%', '✅ Superada'],
+                        ['Maio 2024', '26', 'R$ 49.780,00', 'R$ 1.914,62', '-18,8%', '✅ Atingida'],
+                        ['Junho 2024', '30', 'R$ 57.920,00', 'R$ 1.930,67', '+16,4%', '✅ Atingida'],
+                        ['Julho 2024', '34', 'R$ 65.120,00', 'R$ 1.915,29', '+12,4%', '✅ Superada'],
+                        ['Agosto 2024', '29', 'R$ 55.840,00', 'R$ 1.925,52', '-14,3%', '✅ Atingida']
+                    ];
+                    break;
+
+                case 'clientes':
+                    dados.titulo = 'Análise Detalhada de Clientes';
+                    dados.cabecalho = ['Período', 'Novos Clientes', 'Total Acumulado', 'Taxa Retenção', 'Crescimento', 'LTV Médio (R$)'];
+                    dados.dados = [
+                        ['Janeiro 2024', '8', '108', '87%', '+8,1%', 'R$ 5.654,00'],
+                        ['Fevereiro 2024', '12', '120', '89%', '+50,0%', 'R$ 4.390,00'],
+                        ['Março 2024', '6', '126', '85%', '-50,0%', 'R$ 6.403,00'],
+                        ['Abril 2024', '15', '141', '91%', '+150,0%', 'R$ 4.089,00'],
+                        ['Maio 2024', '9', '150', '88%', '-40,0%', 'R$ 5.531,00'],
+                        ['Junho 2024', '11', '161', '90%', '+22,2%', 'R$ 5.265,00'],
+                        ['Julho 2024', '13', '174', '92%', '+18,2%', 'R$ 5.009,00'],
+                        ['Agosto 2024', '10', '184', '89%', '-23,1%', 'R$ 5.584,00']
+                    ];
+                    break;
+
+                case 'performance':
+                    dados.titulo = 'Performance Individual por Colaborador';
+                    dados.cabecalho = ['Colaborador', 'Vendas', 'Clientes', 'Valor Total (R$)', 'Comissão (R$)', '% Meta', 'Rating'];
+                    dados.dados = [
+                        ['João Vendedor', '68', '45', 'R$ 134.560,00', 'R$ 13.456,00', '126%', '⭐⭐⭐⭐⭐'],
+                        ['Maria Consultora', '52', '38', 'R$ 98.720,00', 'R$ 9.872,00', '109%', '⭐⭐⭐⭐'],
+                        ['Pedro Representante', '45', '32', 'R$ 87.340,00', 'R$ 8.734,00', '97%', '⭐⭐⭐⭐'],
+                        ['Ana Vendedora', '38', '28', 'R$ 72.580,00', 'R$ 7.258,00', '85%', '⭐⭐⭐'],
+                        ['Carlos Consultor', '41', '30', 'R$ 79.230,00', 'R$ 7.923,00', '88%', '⭐⭐⭐'],
+                        ['Lucia Representante', '35', '25', 'R$ 67.890,00', 'R$ 6.789,00', '78%', '⭐⭐⭐'],
+                        ['Roberto Vendedor', '29', '21', 'R$ 56.340,00', 'R$ 5.634,00', '64%', '⭐⭐'],
+                        ['Patricia Consultora', '33', '24', 'R$ 63.120,00', 'R$ 6.312,00', '70%', '⭐⭐⭐']
+                    ];
+                    break;
+
+                case 'comparativo':
+                    dados.titulo = 'Análise Comparativa - Período vs Período';
+                    dados.cabecalho = ['Métrica', 'Período Atual', 'Período Anterior', 'Variação', '% Variação', 'Tendência'];
+                    dados.dados = [
+                        ['Receita Total', 'R$ 305.370,00', 'R$ 271.450,00', '+R$ 33.920,00', '+12,5%', '📈 Crescendo'],
+                        ['Total de Vendas', '158 vendas', '142 vendas', '+16 vendas', '+11,3%', '📈 Crescendo'],
+                        ['Ticket Médio', 'R$ 1.932,72', 'R$ 1.912,32', '+R$ 20,40', '+1,1%', '📈 Crescendo'],
+                        ['Novos Clientes', '47 clientes', '41 clientes', '+6 clientes', '+14,6%', '📈 Crescendo'],
+                        ['Taxa de Conversão', '24,5%', '22,8%', '+1,7%', '+7,5%', '📈 Crescendo'],
+                        ['Satisfação Cliente', '4.7/5.0', '4.4/5.0', '+0,3', '+6,8%', '📈 Crescendo'],
+                        ['Tempo Médio Venda', '3,2 dias', '4,1 dias', '-0,9 dias', '-22,0%', '📈 Melhorando'],
+                        ['Custo de Aquisição', 'R$ 215,00', 'R$ 245,00', '-R$ 30,00', '-12,2%', '📈 Melhorando']
+                    ];
+                    break;
+            }
+
+            return dados;
+        }
+
+        function exportarTabelaExcel(tipo, dados) {
+            // Criar workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Criar dados para a planilha
+            const wsData = [
+                ['MAICONSOFT - SISTEMA DE RELATÓRIOS'],
+                [dados.titulo],
+                [''],
+                [`Período: ${dados.periodo}`],
+                [`Gerado em: ${dados.geradoEm}`],
+                [''],
+                dados.cabecalho,
+                ...dados.dados,
+                [''],
+                [`Total de registros: ${dados.dados.length}`],
+                [`Exportado por: Sistema Maiconsoft`]
+            ];
+            
+            // Criar worksheet
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            
+            // Configurar larguras das colunas
+            const colWidths = dados.cabecalho.map(() => ({ wch: 18 }));
+            ws['!cols'] = colWidths;
+            
+            // Adicionar worksheet ao workbook
+            XLSX.utils.book_append_sheet(wb, ws, `${tipo}_detalhado`);
+            
+            // Salvar arquivo
+            const nomeArquivo = `${tipo}_detalhado_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, nomeArquivo);
+        }
+
+        function imprimirTabelaDetalhada(tipo) {
+            const dadosTabela = getDadosTabelaDetalhada(tipo);
+            
+            // Criar janela de impressão
+            const printWindow = window.open('', '_blank');
+            
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Impressão - ${dadosTabela.titulo}</title>
+                    <style>
+                        @media print {
+                            body { margin: 0; }
+                            .no-print { display: none; }
+                        }
+                        
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 12px;
+                            line-height: 1.4;
+                        }
+                        
+                        .header {
+                            text-align: center;
+                            margin-bottom: 30px;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 15px;
+                        }
+                        
+                        .header h1 {
+                            font-size: 18px;
+                            margin: 0;
+                            font-weight: bold;
+                        }
+                        
+                        .header h2 {
+                            font-size: 14px;
+                            margin: 5px 0;
+                            color: #333;
+                        }
+                        
+                        .info {
+                            margin-bottom: 20px;
+                            font-size: 11px;
+                        }
+                        
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 20px;
+                        }
+                        
+                        th, td {
+                            border: 1px solid #333;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        
+                        th {
+                            background-color: #f0f0f0;
+                            font-weight: bold;
+                        }
+                        
+                        tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                        }
+                        
+                        .footer {
+                            position: fixed;
+                            bottom: 20px;
+                            width: 100%;
+                            text-align: center;
+                            font-size: 10px;
+                            border-top: 1px solid #ccc;
+                            padding-top: 10px;
+                        }
+                        
+                        .controls {
+                            margin-bottom: 20px;
+                            text-align: center;
+                        }
+                        
+                        .btn {
+                            background: #007bff;
+                            color: white;
+                            border: none;
+                            padding: 10px 20px;
+                            margin: 0 10px;
+                            cursor: pointer;
+                            border-radius: 4px;
+                        }
+                        
+                        .btn:hover {
+                            background: #0056b3;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="controls no-print">
+                        <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+                        <button class="btn" onclick="window.close()">❌ Fechar</button>
+                    </div>
+                    
+                    <div class="header">
+                        <h1>MAICONSOFT</h1>
+                        <h2>${dadosTabela.titulo}</h2>
+                    </div>
+                    
+                    <div class="info">
+                        <strong>Período:</strong> ${dadosTabela.periodo}<br>
+                        <strong>Data de geração:</strong> ${dadosTabela.geradoEm}<br>
+                        <strong>Total de registros:</strong> ${dadosTabela.dados.length}
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                ${dadosTabela.cabecalho.map(col => `<th>${col}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${dadosTabela.dados.map(linha => 
+                                `<tr>${linha.map(cel => `<td>${cel}</td>`).join('')}</tr>`
+                            ).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="footer">
+                        Sistema Maiconsoft - Relatórios Automatizados | Página 1 de 1
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            
+            // Auto-foco na janela de impressão
+            printWindow.focus();
+        }
+
+        function exportarRelatorio(tipo, formato) {
+            // Mostrar loading
+            const loadingId = showLoading(`Gerando relatório de ${tipo} em ${formato.toUpperCase()}...`);
+            
+            // Simular delay de processamento
+            setTimeout(() => {
+                try {
+                    const dados = getDadosRelatorio(tipo);
+                    
+                    if (formato === 'pdf') {
+                        exportarPDF(tipo, dados);
+                    } else if (formato === 'excel') {
+                        exportarExcel(tipo, dados);
+                    }
+                    
+                    hideLoading(loadingId);
+                    showSuccess(`Relatório de ${tipo} exportado com sucesso em ${formato.toUpperCase()}!`);
+                } catch (error) {
+                    hideLoading(loadingId);
+                    showError(`Erro ao exportar relatório: ${error.message}`);
+                }
+            }, 1500);
+        }
+
+        function getDadosRelatorio(tipo) {
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            const dados = {
+                titulo: '',
+                periodo: `${document.getElementById('data-inicio').value || '01/01/2024'} a ${document.getElementById('data-fim').value || dataAtual}`,
+                geradoEm: dataAtual,
+                dados: []
+            };
+
+            switch (tipo) {
+                case 'vendas':
+                    dados.titulo = 'Relatório de Vendas';
+                    dados.dados = [
+                        ['Janeiro', 'R$ 45.230,00', '23 vendas', 'R$ 1.966,09'],
+                        ['Fevereiro', 'R$ 52.680,00', '28 vendas', 'R$ 1.881,43'],
+                        ['Março', 'R$ 38.420,00', '19 vendas', 'R$ 2.022,11'],
+                        ['Abril', 'R$ 61.340,00', '32 vendas', 'R$ 1.916,88'],
+                        ['Maio', 'R$ 49.780,00', '26 vendas', 'R$ 1.914,62'],
+                        ['Junho', 'R$ 57.920,00', '30 vendas', 'R$ 1.930,67']
+                    ];
+                    dados.cabecalho = ['Período', 'Receita Total', 'Total de Vendas', 'Ticket Médio'];
+                    break;
+
+                case 'clientes':
+                    dados.titulo = 'Relatório de Clientes';
+                    dados.dados = [
+                        ['João Silva', 'joão.silva@email.com', '(11) 99999-1111', 'R$ 12.450,00', 'Ativo'],
+                        ['Maria Santos', 'maria.santos@email.com', '(11) 99999-2222', 'R$ 8.320,00', 'Ativo'],
+                        ['Pedro Costa', 'pedro.costa@email.com', '(11) 99999-3333', 'R$ 15.680,00', 'Ativo'],
+                        ['Ana Oliveira', 'ana.oliveira@email.com', '(11) 99999-4444', 'R$ 6.720,00', 'Inativo'],
+                        ['Carlos Souza', 'carlos.souza@email.com', '(11) 99999-5555', 'R$ 22.130,00', 'Ativo']
+                    ];
+                    dados.cabecalho = ['Nome', 'E-mail', 'Telefone', 'Total Compras', 'Status'];
+                    break;
+
+                case 'performance':
+                    dados.titulo = 'Relatório de Performance';
+                    dados.dados = [
+                        ['João Vendedor', '32 vendas', 'R$ 67.430,00', '96%', 'R$ 6.743,00'],
+                        ['Maria Consultora', '28 vendas', 'R$ 52.680,00', '87%', 'R$ 5.268,00'],
+                        ['Pedro Representante', '25 vendas', 'R$ 48.920,00', '83%', 'R$ 4.892,00'],
+                        ['Ana Vendedora', '19 vendas', 'R$ 38.420,00', '76%', 'R$ 3.842,00']
+                    ];
+                    dados.cabecalho = ['Vendedor', 'Total Vendas', 'Receita Gerada', 'Meta Atingida', 'Comissão'];
+                    break;
+
+                case 'executivo':
+                    dados.titulo = 'Relatório Executivo';
+                    dados.dados = [
+                        ['Receita Total', 'R$ 305.370,00', '+12,5%'],
+                        ['Total de Vendas', '158 vendas', '+8,3%'],
+                        ['Ticket Médio', 'R$ 1.932,72', '+3,8%'],
+                        ['Novos Clientes', '47 clientes', '+15,2%'],
+                        ['Taxa de Conversão', '24,5%', '+2,1%'],
+                        ['Satisfação Cliente', '4.7/5.0', '+0,3%']
+                    ];
+                    dados.cabecalho = ['Métrica', 'Valor Atual', 'Variação'];
+                    break;
+            }
+
+            return dados;
+        }
+
+        function exportarPDF(tipo, dados) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Configurações do documento
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 20;
+            
+            // Header da empresa
+            doc.addImage('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAoACgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5/ooooA//2Q==', 'JPEG', margin, 10, 30, 15);
+            
+            // Título principal
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MAICONSOFT', pageWidth / 2, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'normal');
+            doc.text(dados.titulo, pageWidth / 2, 30, { align: 'center' });
+            
+            // Informações do relatório
+            doc.setFontSize(10);
+            doc.text(`Período: ${dados.periodo}`, margin, 45);
+            doc.text(`Gerado em: ${dados.geradoEm}`, margin, 52);
+            
+            // Tabela
+            doc.autoTable({
+                startY: 60,
+                head: [dados.cabecalho],
+                body: dados.dados,
+                theme: 'striped',
+                headStyles: {
+                    fillColor: [0, 0, 0],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold'
+                },
+                styles: {
+                    fontSize: 9,
+                    cellPadding: 3
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                }
+            });
+            
+            // Rodapé
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.text(`Página ${i} de ${pageCount}`, pageWidth - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+                doc.text('Sistema Maiconsoft - Relatórios Automatizados', margin, doc.internal.pageSize.getHeight() - 10);
+            }
+            
+            // Salvar arquivo
+            const nomeArquivo = `relatorio_${tipo}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(nomeArquivo);
+        }
+
+        function exportarExcel(tipo, dados) {
+            // Criar workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Criar dados para a planilha
+            const wsData = [
+                ['MAICONSOFT'],
+                [dados.titulo],
+                [''],
+                [`Período: ${dados.periodo}`],
+                [`Gerado em: ${dados.geradoEm}`],
+                [''],
+                dados.cabecalho,
+                ...dados.dados
+            ];
+            
+            // Criar worksheet
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            
+            // Configurar larguras das colunas
+            const colWidths = dados.cabecalho.map(() => ({ wch: 20 }));
+            ws['!cols'] = colWidths;
+            
+            // Aplicar estilos básicos (limitado na versão gratuita)
+            ws['A1'] = { v: 'MAICONSOFT', t: 's', s: { font: { bold: true, sz: 16 } } };
+            ws['A2'] = { v: dados.titulo, t: 's', s: { font: { bold: true, sz: 14 } } };
+            
+            // Adicionar worksheet ao workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Relatório');
+            
+            // Salvar arquivo
+            const nomeArquivo = `relatorio_${tipo}_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, nomeArquivo);
+        }
+
+        // Funções de feedback visual
+        function showLoading(message) {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                color: white;
+                font-size: 1.1rem;
+                font-weight: 600;
+            `;
+            
+            loadingDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="border: 4px solid #f3f3f3; border-top: 4px solid #f59e0b; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                    <div>${message}</div>
+                </div>
+            `;
+            
+            // Adicionar animação CSS
+            const style = document.createElement('style');
+            style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+            document.head.appendChild(style);
+            
+            document.body.appendChild(loadingDiv);
+            return loadingDiv;
+        }
+
+        function hideLoading(loadingElement) {
+            if (loadingElement && loadingElement.parentNode) {
+                loadingElement.parentNode.removeChild(loadingElement);
+            }
+        }
+
+        function showSuccess(message) {
+            showNotification(message, 'success');
+        }
+
+        function showError(message) {
+            showNotification(message, 'error');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10001;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                ${type === 'success' ? 'background: #10b981;' : 'background: #ef4444;'}
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons">${type === 'success' ? 'check_circle' : 'error'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover após 4 segundos
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 4000);
+        }
+
+
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkReportAccess()) {
+                // Configurar filtros de data com valores padrão
+                const hoje = new Date();
+                const trintaDiasAtras = new Date(hoje.getTime() - (30 * 24 * 60 * 60 * 1000));
+                
+                document.getElementById('data-inicio').value = trintaDiasAtras.toISOString().split('T')[0];
+                document.getElementById('data-fim').value = hoje.toISOString().split('T')[0];
+                
+                // Carregar dados iniciais
+                loadDashboardData();
+            }
+        });
+    </script>
+    
+    <style>
+        /* Estilos globais para relatórios */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+        }
+
+        /* Animações suaves para transições */
+        .relatorios-tab-content, .detail-tab-content {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hover effects para botões */
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        /* Tabelas com melhor legibilidade */
+        table {
+            font-family: 'Inter', sans-serif;
+            border-spacing: 0;
+            border-collapse: separate;
+            overflow: hidden;
+        }
+
+        table thead th {
+            position: sticky;
+            top: 0;
+            background: #f9fafb;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        table tbody tr:hover {
+            background: #f0f9ff;
+            cursor: pointer;
+        }
+
+        table td, table th {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+
+        /* Badges e status com melhor contraste */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            white-space: nowrap;
+        }
+
+        .growth-positive {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .growth-negative {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        /* Cards com sombras suaves */
+        .metric-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Responsividade para tabelas */
+        .table-container {
+            overflow-x: auto;
+            max-width: 100%;
+            border: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Loading states */
+        .loading-placeholder {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Print styles */
+        @media print {
+            .relatorios-tab-content {
+                display: block !important;
+            }
+            
+            button, .tab-navigation {
+                display: none !important;
+            }
+            
+            table {
+                width: 100% !important;
+                font-size: 0.8rem;
+            }
+            
+            .metric-card {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+
+        /* Cores específicas para diferentes tipos de dados */
+        .valor-monetario {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .percentual {
+            font-weight: 600;
+        }
+
+        .percentual.positivo {
+            color: #059669;
+        }
+
+        .percentual.negativo {
+            color: #dc2626;
+        }
+
+        /* Tooltips para melhor UX */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Melhorias de acessibilidade */
+        button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        table:focus-within {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Estados de interação melhorados */
+        .export-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .export-button:hover::before {
+            left: 100%;
+        }
+    </style>
+</body>
+</html>

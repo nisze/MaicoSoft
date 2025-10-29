@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Venda Realizada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .highlight {
+            background-color: #d5f4e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+        }
+        .warning {
+            background-color: #fef9e7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
+        }
+        .footer {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 20px;
+        }
+        .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Nova Venda Realizada</h1>
+        </div>
+        
+        <div class="content">
+            <p>Prezado Diretor,</p>
+            
+            <p>Uma nova venda foi registrada no sistema MaicoSoft:</p>
+            
+            <div class="highlight">
+                <h3>📊 Detalhes da Venda</h3>
+                <table>
+                    <tr>
+                        <th>Número do Orçamento:</th>
+                        <td><strong>{{numeroOrcamento}}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Cliente:</th>
+                        <td>{{nomeCliente}} ({{codigoCliente}})</td>
+                    </tr>
+                    <tr>
+                        <th>Data da Venda:</th>
+                        <td>{{dataVenda}}</td>
+                    </tr>
+                    <tr>
+                        <th>Funcionário:</th>
+                        <td>{{nomeFuncionario}}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="highlight">
+                <h3>💵 Valores</h3>
+                <table>
+                    <tr>
+                        <th>Valor Bruto:</th>
+                        <td>R$ {{valorBruto}}</td>
+                    </tr>
+                    <tr>
+                        <th>Desconto:</th>
+                        <td>R$ {{valorDesconto}}</td>
+                    </tr>
+                    <tr>
+                        <th>Valor Total:</th>
+                        <td class="value">R$ {{valorTotal}}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            {{#temCupom}}
+            <div class="warning">
+                <h3>🎟️ Cupom Aplicado</h3>
+                <p><strong>Cupom:</strong> {{nomeCupom}}</p>
+                <p><strong>Desconto:</strong> {{percentualDesconto}}%</p>
+            </div>
+            {{/temCupom}}
+            
+            {{#temObservacao}}
+            <div class="highlight">
+                <h3>📝 Observações</h3>
+                <p>{{observacao}}</p>
+            </div>
+            {{/temObservacao}}
+            
+            <p>Para mais detalhes, acesse o sistema de gestão.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Sistema MaicoSoft - Notificação Automática</p>
+            <p>&copy; 2025 MaicoSoft - Relatório gerado automaticamente</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,659 @@
+/* 
+ * Maiconsoft - Interface de Cadastro de Clientes
+ * Para funcionários e administradores
+ */
+
+/* === HEADER DA PÁGINA === */
+.cliente-header {
+    background: white;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.cliente-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.page-title h1 {
+    color: var(--secondary);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.page-title .material-icons {
+    font-size: 32px;
+    color: var(--primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* === NAVEGAÇÃO DE ABAS === */
+.cliente-tabs {
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 var(--spacing-xl);
+}
+
+.tabs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.tab-button {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    background: none;
+    color: var(--neutral-medium);
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.tab-button:hover {
+    color: var(--primary);
+    background-color: rgba(255, 107, 53, 0.1);
+}
+
+.tab-button.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.tab-button .material-icons {
+    font-size: 20px;
+}
+
+/* === CONTEÚDO PRINCIPAL === */
+.cliente-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+}
+
+/* === FORMULÁRIO DE CADASTRO === */
+.form-container {
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+.form-header {
+    background: var(--bg-light);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.form-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.form-title h2 {
+    color: var(--neutral-dark);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.form-title .material-icons {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+.form-description {
+    color: var(--neutral-medium);
+    margin: 0;
+}
+
+.form-body {
+    padding: var(--spacing-xl);
+}
+
+/* === SEÇÕES DO FORMULÁRIO === */
+.form-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--border-light);
+}
+
+.section-title h3 {
+    color: var(--secondary);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-title .material-icons {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+/* === GRID DE CAMPOS === */
+.form-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.form-grid.two-columns {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-grid.three-columns {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-grid.four-columns {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+/* === CAMPOS ESPECIAIS === */
+.field-group {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: end;
+}
+
+.field-with-button {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.field-with-button .form-input {
+    flex: 1;
+}
+
+.cep-button {
+    padding: 12px 16px;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.cep-button:hover {
+    background: #003d6b;
+}
+
+.cep-button:disabled {
+    background: var(--neutral-light);
+    color: var(--neutral-medium);
+    cursor: not-allowed;
+}
+
+/* === LISTA DE CLIENTES === */
+.clientes-list {
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+.list-header {
+    background: var(--bg-light);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.list-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.list-title h2 {
+    color: var(--neutral-dark);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.list-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    min-width: 300px;
+}
+
+.search-box .material-icons {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--neutral-medium);
+    font-size: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+    outline: none;
+}
+
+/* === TABELA DE CLIENTES === */
+.clientes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clientes-table th {
+    background: var(--bg-light);
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--neutral-dark);
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+}
+
+.clientes-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+    color: var(--neutral-dark);
+}
+
+.clientes-table tbody tr:hover {
+    background: var(--bg-light);
+}
+
+.cliente-name {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.cliente-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cliente-detail {
+    font-size: 12px;
+    color: var(--neutral-medium);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn.edit {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.action-btn.edit:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.action-btn.delete {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: var(--error) !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.action-btn.view {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+}
+
+.action-btn.view:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+/* === PAGINAÇÃO === */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-light);
+}
+
+.pagination-info {
+    color: var(--neutral-medium);
+    font-size: 14px;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-left: auto;
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-light);
+    background: white;
+    color: var(--neutral-dark);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.page-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.page-btn:disabled {
+    background: var(--bg-light);
+    color: var(--neutral-light);
+    cursor: not-allowed;
+}
+
+/* === ESTADOS DE CARREGAMENTO === */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-overlay);
+}
+
+.form-container {
+    position: relative;
+}
+
+.table-loading {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--neutral-medium);
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--neutral-medium);
+}
+
+.empty-state .material-icons {
+    font-size: 64px;
+    color: var(--neutral-light);
+    margin-bottom: var(--spacing-md);
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 1024px) {
+    .cliente-header-content,
+    .tabs-container,
+    .cliente-content {
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+    }
+    
+    .form-grid.four-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .search-box {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title h1 {
+        font-size: 20px;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .tabs-container {
+        overflow-x: auto;
+        padding-bottom: var(--spacing-xs);
+    }
+    
+    .tab-button {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .form-grid.two-columns,
+    .form-grid.three-columns,
+    .form-grid.four-columns {
+        grid-template-columns: 1fr;
+    }
+    
+    .field-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .list-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+    }
+    
+    .search-box {
+        min-width: auto;
+    }
+    
+    .clientes-table {
+        font-size: 14px;
+    }
+    
+    .clientes-table th,
+    .clientes-table td {
+        padding: var(--spacing-sm);
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .pagination-controls {
+        margin-left: 0;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .cliente-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .header-actions {
+        align-self: stretch;
+    }
+    
+    .form-body {
+        padding: var(--spacing-md);
+    }
+    
+    .clientes-table thead {
+        display: none;
+    }
+    
+    .clientes-table,
+    .clientes-table tbody,
+    .clientes-table tr,
+    .clientes-table td {
+        display: block;
+    }
+    
+    .clientes-table tr {
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+    
+    .clientes-table td {
+        border: none;
+        padding: var(--spacing-xs) 0;
+        position: relative;
+        padding-left: 35%;
+        min-height: 24px;
+    }
+    
+    .clientes-table td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 30%;
+        font-weight: 600;
+        color: var(--neutral-medium);
+        font-size: 12px;
+    }
+    
+    .action-buttons {
+        justify-content: flex-start;
+        padding-left: 0;
+    }
+}
+
+/* === ANIMAÇÕES === */
+.form-container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.clientes-list {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.clientes-table tbody tr {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === VALIDAÇÃO DE FORMULÁRIO === */
+.form-field.invalid .form-input {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-field.valid .form-input {
+    border-color: var(--success);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.field-validation {
+    margin-top: var(--spacing-xs);
+    font-size: 12px;
+}
+
+.field-validation.error {
+    color: var(--error);
+}
+
+.field-validation.success {
+    color: var(--success);
+}

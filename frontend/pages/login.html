@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Maiconsoft</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- FORÇAR AMBIENTE DEVELOPMENT -->
+    <script>
+        // Sobrescrever detecção de ambiente para development
+        window.FORCE_DEVELOPMENT = true;
+    </script>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100vh; background: #000000;">
+    
+    <!-- Container Principal -->
+    <div class="main-container" style="display: flex; height: 100vh;">
+        
+        <!-- Lado Esquerdo - Imagem da Construção -->
+        <div class="image-side" style="flex: 1; position: relative; overflow: hidden;">
+            <img src="../images/login.webp" alt="Construção" style="width: 100%; height: 100%; object-fit: cover;">
+            
+            <!-- Overlay com Mensagem -->
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center;">
+                <h1 style="color: white; font-size: 3rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                    Construindo o Futuro
+                </h1>
+                <p style="color: #f0f0f0; font-size: 1.25rem; max-width: 400px; line-height: 1.6; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
+                    Gestão profissional para empresas de construção civil. Controle total de clientes, vendas e projetos.
+                </p>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center;">
+                    <span class="material-icons" style="color: #f59e0b; font-size: 2rem;">engineering</span>
+                    <span class="material-icons" style="color: #f59e0b; font-size: 2rem;">business</span>
+                    <span class="material-icons" style="color: #f59e0b; font-size: 2rem;">trending_up</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lado Direito - Formulário de Login -->
+        <div class="login-side" style="flex: 1; background: #000000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;">
+            
+            <!-- Logo da Empresa -->
+            <div class="logo-container" style="margin-bottom: 3rem; text-align: center;">
+                <img src="../images/teste.webp" alt="Maiconsoft" style="height: 80px; width: auto; margin-bottom: 1rem;">
+                <h2 style="color: #f59e0b; font-size: 1.5rem; font-weight: 600; margin: 0;">
+                    Sistema de Gestão
+                </h2>
+            </div>
+            
+            <!-- Formulário de Login -->
+            <div class="form-container" style="background: #111111; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); width: 100%; max-width: 400px; border: 1px solid #333333;">
+                
+                <h3 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 1.25rem; font-weight: 600;">
+                    Acesse sua conta
+                </h3>
+                
+                <form id="loginForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    
+                    <!-- Campo Código de Acesso -->
+                    <div>
+                        <label style="color: #cccccc; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; font-weight: 500;">
+                            Código de Acesso
+                        </label>
+                        <input type="text" id="codigoAcesso" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #444444; border-radius: 6px; background: #222222; color: white; font-size: 1rem; transition: border-color 0.3s; box-sizing: border-box; text-transform: uppercase;"
+                               placeholder="Digite seu código"
+                               onfocus="this.style.borderColor='#f59e0b'"
+                               onblur="this.style.borderColor='#444444'"
+                               maxlength="10">
+                    </div>
+                    
+                    <!-- Campo Senha -->
+                    <div>
+                        <label style="color: #cccccc; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; font-weight: 500;">
+                            Senha
+                        </label>
+                        <input type="password" id="senha" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #444444; border-radius: 6px; background: #222222; color: white; font-size: 1rem; transition: border-color 0.3s; box-sizing: border-box;"
+                               placeholder="Digite sua senha"
+                               onfocus="this.style.borderColor='#f59e0b'"
+                               onblur="this.style.borderColor='#444444'">
+                    </div>
+                    
+                    <!-- Botão de Login -->
+                    <button type="submit" id="loginBtn"
+                            style="width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000000; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 1rem;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        Entrar no Sistema
+                    </button>
+                    
+                </form>
+                
+                <!-- Códigos de Teste -->
+                <div class="test-codes" style="margin-top: 2rem; padding: 1rem; background: #0a0a0a; border-radius: 8px; border: 1px solid #333333;">
+                    <h4 style="color: #f59e0b; margin: 0 0 1rem 0; font-size: 0.9rem; text-align: center; font-weight: 600;">
+                        🧪 CÓDIGOS DE TESTE
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #222222; border-radius: 4px; cursor: pointer; transition: background 0.3s;" onclick="preencherCodigo('ADM001')" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'">
+                            <span style="color: #cccccc;">👨‍💼 Admin Sistema</span>
+                            <span style="color: #f59e0b; font-weight: 600;">ADM001</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #222222; border-radius: 4px; cursor: pointer; transition: background 0.3s;" onclick="preencherCodigo('RNXOXS')" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'">
+                            <span style="color: #cccccc;">👤 Maria Santos</span>
+                            <span style="color: #f59e0b; font-weight: 600;">RNXOXS</span>
+                        </div>
+                    </div>
+                    <p style="color: #666666; font-size: 0.75rem; margin: 0.75rem 0 0 0; text-align: center; font-style: italic;">
+                        Clique em qualquer perfil para login automático
+                    </p>
+                </div>
+                
+            </div>
+            
+            <!-- Rodapé -->
+            <div style="margin-top: 3rem; text-align: center; color: #666666; font-size: 0.85rem;">
+                <p>© 2025 Maiconsoft - Sistema de Gestão</p>
+                <p>Desenvolvido para empresas de construção civil</p>
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+    <script>
+        // Função para preencher código e senha automaticamente
+        function preencherCodigo(codigo) {
+            // Preencher os campos corretos
+            document.getElementById('codigoAcesso').value = codigo;
+            document.getElementById('senha').value = '123456'; // Senha padrão para todos os usuários de teste
+            
+            // Destacar campos preenchidos
+            document.getElementById('codigoAcesso').style.borderColor = '#f59e0b';
+            document.getElementById('senha').style.borderColor = '#f59e0b';
+            
+            // Remover destaque após 2 segundos
+            setTimeout(() => {
+                document.getElementById('codigoAcesso').style.borderColor = '#444444';
+                document.getElementById('senha').style.borderColor = '#444444';
+            }, 2000);
+        }
+
+        // Inicializar sistema de login
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Sistema Maiconsoft carregado!');
+            console.log('🔧 API URL:', CONFIG.API_BASE_URL);
+            console.log('🔧 APIService disponível:', typeof APIService !== 'undefined');
+            
+            // Verificar se elementos existem
+            const loginForm = document.getElementById('loginForm');
+            const codigoInput = document.getElementById('codigoAcesso');
+            const senhaInput = document.getElementById('senha');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            console.log('🔍 Elementos encontrados:', {
+                loginForm: !!loginForm,
+                codigoInput: !!codigoInput,
+                senhaInput: !!senhaInput,
+                loginBtn: !!loginBtn
+            });
+            
+            // Inicializar gerenciador de login
+            try {
+                const loginManager = new LoginManager();
+                console.log('✅ LoginManager inicializado com sucesso!');
+            } catch (error) {
+                console.error('❌ Erro ao inicializar LoginManager:', error);
+            }
+            
+            // Testar conexão com backend
+            if (typeof checkBackendConnection === 'function') {
+                checkBackendConnection().then(connected => {
+                    if (connected) {
+                        console.log('✅ Backend conectado com sucesso!');
+                    } else {
+                        console.warn('⚠️ Backend não conectado - verifique se a API está rodando');
+                    }
+                });
+            } else {
+                console.warn('⚠️ Função checkBackendConnection não encontrada');
+            }
+        });
+    </script>
+        // Cliente da API integrado
+        class MaiconsoftAPIClient {
+            constructor() {
+                this.baseURL = 'http://localhost:8080/api';
+                this.token = this.getToken();
+            }
+
+            getToken() {
+                const user = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+                return user.token || null;
+            }
+
+            setToken(token) {
+                const user = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+                user.token = token;
+                localStorage.setItem('usuarioLogado', JSON.stringify(user));
+                this.token = token;
+            }
+
+            getHeaders() {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                };
+
+                if (this.token) {
+                    headers['Authorization'] = `Bearer ${this.token}`;
+                }
+
+                return headers;
+            }
+
+            async makeRequest(endpoint, options = {}) {
+                const url = `${this.baseURL}${endpoint}`;
+                
+                const config = {
+                    method: options.method || 'GET',
+                    headers: this.getHeaders(),
+                    ...options
+                };
+
+                if (config.body && typeof config.body === 'object') {
+                    config.body = JSON.stringify(config.body);
+                }
+
+                try {
+                    console.log(`[API] ${config.method} ${url}`, config.body ? JSON.parse(config.body) : '');
+                    
+                    const response = await fetch(url, config);
+                    
+                    if (!response.ok) {
+                        const errorData = await response.text();
+                        console.error(`[API Error] ${response.status}:`, errorData);
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    console.log(`[API Response] ${config.method} ${url}:`, data);
+                    
+                    return data;
+                } catch (error) {
+                    console.error(`[API Error] ${config.method} ${url}:`, error);
+                    throw error;
+                }
+            }
+
+            async login(codigoAcesso, senha) {
+                try {
+                    const response = await this.makeRequest('/auth/login', {
+                        method: 'POST',
+                        body: {
+                            codigoAcesso: codigoAcesso,
+                            senha: senha
+                        }
+                    });
+
+                    if (response.token) {
+                        this.setToken(response.token);
+                        
+                        // Salvar dados do usuário
+                        const dadosUsuario = {
+                            token: response.token,
+                            codigo: response.codigoAcesso,
+                            nome: response.nome,
+                            role: response.role,
+                            loginTime: new Date().toISOString()
+                        };
+                        
+                        localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
+                    }
+
+                    return response;
+                } catch (error) {
+                    throw new Error(`Erro no login: ${error.message}`);
+                }
+            }
+
+            async testConnection() {
+                try {
+                    const response = await this.makeRequest('/auth/test', {
+                        method: 'POST'
+                    });
+                    return response;
+                } catch (error) {
+                    throw new Error(`Erro de conexão: ${error.message}`);
+                }
+            }
+        }
+
+        // Instância da API
+        const apiClient = new MaiconsoftAPIClient();
+
+        // Códigos para teste rápido (fallback se API não estiver disponível)
+        const codigosValidos = {
+            'ADMIN': {
+                nome: 'Administrador do Sistema',
+                role: 'ADMIN',
+                senha: 'admin123',
+                permissoes: ['dashboard', 'clientes', 'vendas', 'usuarios', 'relatorios'],
+                acessoTotal: true
+            },
+            'DIRETOR': {
+                nome: 'Diretor',
+                role: 'DIRETOR', 
+                senha: 'diretor123',
+                permissoes: ['dashboard', 'clientes', 'vendas', 'usuarios', 'relatorios'],
+                acessoTotal: true
+            },
+            'FUNCIONARIO': {
+                nome: 'Funcionário',
+                role: 'FUNCIONARIO',
+                senha: 'func123',
+                permissoes: ['dashboard', 'clientes', 'vendas'],
+                acessoTotal: false
+            }
+        };
+
+        // Função para preencher código e senha automaticamente
+        function preencherCodigo(codigo) {
+            // Preencher os campos corretos
+            document.getElementById('codigoAcesso').value = codigo;
+            document.getElementById('senha').value = '123456'; // Senha padrão para todos os usuários de teste
+            
+            // Destacar campos preenchidos
+            document.getElementById('codigoAcesso').style.borderColor = '#f59e0b';
+            document.getElementById('senha').style.borderColor = '#f59e0b';
+            
+            // Remover destaque após 2 segundos
+            setTimeout(() => {
+                document.getElementById('codigoAcesso').style.borderColor = '#444444';
+                document.getElementById('senha').style.borderColor = '#444444';
+            }, 2000);
+        }
+
+        // Função para realizar login com API
+        async function realizarLogin(codigo, senha) {
+            // Mostrar loading
+            mostrarLoading('Conectando com o servidor...');
+            
+            try {
+                // Tentar login com a API primeiro
+                const response = await apiClient.login(codigo, senha);
+                
+                esconderLoading();
+                mostrarSucesso(`Bem-vindo, ${response.nome}!`);
+                
+                // Redirecionar baseado no tipo de usuário após 1 segundo
+                setTimeout(() => {
+                    const role = response.role.toLowerCase();
+                    
+                    if (role === 'admin' || role === 'diretor') {
+                        window.location.href = 'dashboard.html';
+                    } else if (role === 'funcionario') {
+                        window.location.href = 'clientes.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                esconderLoading();
+                console.warn('API não disponível, usando fallback:', error.message);
+                
+                // Fallback para códigos locais se API não funcionar
+                realizarLoginFallback(codigo, senha);
+            }
+        }
+        
+        // Função de fallback (sistema original)
+        function realizarLoginFallback(codigo, senha) {
+            const usuario = codigosValidos[codigo];
+            
+            if (!usuario) {
+                mostrarErro('Código de acesso inválido!');
+                return;
+            }
+
+            if (senha !== usuario.senha) {
+                mostrarErro('Senha incorreta!');
+                return;
+            }
+
+            // Salvar dados do usuário logado
+            const dadosUsuario = {
+                codigo: codigo,
+                nome: usuario.nome,
+                role: usuario.role,
+                permissoes: usuario.permissoes,
+                acessoTotal: usuario.acessoTotal,
+                loginTime: new Date().toISOString(),
+                source: 'fallback' // Indicar que é fallback
+            };
+            
+            localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
+
+            mostrarSucesso(`Bem-vindo, ${usuario.nome}! (Modo offline)`);
+            
+            // Redirecionar baseado no tipo de usuário após 1 segundo
+            setTimeout(() => {
+                const role = usuario.role.toLowerCase();
+                
+                if (role === 'admin' || role === 'diretor') {
+                    window.location.href = 'dashboard.html';
+                } else if (role === 'funcionario') {
+                    window.location.href = 'clientes.html';
+                }
+            }, 1000);
+        }
+
+        // Converte códigos para maiúsculo conforme digita
+        document.getElementById('codigo').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Submissão do formulário
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const codigo = document.getElementById('codigo').value.toUpperCase();
+            const password = document.getElementById('password').value;
+            
+            // Usar a função centralizada de login com API
+            await realizarLogin(codigo, password);
+        });
+
+        // Função para mostrar erro
+        function mostrarErro(mensagem) {
+            const codigo = document.getElementById('codigo');
+            codigo.style.borderColor = '#ef4444';
+            codigo.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+            
+            // Criar ou atualizar mensagem de erro
+            let errorDiv = document.getElementById('error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'error-message';
+                errorDiv.style.cssText = 'margin-top: 1rem; padding: 0.75rem; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 6px; color: #ef4444; font-size: 0.9rem; text-align: center;';
+                document.getElementById('loginForm').appendChild(errorDiv);
+            }
+            errorDiv.textContent = mensagem;
+            
+            // Remover erro após 3 segundos
+            setTimeout(() => {
+                codigo.style.borderColor = '#444444';
+                codigo.style.boxShadow = 'none';
+                if (errorDiv) errorDiv.remove();
+            }, 3000);
+        }
+
+        // Função para mostrar sucesso
+        function mostrarSucesso(mensagem) {
+            let successDiv = document.getElementById('success-message');
+            if (!successDiv) {
+                successDiv = document.createElement('div');
+                successDiv.id = 'success-message';
+                successDiv.style.cssText = 'margin-top: 1rem; padding: 0.75rem; background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 6px; color: #22c55e; font-size: 0.9rem; text-align: center;';
+                document.getElementById('loginForm').appendChild(successDiv);
+            }
+            successDiv.textContent = mensagem;
+        }
+
+        // Função para mostrar loading
+        function mostrarLoading(mensagem) {
+            let loadingDiv = document.getElementById('loading-message');
+            if (!loadingDiv) {
+                loadingDiv = document.createElement('div');
+                loadingDiv.id = 'loading-message';
+                loadingDiv.style.cssText = 'margin-top: 1rem; padding: 0.75rem; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; border-radius: 6px; color: #f59e0b; font-size: 0.9rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem;';
+                loadingDiv.innerHTML = `
+                    <div style="width: 16px; height: 16px; border: 2px solid #333; border-top: 2px solid #f59e0b; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <span>${mensagem}</span>
+                `;
+                document.getElementById('loginForm').appendChild(loadingDiv);
+            } else {
+                loadingDiv.querySelector('span').textContent = mensagem;
+            }
+        }
+
+        // Função para esconder loading
+        function esconderLoading() {
+            const loadingDiv = document.getElementById('loading-message');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+    </script>
+    
+    <!-- Responsividade -->
+    <style>
+        /* ============================================
+           RESPONSIVIDADE OTIMIZADA PARA NOTEBOOKS
+           ============================================ */
+        
+        /* Garantir que a logo sempre apareça */
+        .logo-container {
+            margin-bottom: 2rem !important;
+            text-align: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .logo-container img {
+            height: 80px !important;
+            width: auto !important;
+            max-width: 200px !important;
+            margin-bottom: 1rem !important;
+            display: block !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        
+        /* ============================================
+           NOTEBOOKS E TELAS COM ALTURA REDUZIDA
+           ============================================ */
+        
+        /* NOTEBOOKS PADRÃO - Altura reduzida mas ainda confortável */
+        @media (max-height: 800px) {
+            .login-side {
+                padding: 1.5rem !important;
+                justify-content: flex-start !important;
+                padding-top: 2rem !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 2rem !important;
+            }
+            
+            .logo-container img {
+                height: 70px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1.4rem !important;
+            }
+        }
+        
+        /* NOTEBOOKS PEQUENOS - Altura muito reduzida */
+        @media (max-height: 700px) {
+            .login-side {
+                padding: 1rem !important;
+                padding-top: 1rem !important;
+                justify-content: flex-start !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .logo-container img {
+                height: 60px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1.3rem !important;
+                margin-top: 0.5rem !important;
+            }
+            
+            /* Formulário mais compacto */
+            .form-container {
+                padding: 2rem !important;
+            }
+            
+            .form-container h3 {
+                margin-bottom: 1.5rem !important;
+                font-size: 1.2rem !important;
+            }
+            
+            .form-container form {
+                gap: 1.2rem !important;
+            }
+            
+            .test-codes {
+                margin-top: 1.5rem !important;
+            }
+        }
+        
+        /* NOTEBOOKS MUITO PEQUENOS - Netbooks */
+        @media (max-height: 600px) {
+            .login-side {
+                padding: 0.5rem !important;
+                padding-top: 0.5rem !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 1rem !important;
+            }
+            
+            .logo-container img {
+                height: 50px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1.2rem !important;
+                margin-top: 0.3rem !important;
+            }
+            
+            .form-container {
+                padding: 1.5rem !important;
+            }
+            
+            .form-container h3 {
+                margin-bottom: 1rem !important;
+                font-size: 1.1rem !important;
+            }
+            
+            .form-container form {
+                gap: 1rem !important;
+            }
+            
+            .test-codes {
+                margin-top: 1rem !important;
+                padding: 0.8rem !important;
+            }
+            
+            .test-codes h4 {
+                font-size: 0.8rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+        }
+        
+        /* ============================================
+           TABLETS E CELULARES
+           ============================================ */
+        
+        /* TABLETS */
+        @media (max-width: 1024px) and (min-height: 600px) {
+            .main-container {
+                flex-direction: row !important;
+            }
+            
+            .login-side {
+                padding: 1.5rem !important;
+            }
+            
+            .logo-container img {
+                height: 70px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1.3rem !important;
+            }
+        }
+        
+        /* CELULARES */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column !important;
+            }
+            
+            .image-side {
+                height: 35vh !important;
+                min-height: 250px !important;
+            }
+            
+            .login-side {
+                padding: 1rem !important;
+                justify-content: flex-start !important;
+                padding-top: 2rem !important;
+            }
+            
+            .logo-container {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .logo-container img {
+                height: 60px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1.2rem !important;
+            }
+            
+            .form-container {
+                padding: 1.5rem !important;
+            }
+        }
+        
+        /* CELULARES PEQUENOS */
+        @media (max-width: 480px) {
+            .image-side {
+                height: 30vh !important;
+                min-height: 200px !important;
+            }
+            
+            .login-side {
+                padding: 0.5rem !important;
+                padding-top: 1rem !important;
+            }
+            
+            .logo-container img {
+                height: 50px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 1rem !important;
+            }
+            
+            .form-container {
+                padding: 1rem !important;
+            }
+            
+            .image-side h1 {
+                font-size: 2rem !important;
+            }
+            
+            .image-side p {
+                font-size: 1rem !important;
+            }
+        }
+        
+        /* CELULARES MUITO PEQUENOS */
+        @media (max-width: 360px) {
+            .logo-container img {
+                height: 45px !important;
+            }
+            
+            .logo-container h2 {
+                font-size: 0.9rem !important;
+            }
+        }
+        
+        /* Animação de loading */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    
+</body>
+</html>

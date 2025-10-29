@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maiconsoft - Sistema de Gestão</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 700px;
+            width: 90%;
+        }
+        
+        .logo-container {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .logo-img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-text {
+            color: #f59e0b;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: #222222;
+            border: 1px solid #444444;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #333333;
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #000000;
+            border-color: transparent;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .feature {
+            background: #0a0a0a;
+            border: 1px solid #333333;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            color: #f59e0b;
+        }
+        
+        .feature-text {
+            font-size: 0.9rem;
+        }
+        
+        .info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #0a0a0a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .info strong {
+            color: #f59e0b;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="frontend/images/teste.webp" alt="Maiconsoft" class="logo-img">
+            <h2 class="logo-text">Sistema de Gestão</h2>
+        </div>
+        <div class="subtitle">Plataforma completa para gestão de clientes e vendas</div>
+        
+        <div class="buttons">
+            <a href="frontend/pages/clientes.html" class="btn btn-primary">
+                <span class="material-icons">people</span>
+                Acessar Sistema de Clientes
+            </a>
+            
+            <a href="frontend/pages/vendas.html" class="btn">
+                <span class="material-icons">trending_up</span>
+                Sistema de Vendas
+            </a>
+            
+            <a href="frontend/pages/login.html" class="btn">
+                <span class="material-icons">login</span>
+                Tela de Login
+            </a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="material-icons feature-icon">group</span>
+                <span class="feature-text">5 Clientes Demo</span>
+            </div>
+            <div class="feature">
+                <span class="material-icons feature-icon">edit</span>
+                <span class="feature-text">CRUD Completo</span>
+            </div>
+            <div class="feature">
+                <span class="material-icons feature-icon">phone_android</span>
+                <span class="feature-text">Design Responsivo</span>
+            </div>
+            <div class="feature">
+                <span class="material-icons feature-icon">speed</span>
+                <span class="feature-text">Modo Demo</span>
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>💡 Modo Demonstração Ativo</strong><br>
+            O sistema funciona com dados de exemplo. Todas as funcionalidades estão disponíveis para teste!
+        </div>
+    </div>
+    
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

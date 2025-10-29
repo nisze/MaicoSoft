@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo à Maiconsoft - Soluções em Construção</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #37474F; background-color: #ECEFF1;">
+    
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ECEFF1;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                
+                <!-- Email Container -->
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: #000000; color: white; padding: 0; text-align: center;">
+                            <img src="https://drive.google.com/uc?id=1C6lEzTLNaJ6D1846j_J5P5d9-Q60J1m5" 
+                                 alt="Maiconsoft Logo" 
+                                 style="width: 100%; height: 200px; object-fit: contain; display: block;">
+                        </td>
+                    </tr>
+                    
+                    <!-- Subtitle Band -->
+                    <tr>
+                        <td style="background: #37474F; color: white; padding: 15px 20px; text-align: center;">
+                            <h2 style="font-size: 18px; font-weight: 500; margin: 0; color: white; letter-spacing: 1px;">Soluções em Construção & Engenharia</h2>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            
+                            <!-- Welcome Message -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="text-align: center; margin-bottom: 30px;">
+                                        <h2 style="color: #FF6B35; font-size: 24px; margin-bottom: 15px;">Bem-vindo à nossa empresa!</h2>
+                                        <p style="margin: 0; font-size: 16px; color: #37474F;">É com grande satisfação que confirmamos seu cadastro em nossa plataforma. Agora você faz parte da família Maiconsoft e terá acesso a nossas soluções especializadas em construção civil!</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Client Info -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #ECEFF1 0%, #f8f9ff 100%); border-left: 4px solid #FF6B35; border-radius: 8px; margin: 25px 0;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <h3 style="color: #004E89; margin-bottom: 15px; font-size: 18px;">Informações do seu cadastro</h3>
+                                        
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="padding: 10px 0; border-bottom: 1px solid rgba(0, 78, 137, 0.1);">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td style="font-weight: 600; color: #37474F;">Nome:</td>
+                                                            <td style="color: #D84315; font-weight: 700; text-align: right;" th:text="${nomeCliente}">Nome do Cliente</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0; border-bottom: 1px solid rgba(0, 78, 137, 0.1);">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td style="font-weight: 600; color: #37474F;">Código do Cliente:</td>
+                                                            <td style="color: #D84315; font-weight: 700; text-align: right;" th:text="${codigoCliente}">CLT001</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td style="font-weight: 600; color: #37474F;">Status:</td>
+                                                            <td style="color: #D84315; font-weight: 700; text-align: right;">Ativo</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Services Section -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <h3 style="color: #004E89; margin-bottom: 25px; font-size: 20px;">Nossos Serviços Especializados</h3>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <!-- Services Grid -->
+                                        <table width="100%" cellpadding="10" cellspacing="0" border="0">
+                                            <tr>
+                                                <!-- Service 1 -->
+                                                <td width="50%" style="vertical-align: top;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 12px; border: 1px solid rgba(255, 107, 53, 0.1);">
+                                                        <tr>
+                                                            <td style="padding: 25px; text-align: center;">
+                                                                <div style="width: 60px; height: 60px; background: #000000; color: white; border-radius: 12px; margin: 0 auto 15px; line-height: 60px; font-size: 24px;">🏗️</div>
+                                                                <h4 style="color: #004E89; margin: 10px 0; font-size: 16px;">Gestão de Obras</h4>
+                                                                <p style="color: #666; font-size: 14px; margin: 0; line-height: 1.4;">Planejamento e acompanhamento completo</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <!-- Service 2 -->
+                                                <td width="50%" style="vertical-align: top;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 12px; border: 1px solid rgba(255, 107, 53, 0.1);">
+                                                        <tr>
+                                                            <td style="padding: 25px; text-align: center;">
+                                                                <div style="width: 60px; height: 60px; background: #000000; color: white; border-radius: 12px; margin: 0 auto 15px; line-height: 60px; font-size: 24px;">📊</div>
+                                                                <h4 style="color: #004E89; margin: 10px 0; font-size: 16px;">Orçamentos</h4>
+                                                                <p style="color: #666; font-size: 14px; margin: 0; line-height: 1.4;">Orçamentos detalhados e precisos</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr style="height: 20px;"><td colspan="2"></td></tr>
+                                            <tr>
+                                                <!-- Service 3 -->
+                                                <td width="50%" style="vertical-align: top;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 12px; border: 1px solid rgba(255, 107, 53, 0.1);">
+                                                        <tr>
+                                                            <td style="padding: 25px; text-align: center;">
+                                                                <div style="width: 60px; height: 60px; background: #000000; color: white; border-radius: 12px; margin: 0 auto 15px; line-height: 60px; font-size: 24px;">⚖️</div>
+                                                                <h4 style="color: #004E89; margin: 10px 0; font-size: 16px;">Consultoria Técnica</h4>
+                                                                <p style="color: #666; font-size: 14px; margin: 0; line-height: 1.4;">Assessoria especializada em engenharia</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <!-- Service 4 -->
+                                                <td width="50%" style="vertical-align: top;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 12px; border: 1px solid rgba(255, 107, 53, 0.1);">
+                                                        <tr>
+                                                            <td style="padding: 25px; text-align: center;">
+                                                                <div style="width: 60px; height: 60px; background: #000000; color: white; border-radius: 12px; margin: 0 auto 15px; line-height: 60px; font-size: 24px;">🔧</div>
+                                                                <h4 style="color: #004E89; margin: 10px 0; font-size: 16px;">Manutenção</h4>
+                                                                <p style="color: #666; font-size: 14px; margin: 0; line-height: 1.4;">Serviços de manutenção predial</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Visual Section with Background Image -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0; border-radius: 12px; background-image: url('https://drive.google.com/uc?id=1JvVh3kg9pzKcdGjat3qFO5nVhbK3Fqxv'); background-size: cover; background-position: center;">
+                                <tr>
+                                    <td style="padding: 40px 20px; text-align: center; background: rgba(0, 0, 0, 0.4); border-radius: 12px;">
+                                        <h3 style="font-size: 22px; margin-bottom: 15px; color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">Nossos Projetos em Ação</h3>
+                                        <p style="font-size: 16px; margin: 0; color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);">Transformamos ideias em realidade com qualidade e excelência técnica</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- CTA Section -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #546E7A; border-radius: 12px; margin: 30px 0;">
+                                <tr>
+                                    <td style="padding: 30px; text-align: center;">
+                                        <h3 style="margin-bottom: 15px; font-size: 22px; color: white;">Pronto para construir seu projeto?</h3>
+                                        <p style="font-size: 16px; margin: 0; color: white;">Nossa equipe de engenheiros e especialistas entrará em contato em breve para apresentar nossas soluções personalizadas para suas necessidades de construção.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #78909C; color: white; padding: 30px 20px; text-align: center;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td>
+                                        <div style="margin-bottom: 20px;">
+                                            <div style="margin: 10px 0; font-size: 14px;">
+                                                <strong style="color: #FF6B35;">Email:</strong> contato@maiconsoft.com.br
+                                            </div>
+                                            <div style="margin: 10px 0; font-size: 14px;">
+                                                <strong style="color: #FF6B35;">Telefone:</strong> (11) 9999-9999
+                                            </div>
+                                            <div style="margin: 10px 0; font-size: 14px;">
+                                                <strong style="color: #FF6B35;">Endereço:</strong> São Paulo, SP - Brasil
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="height: 2px; background: #FF6B35; margin: 30px auto; width: 100px;"></div>
+                                        
+                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 20px;">
+                                            © 2025 Maiconsoft. Todos os direitos reservados.<br>
+                                            Construindo o futuro com tecnologia e inovação.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+            </td>
+        </tr>
+    </table>
+    
+</body>
+</html>

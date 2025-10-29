@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Maiconsoft</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/cliente.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <style>
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+            max-width: 400px;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-ativo {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-prospecto {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-inativo {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Animação de loading para busca */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-search {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Estilos para resultados de busca */
+        .search-highlight {
+            background-color: #fef3c7;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        
+        .no-results {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Container de Alertas -->
+    <div id="alert-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="display: flex; align-items: center;">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                </a>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="dashboard.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="clientes.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #f59e0b; font-weight: 600; border-radius: 6px;">
+                    <span class="material-icons" style="font-size: 1.1rem;">people</span>
+                    Clientes
+                </a>
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
+                    Vendas
+                </a>
+                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">local_offer</span>
+                    Cupons
+                </a>
+                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">group</span>
+                    Usuários
+                </a>
+                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
+                    Relatórios
+                </a>
+                <a href="#" onclick="fazerLogout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
+        
+        <!-- Header da Página -->
+        <div style="background: white; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="material-icons" style="font-size: 1.75rem; color: #3b82f6;">people</span>
+                        Gestão de Clientes
+                    </h1>
+                    <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Cadastre e gerencie informações completas dos seus clientes</p>
+                </div>
+                
+                <!-- Tabs de Navegação -->
+                <div style="display: flex; background: #f3f4f6; padding: 0.25rem;">
+                    <button id="tab-cadastro-btn" class="tab-button" data-tab="tab-cadastro" onclick="console.log('🎯 ONCLICK Cadastrar!'); showTab('cadastro');"
+                            style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                        <span class="material-icons" style="font-size: 1rem;">person_add</span>
+                        Cadastrar
+                    </button>
+                    <button id="tab-lista-btn" class="tab-button active" data-tab="tab-lista" onclick="console.log('🎯 ONCLICK Lista!'); showTab('lista');"
+                            style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                        <span class="material-icons" style="font-size: 1rem;">search</span>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteúdo das Tabs -->
+        <div id="tab-cadastro" class="tab-content" style="display: none;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+
+                <form id="clienteForm" style="padding: 0;">
+                    <!-- Dados Básicos -->
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">person</span>
+                            Dados Básicos
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo *</label>
+                                <select id="tipoCliente" name="tipoCliente" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecionar</option>
+                                    <option value="pf">Pessoa Física</option>
+                                    <option value="pj">Pessoa Jurídica</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Finalidade *</label>
+                                <select id="finalidade" name="finalidade" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecionar</option>
+                                    <option value="C">Consumidor</option>
+                                    <option value="R">Revenda</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CPF/CNPJ *</label>
+                                <input type="text" id="cpfCnpj" name="cpfCnpj" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="000.000.000-00">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Completo / Razão Social *</label>
+                                <input type="text" id="nome" name="nome" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Nome ou razão social">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Fantasia</label>
+                                <input type="text" id="nomeFantasia" name="nomeFantasia" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Nome fantasia">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contatos -->
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #10b981;">contact_phone</span>
+                            Contatos
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Telefone Principal *</label>
+                                <input type="tel" id="telefone1" name="telefone1" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="(11) 99999-9999">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">WhatsApp</label>
+                                <input type="tel" id="whatsapp" name="whatsapp" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="(11) 99999-9999">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Telefone Secundário</label>
+                                <input type="tel" id="telefone2" name="telefone2" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="(11) 3333-3333">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">E-mail Principal *</label>
+                                <input type="email" id="email" name="email" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="contato@empresa.com.br">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Pessoa de Contato</label>
+                                <input type="text" id="contatoPrincipal" name="contatoPrincipal" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Nome do responsável">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Endereço -->
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #f59e0b;">location_on</span>
+                            Endereço
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 3fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CEP</label>
+                                <input type="text" id="cep" name="cep" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="00000-000" onblur="buscarCEP()">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Logradouro</label>
+                                <input type="text" id="logradouro" name="logradouro" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Rua, Avenida">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Número</label>
+                                <input type="text" id="numero" name="numero" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="123">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Bairro</label>
+                                <input type="text" id="bairro" name="bairro" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Bairro">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Cidade</label>
+                                <input type="text" id="cidade" name="cidade" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Cidade">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Estado</label>
+                                <select id="estado" name="estado" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">UF</option>
+                                    <option value="SP">SP</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="MG">MG</option>
+                                    <option value="RS">RS</option>
+                                    <option value="PR">PR</option>
+                                    <option value="SC">SC</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações Comerciais -->
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #8b5cf6;">business</span>
+                            Informações Comerciais
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Segmento</label>
+                                <select id="segmento" name="segmento" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecionar</option>
+                                    <option value="construcao_civil">Construção Civil</option>
+                                    <option value="engenharia">Engenharia</option>
+                                    <option value="arquitetura">Arquitetura</option>
+                                    <option value="incorporadora">Incorporadora</option>
+                                    <option value="construtora">Construtora</option>
+                                    <option value="particular">Particular</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Porte</label>
+                                <select id="porte" name="porte" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecionar</option>
+                                    <option value="mei">MEI</option>
+                                    <option value="micro">Microempresa</option>
+                                    <option value="pequena">Pequena</option>
+                                    <option value="media">Média</option>
+                                    <option value="grande">Grande</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Como nos conheceu?</label>
+                                <select id="origem" name="origem" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                    <option value="">Selecionar</option>
+                                    <option value="indicacao">Indicação</option>
+                                    <option value="site">Site</option>
+                                    <option value="google">Google</option>
+                                    <option value="redes_sociais">Redes Sociais</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Observações</label>
+                            <textarea id="observacoes" name="observacoes" rows="3" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; resize: vertical;" placeholder="Informações adicionais sobre o cliente"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div style="padding: 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" onclick="limparFormulario()" style="background: #ef4444; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                            <span class="material-icons" style="font-size: 1rem;">clear</span>
+                            Limpar
+                        </button>
+                        
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button type="button" onclick="salvarRascunho()" style="background: #f59e0b; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">
+                                <span class="material-icons" style="font-size: 1rem;">save</span>
+                                Rascunho
+                            </button>
+                            <button type="submit" onclick="console.log('📝 ONCLICK Submit!'); event.preventDefault(); cadastrarCliente();" style="background: #10b981; color: white; border: none; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                <span class="material-icons" style="font-size: 1rem;">save</span>
+                                Cadastrar Cliente
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab: Lista de Clientes -->
+        <div id="tab-lista" class="tab-content" style="display: block;">
+            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem;">
+                <!-- Filtros e Busca -->
+                <div style="background: #f8fafc; padding: 1rem; margin-bottom: 1rem; border: 1px solid #e5e7eb;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">search</span>
+                            Buscar Clientes
+                        </h3>
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <select id="statusFilter" style="padding: 0.5rem; border: 1px solid #d1d5db; font-size: 0.85rem; background: white;">
+                                <option value="">Todos os status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="prospecto">Prospecto</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                            <input type="text" id="searchInput" placeholder="Nome, email ou CPF/CNPJ..." style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; font-size: 0.85rem; min-width: 250px;">
+                            <button onclick="console.log('🔍 Botão buscar clicado!'); buscarClientes();" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                                <span class="material-icons" style="font-size: 0.9rem;">search</span>
+                                Buscar
+                            </button>
+                            <button onclick="console.log('🔄 Botão recarregar clicado!'); loadClientesList();" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                <span class="material-icons" style="font-size: 0.9rem;">refresh</span>
+                                Recarregar
+                            </button>
+                            <button onclick="console.log('🧹 Botão limpar filtros clicado!'); limparFiltros();" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
+                                <span class="material-icons" style="font-size: 0.9rem;">clear</span>
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Resultados -->
+                <div id="clientsList" style="min-height: 200px;">
+                    <!-- Tabela de Clientes -->
+                    <div id="clientsTable" style="display: block;">
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                                <thead>
+                                    <tr style="background: #f8fafc; border-bottom: 2px solid #e5e7eb;">
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Nome/Razão Social</th>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">CPF/CNPJ</th>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Telefone</th>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Email</th>
+                                        <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Status</th>
+                                        <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151;">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clientsTableBody">
+                                    <!-- Resultados serão inseridos aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginação -->
+                        <div id="pagination" style="display: flex; justify-content: between; align-items: center; margin-top: 1rem; padding: 1rem 0; border-top: 1px solid #e5e7eb;">
+                            <div style="color: #6b7280; font-size: 0.85rem;">
+                                Mostrando <span id="showingCount">0</span> de <span id="totalCount">0</span> clientes
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button id="prevPage" style="padding: 0.4rem 0.8rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.8rem;" disabled>Anterior</button>
+                                <button id="nextPage" style="padding: 0.4rem 0.8rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.8rem;" disabled>Próximo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estado Vazio -->
+                    <div id="emptyState" style="display: none; text-align: center; padding: 2rem; color: #6b7280;">
+                        <span class="material-icons" style="font-size: 2.5rem; color: #d1d5db; margin-bottom: 1rem; display: block;">people_outline</span>
+                        <p style="margin: 0; font-size: 1rem; font-weight: 500;">Nenhum cliente encontrado</p>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem;">Use os filtros acima para buscar ou cadastre novos clientes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização -->
+    <div id="viewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons" style="color: #3b82f6;">visibility</span>
+                    Detalhes do Cliente
+                </h2>
+                <button onclick="closeViewModal()" style="background: none; border: none; cursor: pointer; color: #6b7280; padding: 0.5rem;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div id="viewModalContent" style="padding: 1.5rem;">
+                <!-- Conteúdo será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-icons" style="color: #f59e0b;">edit</span>
+                    Editar Cliente
+                </h2>
+                <button onclick="closeEditModal()" style="background: none; border: none; cursor: pointer; color: #6b7280; padding: 0.5rem;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="editForm" style="padding: 1.5rem;">
+                <div id="editModalContent">
+                    <!-- Formulário será inserido aqui -->
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                    <button type="button" onclick="closeEditModal()" style="padding: 0.75rem 1.5rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="editSubmitBtn" style="padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                        <span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem;">save</span>
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/ajax-utils.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/cliente.js"></script>
+    <script src="../js/cliente-responsive.js"></script>
+    <script>
+        // FUNÇÕES GLOBAIS - DEVEM ESTAR SEMPRE DISPONÍVEIS
+        
+        // Function to show/hide tabs
+        function showTab(tabName) {
+            console.log('🔄 Mostrando tab:', tabName);
+            
+            // Hide all tabs
+            const allContent = document.querySelectorAll('.tab-content');
+            allContent.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabName);
+            if (targetTab) {
+                targetTab.style.display = 'block';
+                console.log('✅ Tab', tabName, 'exibida com sucesso');
+                
+                // Load data when switching to list tab
+                if (tabName === 'lista') {
+                    console.log('🔄 Carregando dados da aba lista...');
+                    // Carregar lista de clientes diretamente
+                    setTimeout(() => {
+                        loadClientesList();
+                    }, 300);
+                    setupSearchListeners(); // Configurar listeners de busca
+                }
+            } else {
+                console.error('❌ Tab não encontrada:', 'tab-' + tabName);
+            }
+            
+            // Update button styles
+            const allButtons = document.querySelectorAll('.tab-button');
+            allButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = 'transparent';
+                btn.style.color = '#6b7280';
+            });
+            
+            const activeButton = document.getElementById('tab-' + tabName + '-btn');
+            if (activeButton) {
+                activeButton.classList.add('active');
+                activeButton.style.background = '#3b82f6';
+                activeButton.style.color = 'white';
+            }
+        }
+        
+        // Configurar listeners para busca em tempo real
+        function setupSearchListeners() {
+            console.log('🔧 Configurando listeners de busca...');
+            
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            if (searchInput) {
+                // Busca em tempo real com debounce
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        console.log('🔍 Busca automática disparada');
+                        buscarClientes();
+                    }, 500); // 500ms de delay
+                });
+                
+                // Busca ao pressionar Enter
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log('🔍 Busca por Enter');
+                        buscarClientes();
+                    }
+                });
+                
+                console.log('✅ Listeners do campo de busca configurados');
+            }
+            
+            if (statusFilter) {
+                statusFilter.addEventListener('change', function() {
+                    console.log('🔍 Filtro de status alterado');
+                    buscarClientes();
+                });
+                
+                console.log('✅ Listener do filtro de status configurado');
+            }
+        }
+        
+        // Limpar filtros de busca
+        function limparFiltros() {
+            console.log('🧹 Limpando filtros de busca...');
+            
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            if (searchInput) searchInput.value = '';
+            if (statusFilter) statusFilter.value = '';
+            
+            // Recarregar lista completa
+            loadClientesList();
+            
+            showSuccessMessage('Filtros limpos');
+        }
+        
+        // Function to register client
+        async function cadastrarCliente() {
+            console.log('💾 Iniciando cadastro do cliente...');
+            
+            const form = document.getElementById('clienteForm');
+            if (!form) {
+                console.error('❌ Formulário não encontrado!');
+                return;
+            }
+            
+            const formData = new FormData(form);
+            
+            // Validate required fields first
+            const nome = formData.get('nome')?.trim();
+            const cpfCnpj = formData.get('cpfCnpj')?.trim();
+            const tipoCliente = formData.get('tipoCliente')?.trim();
+            const finalidade = formData.get('finalidade')?.trim();
+            
+            console.log('📋 Dados do formulário:', {
+                nome,
+                cpfCnpj,
+                tipoCliente,
+                finalidade,
+                email: formData.get('email'),
+                telefone1: formData.get('telefone1')
+            });
+            
+            // Validate required fields
+            if (!nome) {
+                showErrorMessage('Nome/Razão Social é obrigatório');
+                return;
+            }
+            
+            if (!cpfCnpj) {
+                showErrorMessage('CPF/CNPJ é obrigatório');
+                return;
+            }
+            
+            if (!tipoCliente || (tipoCliente !== 'pf' && tipoCliente !== 'pj')) {
+                showErrorMessage('Tipo de cliente é obrigatório (Pessoa Física ou Jurídica)');
+                return;
+            }
+            
+            if (!finalidade || (finalidade !== 'C' && finalidade !== 'R')) {
+                showErrorMessage('Finalidade é obrigatória (Consumidor ou Revenda)');
+                return;
+            }
+            
+            // Clean CPF/CNPJ (remove formatting)
+            const cleanCpfCnpj = cpfCnpj.replace(/[^\d]/g, '');
+            
+            // Map form fields to backend DTO format with proper validation
+            const clienteData = {
+                // Required fields
+                codigo: 'CLI' + Date.now().toString().slice(-6), // 6 digits max
+                loja: '01', // Required field
+                razaoSocial: nome, // Required field
+                tipo: tipoCliente === 'pf' ? 'F' : 'J', // Required: F or J
+                cpfCnpj: cleanCpfCnpj, // Required field, cleaned
+                finalidade: finalidade, // Required field: C or R
+                
+                // Optional fields - only send if they have values
+                ...(formData.get('nomeFantasia')?.trim() && { nomeFantasia: formData.get('nomeFantasia').trim() }),
+                ...(formData.get('email')?.trim() && { email: formData.get('email').trim() }),
+                ...(formData.get('telefone1')?.trim() && { telefone: formData.get('telefone1').trim() }),
+                ...(formData.get('cep')?.trim() && { cep: formData.get('cep').trim() }),
+                ...(formData.get('logradouro')?.trim() && { endereco: formData.get('logradouro').trim() }),
+                ...(formData.get('bairro')?.trim() && { bairro: formData.get('bairro').trim() }),
+                ...(formData.get('cidade')?.trim() && { cidade: formData.get('cidade').trim() }),
+                ...(formData.get('estado')?.trim() && { estado: formData.get('estado').trim() }),
+                ...(formData.get('contatoPrincipal')?.trim() && { contato: formData.get('contatoPrincipal').trim() }),
+                
+                // Default values for optional fields
+                pais: 'Brasil'
+            };
+            
+            console.log('📋 Dados finais para envio (COMPLETOS):', JSON.stringify(clienteData, null, 2));
+            
+            // Verificar se todos os campos obrigatórios estão presentes
+            const camposObrigatorios = ['codigo', 'loja', 'razaoSocial', 'tipo', 'cpfCnpj'];
+            const camposFaltando = camposObrigatorios.filter(campo => !clienteData[campo]);
+            
+            if (camposFaltando.length > 0) {
+                console.error('❌ Campos obrigatórios faltando:', camposFaltando);
+                showErrorMessage(`Campos obrigatórios faltando: ${camposFaltando.join(', ')}`);
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    const originalText = submitButton.innerHTML;
+                    submitButton.innerHTML = '<span class="material-icons">hourglass_empty</span> Cadastrando...';
+                    submitButton.disabled = true;
+                }
+                
+                // Call API
+                if (window.APIService && window.APIService.clientes) {
+                    console.log('📞 Chamando APIService.clientes.create...');
+                    const response = await window.APIService.clientes.create(clienteData);
+                    console.log('✅ Cliente cadastrado com sucesso:', response);
+                    
+                    // Show success message
+                    showSuccessMessage('Cliente cadastrado com sucesso!');
+                    
+                    // Clear form
+                    form.reset();
+                    
+                    // Switch to list tab and reload
+                    showTab('lista');
+                    
+                } else {
+                    console.error('❌ APIService não disponível');
+                    showErrorMessage('Erro: Sistema não configurado corretamente');
+                }
+                
+                // Restore button
+                if (submitButton) {
+                    submitButton.innerHTML = '<span class="material-icons">save</span> Cadastrar Cliente';
+                    submitButton.disabled = false;
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao cadastrar cliente:', error);
+                
+                // Tentar extrair mais detalhes do erro
+                let errorMessage = 'Erro ao cadastrar cliente';
+                
+                if (error.response && error.response.data) {
+                    console.error('Detalhes do erro do servidor:', error.response.data);
+                    if (typeof error.response.data === 'string') {
+                        errorMessage = error.response.data;
+                    } else if (error.response.data.message) {
+                        errorMessage = error.response.data.message;
+                    } else if (error.response.data.errors) {
+                        errorMessage = Array.isArray(error.response.data.errors) 
+                            ? error.response.data.errors.join(', ')
+                            : JSON.stringify(error.response.data.errors);
+                    }
+                } else if (error.message) {
+                    if (error.message.includes('400')) {
+                        errorMessage = 'Dados inválidos. Verifique os campos obrigatórios.';
+                    } else if (error.message.includes('409')) {
+                        errorMessage = 'Cliente já existe (CPF/CNPJ duplicado).';
+                    } else {
+                        errorMessage = error.message;
+                    }
+                }
+                
+                showErrorMessage(errorMessage);
+                
+                // Restore button
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.innerHTML = '<span class="material-icons">save</span> Cadastrar Cliente';
+                    submitButton.disabled = false;
+                }
+            }
+        }
+        
+        // Function to load clients list
+        async function loadClientesList() {
+            console.log('📋 Carregando lista de clientes...');
+            
+            // Show loading state
+            const container = document.querySelector('#clientsList');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <span class="material-icons" style="font-size: 2rem; animation: spin 1s linear infinite;">hourglass_empty</span>
+                        <p style="margin: 1rem 0 0 0;">Carregando clientes...</p>
+                    </div>
+                `;
+            }
+            
+            try {
+                // Debug mais detalhado
+                console.log('🔍 Debug completo:', {
+                    window_APIService: !!window.APIService,
+                    APIService_clientes: !!window.APIService?.clientes,
+                    APIService_baseURL: window.APIService?.baseURL,
+                    window_config: !!window.config,
+                    location: window.location.href
+                });
+                
+                // Testar múltiplas URLs
+                const testUrls = [
+                    'http://localhost:8090/api/clientes',
+                    'http://127.0.0.1:8090/api/clientes'
+                ];
+                
+                let successUrl = null;
+                let lastError = null;
+                
+                for (const testUrl of testUrls) {
+                    console.log(`🌐 Testando URL: ${testUrl}`);
+                    
+                    try {
+                        const response = await fetch(testUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            mode: 'cors'
+                        });
+                        
+                        console.log(`📡 Resposta de ${testUrl}:`, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            ok: response.ok
+                        });
+                        
+                        if (response.ok) {
+                            successUrl = testUrl;
+                            const rawData = await response.text();
+                            console.log('📄 Dados brutos:', rawData.substring(0, 500));
+                            
+                            const parsedData = JSON.parse(rawData);
+                            console.log('✅ Dados parseados:', parsedData);
+                            
+                            // Processar dados
+                            let clientes = [];
+                            if (Array.isArray(parsedData)) {
+                                clientes = parsedData;
+                            } else if (parsedData.content) {
+                                clientes = parsedData.content;
+                            } else if (parsedData.clientes) {
+                                clientes = parsedData.clientes;
+                            }
+                            
+                            console.log(`📊 ${clientes.length} clientes encontrados`);
+                            displayClientesList(clientes);
+                            return; // Sucesso, sair da função
+                        }
+                        
+                    } catch (urlError) {
+                        console.error(`❌ Erro em ${testUrl}:`, urlError);
+                        lastError = urlError;
+                    }
+                }
+                
+                // Se chegou aqui, nenhuma URL funcionou
+                throw new Error(`Falha em todas as URLs testadas. Último erro: ${lastError?.message}`);
+                
+            } catch (error) {
+                console.error('❌ Erro completo ao carregar clientes:', error);
+                
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: #ef4444;">
+                            <span class="material-icons" style="font-size: 3rem;">error</span>
+                            <p style="margin: 1rem 0 0 0; font-size: 1.1rem;">Erro ao carregar clientes</p>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #6b7280;">${error.message}</p>
+                            <div style="margin-top: 1rem;">
+                                <button onclick="loadClientesList()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem; margin-right: 0.5rem;">
+                                    Tentar Novamente
+                                </button>
+                                <button onclick="testarAPIDirecta()" style="background: #f59e0b; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
+                                    Debug API
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        // Function to display clients list
+        function displayClientesList(clientes) {
+            console.log('🎨 Exibindo lista de clientes:', clientes.length, 'clientes');
+            
+            const container = document.querySelector('#clientsList');
+            if (!container) {
+                console.error('❌ Container #clientsList não encontrado');
+                return;
+            }
+            
+            if (!clientes || clientes.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <span class="material-icons" style="font-size: 3rem; color: #d1d5db;">people</span>
+                        <p style="margin: 1rem 0 0 0; font-size: 1.1rem;">Nenhum cliente cadastrado</p>
+                        <div style="margin-top: 1rem;">
+                            <button onclick="loadClientesList()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
+                                Recarregar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Criar tabela completa
+            let html = `
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <thead>
+                            <tr style="background: #f8fafc; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Nome/Razão Social</th>
+                                <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">CPF/CNPJ</th>
+                                <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Telefone</th>
+                                <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Email</th>
+                                <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Status</th>
+                                <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            clientes.forEach(cliente => {
+                html += `
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 0.75rem; color: #374151;">${cliente.razaoSocial || cliente.nomeFantasia || cliente.nome || 'N/A'}</td>
+                        <td style="padding: 0.75rem; color: #374151;">${cliente.cpfCnpj || 'N/A'}</td>
+                        <td style="padding: 0.75rem; color: #374151;">${cliente.telefone || 'N/A'}</td>
+                        <td style="padding: 0.75rem; color: #374151;">${cliente.email || 'N/A'}</td>
+                        <td style="padding: 0.75rem;">
+                            <span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 500;">
+                                ATIVO
+                            </span>
+                        </td>
+                        <td style="padding: 0.75rem; text-align: center;">
+                            <button onclick="viewCliente(${cliente.idCliente})" style="background: #3b82f6; color: white; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem;" title="Visualizar">
+                                <span class="material-icons" style="font-size: 1rem;">visibility</span>
+                            </button>
+                            <button onclick="editCliente(${cliente.idCliente})" style="background: #f59e0b; color: white; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem;" title="Editar">
+                                <span class="material-icons" style="font-size: 1rem;">edit</span>
+                            </button>
+                            <button onclick="deleteCliente(${cliente.idCliente})" style="background: #ef4444 !important; color: white !important; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem; display: inline-block !important; visibility: visible !important;" title="Excluir">
+                                <span class="material-icons" style="font-size: 1rem;">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Paginação -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding: 1rem 0; border-top: 1px solid #e5e7eb;">
+                    <div style="color: #6b7280; font-size: 0.85rem;">
+                        Mostrando ${clientes.length} de ${clientes.length} clientes
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button style="padding: 0.4rem 0.8rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.8rem;" disabled>Anterior</button>
+                        <button style="padding: 0.4rem 0.8rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.8rem;" disabled>Próximo</button>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            console.log('✅ Tabela renderizada com', clientes.length, 'clientes e botões delete!');
+        }
+        
+        // Função para testar API diretamente (debug)
+        async function testarAPIDirecta() {
+            console.log('🧪 Testando API diretamente...');
+            
+            const urls = [
+                'http://localhost:8090/api/clientes',
+                'http://127.0.0.1:8090/api/clientes',
+                window.APIService?.baseURL + '/clientes'
+            ].filter(Boolean);
+            
+            for (const url of urls) {
+                console.log(`🔗 Testando: ${url}`);
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    console.log(`✅ ${url} - Status: ${response.status}`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(`📊 ${url} - Dados:`, data);
+                        alert(`API funcionando! Encontrados ${Array.isArray(data) ? data.length : 'dados'} registros em ${url}`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error(`❌ ${url} - Erro:`, error);
+                }
+            }
+            
+            alert('Nenhuma URL da API está funcionando. Verifique se o backend está rodando na porta 8090.');
+        }
+        
+        // Função melhorada para verificar se há dados no backend
+        async function verificarDadosBackend() {
+            console.log('🔍 Verificando dados no backend...');
+            
+            try {
+                const url = 'http://localhost:8090/api/clientes';
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📊 Dados encontrados no backend:', data);
+                    
+                    const total = Array.isArray(data) ? data.length : (data.content ? data.content.length : 0);
+                    
+                    showSuccessMessage(`Backend encontrado! Total de clientes: ${total}`);
+                    
+                    if (total > 0) {
+                        displayClientesList(Array.isArray(data) ? data : data.content || []);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao verificar backend:', error);
+                showErrorMessage('Backend não está respondendo. Verifique se está rodando na porta 8090.');
+            }
+        }
+        
+        // Utility functions
+        function showSuccessMessage(message) {
+            console.log('✅', message);
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 1000;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            `;
+            notification.innerHTML = `
+                <span class="material-icons">check_circle</span>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+        
+        function showErrorMessage(message) {
+            console.log('❌', message);
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ef4444;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 1000;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            `;
+            notification.innerHTML = `
+                <span class="material-icons">error</span>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+        
+        // Placeholder functions for actions
+        async function buscarClientes() {
+            console.log('🔍 Função buscarClientes chamada');
+            
+            // Obter valores dos filtros
+            const searchInput = document.getElementById('searchInput')?.value?.trim() || '';
+            const statusFilter = document.getElementById('statusFilter')?.value || '';
+            
+            console.log('📋 Parâmetros de busca:', { searchInput, statusFilter });
+            
+            // Show loading state
+            const container = document.querySelector('#clientsList');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <span class="material-icons" style="font-size: 2rem; animation: spin 1s linear infinite;">search</span>
+                        <p style="margin: 1rem 0 0 0;">Buscando clientes...</p>
+                    </div>
+                `;
+            }
+            
+            try {
+                if (!window.APIService) {
+                    throw new Error('APIService não está disponível');
+                }
+                
+                if (!window.APIService.clientes) {
+                    throw new Error('APIService.clientes não está configurado');
+                }
+                
+                // Carregar todos os clientes do banco de dados
+                console.log('📞 Buscando clientes na API...');
+                const response = await window.APIService.clientes.getAll();
+                console.log('✅ Resposta da API recebida:', response);
+                
+                // Handle different response formats
+                let todosClientes;
+                if (Array.isArray(response)) {
+                    todosClientes = response;
+                } else if (response && response.clientes) {
+                    // Formato da nossa API: { "clientes": [...], "currentPage": 0, ... }
+                    todosClientes = response.clientes;
+                } else if (response && response.content) {
+                    todosClientes = response.content;
+                } else if (response && response.data) {
+                    todosClientes = response.data;
+                } else {
+                    console.warn('⚠️ Formato de resposta não esperado:', response);
+                    todosClientes = [];
+                }
+                
+                console.log('📊 Total de clientes carregados:', todosClientes.length);
+                
+                // Debug: mostrar alguns clientes para verificar dados
+                if (todosClientes.length > 0) {
+                    console.log('🔍 Amostra de clientes para debug:', todosClientes.slice(0, 3).map(c => ({
+                        codigo: c.codigo,
+                        razaoSocial: c.razaoSocial,
+                        email: c.email,
+                        cpfCnpj: c.cpfCnpj
+                    })));
+                }
+                
+                // Aplicar filtros
+                let clientesFiltrados = todosClientes;
+                
+                // Filtro por texto (nome, email, cpf/cnpj)
+                if (searchInput) {
+                    console.log('🔍 Aplicando filtro de texto:', searchInput);
+                    const searchLower = searchInput.toLowerCase();
+                    
+                    const clientesAnteriores = clientesFiltrados.length;
+                    clientesFiltrados = clientesFiltrados.filter(cliente => {
+                        const nome = (cliente.razaoSocial || '').toLowerCase();
+                        const email = (cliente.email || '').toLowerCase();
+                        const cpfCnpj = (cliente.cpfCnpj || '').replace(/[^\d]/g, '');
+                        const searchCpfCnpj = searchInput.replace(/[^\d]/g, '');
+                        
+                        const matchNome = nome.includes(searchLower);
+                        const matchEmail = email.includes(searchLower);
+                        // Só buscar por CPF se o termo de busca contiver números
+                        const matchCpf = searchCpfCnpj.length > 0 ? cpfCnpj.includes(searchCpfCnpj) : false;
+                        
+                        const match = matchNome || matchEmail || matchCpf;
+                        
+                        console.log(`🔎 Cliente ${cliente.codigo}: nome="${nome}" email="${email}" cpf="${cpfCnpj}" | Match: ${match} (nome:${matchNome}, email:${matchEmail}, cpf:${matchCpf})`);
+                        
+                        return match;
+                    });
+                    
+                    console.log(`📊 Filtro aplicado: ${clientesAnteriores} → ${clientesFiltrados.length} clientes`);
+                }
+                
+                // Filtro por status (se implementado no backend)
+                if (statusFilter) {
+                    clientesFiltrados = clientesFiltrados.filter(cliente => {
+                        // Como não temos campo status explícito, usar ativo como status
+                        if (statusFilter === 'ativo') {
+                            return cliente.ativo !== false;
+                        } else if (statusFilter === 'inativo') {
+                            return cliente.ativo === false;
+                        }
+                        return true;
+                    });
+                }
+                
+                console.log('🎯 Clientes após filtros:', clientesFiltrados.length);
+                
+                // Exibir resultados
+                displayClientesList(clientesFiltrados);
+                
+                // Atualizar contador
+                const showingCount = document.getElementById('showingCount');
+                const totalCount = document.getElementById('totalCount');
+                if (showingCount) showingCount.textContent = clientesFiltrados.length;
+                if (totalCount) totalCount.textContent = todosClientes.length;
+                
+                // Mostrar mensagem se não encontrou nada
+                if (clientesFiltrados.length === 0 && searchInput) {
+                    showSuccessMessage(`Nenhum cliente encontrado para "${searchInput}"`);
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar clientes:', error);
+                
+                // Show error state
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: #ef4444;">
+                            <span class="material-icons" style="font-size: 2rem; margin-bottom: 1rem; display: block;">error</span>
+                            Erro ao buscar clientes
+                            <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                                ${error.message}
+                            </div>
+                            <button onclick="buscarClientes()" style="margin-top: 1rem; background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                                Tentar Novamente
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                showErrorMessage('Erro ao buscar clientes: ' + error.message);
+            }
+        }
+        
+        async function viewCliente(id) {
+            console.log('👁️ Visualizar cliente:', id);
+            
+            try {
+                // Buscar dados do cliente
+                const cliente = await APIService.clientes.getById(id);
+                console.log('📋 Dados do cliente:', cliente);
+                
+                // Montar conteúdo do modal
+                const modalContent = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Informações Básicas
+                            </h3>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div><strong>Código:</strong> ${cliente.codigo || 'N/A'}</div>
+                                <div><strong>Loja:</strong> ${cliente.loja || 'N/A'}</div>
+                                <div><strong>Razão Social:</strong> ${cliente.razaoSocial || 'N/A'}</div>
+                                <div><strong>Nome Fantasia:</strong> ${cliente.nomeFantasia || 'N/A'}</div>
+                                <div><strong>Tipo:</strong> ${cliente.tipo === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica'}</div>
+                                <div><strong>Finalidade:</strong> ${cliente.finalidade === 'C' ? 'Cliente' : cliente.finalidade === 'R' ? 'Revendedor' : 'Fornecedor'}</div>
+                                <div><strong>CPF/CNPJ:</strong> ${cliente.cpfCnpj || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Contato
+                            </h3>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div><strong>Email:</strong> ${cliente.email || 'N/A'}</div>
+                                <div><strong>Telefone:</strong> ${cliente.telefone ? `(${cliente.ddd}) ${cliente.telefone}` : 'N/A'}</div>
+                                <div><strong>Contato:</strong> ${cliente.contato || 'N/A'}</div>
+                                <div><strong>Homepage:</strong> ${cliente.homepage || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Endereço
+                            </h3>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div><strong>CEP:</strong> ${cliente.cep || 'N/A'}</div>
+                                <div><strong>Endereço:</strong> ${cliente.endereco || 'N/A'}</div>
+                                <div><strong>Bairro:</strong> ${cliente.bairro || 'N/A'}</div>
+                                <div><strong>Cidade:</strong> ${cliente.cidade || 'N/A'}</div>
+                                <div><strong>Estado:</strong> ${cliente.estado || 'N/A'}</div>
+                                <div><strong>País:</strong> ${cliente.pais || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Informações Adicionais
+                            </h3>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div><strong>Data Cadastro:</strong> ${cliente.datahoraCadastro ? new Date(cliente.datahoraCadastro).toLocaleString('pt-BR') : 'N/A'}</div>
+                                <div><strong>Usuário Cadastro:</strong> ${cliente.usuarioCadastroNome || 'N/A'}</div>
+                                <div><strong>Código Usuário:</strong> ${cliente.usuarioCadastroCodigo || 'N/A'}</div>
+                                <div><strong>Descrição:</strong> ${cliente.descricao || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 1rem;">
+                        <button onclick="closeViewModal()" style="padding: 0.75rem 1.5rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                            Fechar
+                        </button>
+                        <button onclick="closeViewModal(); editCliente(${id})" style="padding: 0.75rem 1.5rem; background: #f59e0b; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                            <span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem;">edit</span>
+                            Editar
+                        </button>
+                    </div>
+                `;
+                
+                // Inserir conteúdo no modal
+                document.getElementById('viewModalContent').innerHTML = modalContent;
+                
+                // Mostrar modal
+                const modal = document.getElementById('viewModal');
+                modal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar cliente:', error);
+                showErrorMessage('Erro ao carregar dados do cliente: ' + error.message);
+            }
+        }
+        
+        async function editCliente(id) {
+            console.log('✏️ Editar cliente:', id);
+            
+            try {
+                // Buscar dados do cliente
+                const cliente = await APIService.clientes.getById(id);
+                console.log('📋 Dados para edição:', cliente);
+                
+                // Montar formulário de edição
+                const formContent = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <!-- Primeira coluna -->
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Informações Básicas
+                            </h3>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Código *</label>
+                                <input type="text" name="codigo" value="${cliente.codigo || ''}" readonly 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; background: #f9fafb; color: #6b7280; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Loja *</label>
+                                <input type="text" name="loja" value="${cliente.loja || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo *</label>
+                                <select name="tipo" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                    <option value="F" ${cliente.tipo === 'F' ? 'selected' : ''}>Pessoa Física</option>
+                                    <option value="J" ${cliente.tipo === 'J' ? 'selected' : ''}>Pessoa Jurídica</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Finalidade *</label>
+                                <select name="finalidade" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                    <option value="C" ${cliente.finalidade === 'C' ? 'selected' : ''}>Cliente</option>
+                                    <option value="R" ${cliente.finalidade === 'R' ? 'selected' : ''}>Revendedor</option>
+                                    <option value="F" ${cliente.finalidade === 'F' ? 'selected' : ''}>Fornecedor</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CPF/CNPJ *</label>
+                                <input type="text" name="cpfCnpj" value="${cliente.cpfCnpj || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Razão Social *</label>
+                                <input type="text" name="razaoSocial" value="${cliente.razaoSocial || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Fantasia</label>
+                                <input type="text" name="nomeFantasia" value="${cliente.nomeFantasia || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                        </div>
+                        
+                        <!-- Segunda coluna -->
+                        <div>
+                            <h3 style="margin: 0 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Contato
+                            </h3>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Email *</label>
+                                <input type="email" name="email" value="${cliente.email || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 80px 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">DDD</label>
+                                    <input type="text" name="ddd" value="${cliente.ddd || ''}" maxlength="2"
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Telefone *</label>
+                                    <input type="text" name="telefone" value="${cliente.telefone || ''}" 
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Pessoa de Contato</label>
+                                <input type="text" name="contato" value="${cliente.contato || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Homepage</label>
+                                <input type="url" name="homepage" value="${cliente.homepage || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <h3 style="margin: 1.5rem 0 1rem 0; color: #374151; font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                Endereço
+                            </h3>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CEP</label>
+                                <input type="text" name="cep" value="${cliente.cep || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Endereço</label>
+                                <input type="text" name="endereco" value="${cliente.endereco || ''}" 
+                                       style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Bairro</label>
+                                    <input type="text" name="bairro" value="${cliente.bairro || ''}" 
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Cidade</label>
+                                    <input type="text" name="cidade" value="${cliente.cidade || ''}" 
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Estado</label>
+                                    <input type="text" name="estado" value="${cliente.estado || ''}" maxlength="2"
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">País</label>
+                                    <input type="text" name="pais" value="${cliente.pais || ''}" 
+                                           style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="grid-column: 1 / -1; margin-top: 1rem;">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Descrição</label>
+                        <textarea name="descricao" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; font-size: 0.9rem; resize: vertical;">${cliente.descricao || ''}</textarea>
+                    </div>
+                    
+                    <input type="hidden" name="idCliente" value="${cliente.idCliente}">
+                `;
+                
+                // Inserir conteúdo no modal
+                document.getElementById('editModalContent').innerHTML = formContent;
+                
+                // Configurar evento de submit
+                const editForm = document.getElementById('editForm');
+                editForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    saveClienteChanges(id);
+                };
+                
+                // Mostrar modal
+                const modal = document.getElementById('editModal');
+                modal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar cliente para edição:', error);
+                showErrorMessage('Erro ao carregar dados do cliente: ' + error.message);
+            }
+        }
+        
+        function limparFormulario() {
+            const form = document.getElementById('clienteForm');
+            if (form) {
+                form.reset();
+                console.log('🗑️ Formulário limpo');
+            }
+        }
+        
+        function salvarRascunho() {
+            console.log('💾 Salvando rascunho...');
+            alert('Funcionalidade de rascunho será implementada');
+        }
+        
+        // Função para deletar cliente
+        async function deleteCliente(id) {
+            console.log('🗑️ Deletar cliente ID:', id);
+            
+            // Confirmação
+            const confirmed = confirm('Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.');
+            if (!confirmed) {
+                console.log('❌ Exclusão cancelada pelo usuário');
+                return;
+            }
+            
+            try {
+                console.log('🔄 Deletando cliente...');
+                
+                // Usar fetch direto para ter controle total da resposta
+                const response = await fetch(`http://localhost:8090/api/clientes/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                console.log('📡 Resposta DELETE:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                // Para DELETE, normalmente retorna 204 (No Content) sem body
+                // Não tentar fazer parse JSON se não há conteúdo
+                let responseData = null;
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const text = await response.text();
+                    if (text.trim()) {
+                        responseData = JSON.parse(text);
+                    }
+                }
+                
+                console.log('✅ Cliente deletado com sucesso!', responseData);
+                alert('Cliente excluído com sucesso!');
+                
+                // Recarregar a lista
+                loadClientesList();
+                
+            } catch (error) {
+                console.error('❌ Erro ao deletar cliente:', error);
+                alert('Erro ao excluir cliente: ' + error.message);
+            }
+        }
+        
+        // Funções auxiliares dos modals
+        function closeViewModal() {
+            console.log('❌ Fechando modal de visualização');
+            const modal = document.getElementById('viewModal');
+            modal.style.display = 'none';
+        }
+        
+        function closeEditModal() {
+            console.log('❌ Fechando modal de edição');
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'none';
+        }
+        
+        async function saveClienteChanges(id) {
+            console.log('💾 Salvando alterações do cliente:', id);
+            
+            try {
+                // Mostrar loading no botão
+                const submitBtn = document.getElementById('editSubmitBtn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem; animation: spin 1s linear infinite;">hourglass_empty</span>Salvando...';
+                submitBtn.disabled = true;
+                
+                // Coletar dados do formulário
+                const form = document.getElementById('editForm');
+                const formData = new FormData(form);
+                
+                // Converter FormData para objeto
+                const clienteData = {};
+                for (let [key, value] of formData.entries()) {
+                    clienteData[key] = value.trim();
+                }
+                
+                console.log('📋 Dados para envio:', clienteData);
+                
+                // Enviar para API
+                const response = await APIService.clientes.update(id, clienteData);
+                console.log('✅ Cliente atualizado:', response);
+                
+                // Mostrar mensagem de sucesso
+                showSuccessMessage('Cliente atualizado com sucesso!');
+                
+                // Fechar modal
+                closeEditModal();
+                
+                // Recarregar lista
+                loadClientesList();
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar alterações:', error);
+                showErrorMessage('Erro ao salvar alterações: ' + error.message);
+                
+                // Restaurar botão
+                const submitBtn = document.getElementById('editSubmitBtn');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Fechar modal ao clicar fora dele
+        document.addEventListener('click', function(e) {
+            const viewModal = document.getElementById('viewModal');
+            const editModal = document.getElementById('editModal');
+            
+            if (e.target === viewModal) {
+                closeViewModal();
+            }
+            
+            if (e.target === editModal) {
+                closeEditModal();
+            }
+        });
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de clientes carregada - todas as funções disponíveis');
+            console.log('🔍 Funções globais disponíveis:', {
+                showTab: typeof showTab,
+                cadastrarCliente: typeof cadastrarCliente,
+                loadClientesList: typeof loadClientesList,
+                verificarDadosBackend: typeof verificarDadosBackend,
+                testarAPIDirecta: typeof testarAPIDirecta
+            });
+            
+            // Configurar listeners de busca
+            setupSearchListeners();
+            
+            // Como a aba 'lista' já está ativa por padrão, carregar os dados automaticamente
+            setTimeout(() => {
+                console.log('🔗 Carregando dados da aba lista automaticamente...');
+                loadClientesList();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
