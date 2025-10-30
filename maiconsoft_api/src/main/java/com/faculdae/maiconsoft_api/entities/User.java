@@ -40,11 +40,15 @@ public class User {
     @Column(name = "SENHA", length = 255)
     private String senha;
 
-    @Column(name = "TIPO_USUARIO", length = 20)
-    private String tipoUsuario = "FUNCIONARIO";
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID_ROLE")
+    private UserRole userRole;
 
     @Column(name = "ATIVO")
     private Boolean ativo = true;
+
+    @Column(name = "PROFILE_PHOTO_PATH", length = 255)
+    private String profilePhotoPath;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;

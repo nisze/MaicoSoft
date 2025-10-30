@@ -89,6 +89,18 @@ class LoginManager {
         } else {
             console.error('❌ Campo senha não encontrado!');
         }
+        
+        // Event listeners para novos botões
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const profileSetupBtn = document.getElementById('profileSetupBtn');
+        
+        if (forgotPasswordBtn) {
+            forgotPasswordBtn.addEventListener('click', () => this.showForgotPasswordModal());
+        }
+        
+        if (profileSetupBtn) {
+            profileSetupBtn.addEventListener('click', () => this.showProfileSetupModal());
+        }
     }
 
     setupPasswordToggle() {
@@ -422,6 +434,18 @@ class LoginManager {
 
         // Simulate forgot password request
         this.showMessage('Se este email estiver cadastrado, você receberá instruções para redefinir sua senha.', 'info');
+    }
+    
+    showForgotPasswordModal() {
+        if (window.userProfileManager) {
+            window.userProfileManager.openForgotPasswordModal();
+        }
+    }
+    
+    showProfileSetupModal() {
+        if (window.userProfileManager) {
+            window.userProfileManager.openProfileModal();
+        }
     }
 }
 

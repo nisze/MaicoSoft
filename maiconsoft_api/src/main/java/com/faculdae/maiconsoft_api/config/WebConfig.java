@@ -1,25 +1,24 @@
 package com.faculdae.maiconsoft_api.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${app.upload.directory:${user.home}/maiconsoft-uploads}")
+    private String uploadDirectory;
+
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns(
-                    "http://localhost:*",
-                    "http://127.0.0.1:*",
-                    "https://localhost:*",
-                    "https://127.0.0.1:*",
-                    "file://*"
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Configurar para servir arquivos de upload
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:" + uploadDirectory + "/");
+        
+        // Configurar para servir arquivos estáticos da aplicação
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 }

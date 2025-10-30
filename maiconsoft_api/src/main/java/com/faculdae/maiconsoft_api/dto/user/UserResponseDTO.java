@@ -17,4 +17,6 @@ public class UserResponseDTO {
     private String cpf;
     private String telefone;
     private String roleName;
+    private Boolean ativo;
+    private String profilePhotoPath;
 }

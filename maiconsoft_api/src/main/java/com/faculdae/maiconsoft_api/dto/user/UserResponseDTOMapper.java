@@ -16,7 +16,9 @@ public class UserResponseDTOMapper implements Function<User, UserResponseDTO> {
                 user.getEmail(),
                 user.getCpf(),
                 user.getTelefone(),
-                user.getTipoUsuario() != null ? user.getTipoUsuario() : "FUNCIONARIO"
+                user.getUserRole() != null ? user.getUserRole().getRoleName() : "FUNCIONARIO",
+                user.getAtivo(),
+                user.getProfilePhotoPath()
         );
     }
 }

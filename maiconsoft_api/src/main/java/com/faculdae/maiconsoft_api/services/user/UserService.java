@@ -5,7 +5,9 @@ import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginResponseDTO;
 import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.User;
+import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.repositories.UserRepository;
+import com.faculdae.maiconsoft_api.repositories.UserRoleRepository;
 import com.faculdae.maiconsoft_api.services.CodigoAcessoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private UserRoleRepository userRoleRepository;
     
     @Autowired
     private CodigoAcessoService codigoAcessoService;
@@ -110,7 +115,19 @@ public class UserService {
         user.setCodigoAcesso(codigoAcesso);
         user.setSenha(passwordEncoder.encode(userRequest.getSenha()));
         user.setAtivo(userRequest.getAtivo() != null ? userRequest.getAtivo() : true);
-        user.setTipoUsuario(userRequest.getTipoUsuario() != null ? userRequest.getTipoUsuario() : "FUNCIONARIO");
+        
+        // Buscar e definir o UserRole baseado no roleName
+        String roleName = userRequest.getRoleName() != null ? userRequest.getRoleName() : "FUNCIONARIO";
+        UserRole userRole = userRoleRepository.findByRoleNameIgnoreCase(roleName)
+                .orElse(userRoleRepository.findByRoleNameIgnoreCase("FUNCIONARIO")
+                        .orElseThrow(() -> new IllegalArgumentException("Role FUNCIONARIO não encontrada no sistema")));
+        
+        user.setUserRole(userRole);
+
+        // Definir caminho da foto de perfil se fornecido
+        if (userRequest.getProfilePhotoPath() != null && !userRequest.getProfilePhotoPath().trim().isEmpty()) {
+            user.setProfilePhotoPath(userRequest.getProfilePhotoPath());
+        }
 
         User savedUser = userRepository.save(user);
         
@@ -124,7 +141,7 @@ public class UserService {
                 savedUser.getEmail(),
                 savedUser.getCodigoAcesso(),
                 savedUser.getAtivo(),
-                savedUser.getTipoUsuario(),
+                savedUser.getUserRole() != null ? savedUser.getUserRole().getRoleName() : "FUNCIONARIO",
                 savedUser.getCreatedAt(),
                 savedUser.getUpdatedAt(),
                 mensagem
@@ -146,7 +163,7 @@ public class UserService {
         System.out.println("CPF: " + userRequest.getCpf());
         System.out.println("Telefone: " + userRequest.getTelefone());
         System.out.println("CodigoAcesso: " + userRequest.getCodigoAcesso());
-        System.out.println("TipoUsuario: " + userRequest.getTipoUsuario());
+        System.out.println("RoleName: " + userRequest.getRoleName());
         System.out.println("Ativo: " + userRequest.getAtivo());
         System.out.println("========================");
         
@@ -198,9 +215,18 @@ public class UserService {
             existingUser.setAtivo(userRequest.getAtivo());
         }
         
-        // Atualizar tipo de usuário se fornecido
-        if (userRequest.getTipoUsuario() != null && !userRequest.getTipoUsuario().trim().isEmpty()) {
-            existingUser.setTipoUsuario(userRequest.getTipoUsuario());
+        // Atualizar role do usuário se fornecida
+        if (userRequest.getRoleName() != null && !userRequest.getRoleName().trim().isEmpty()) {
+            // Buscar e atualizar o UserRole baseado no roleName
+            UserRole userRole = userRoleRepository.findByRoleNameIgnoreCase(userRequest.getRoleName())
+                    .orElseThrow(() -> new IllegalArgumentException("Role não encontrada: " + userRequest.getRoleName()));
+            
+            existingUser.setUserRole(userRole);
+        }
+
+        // Atualizar caminho da foto de perfil se fornecido
+        if (userRequest.getProfilePhotoPath() != null) {
+            existingUser.setProfilePhotoPath(userRequest.getProfilePhotoPath());
         }
 
         User savedUser = userRepository.save(existingUser);
@@ -211,7 +237,7 @@ public class UserService {
                 savedUser.getEmail(),
                 savedUser.getCodigoAcesso(),
                 savedUser.getAtivo(),
-                savedUser.getTipoUsuario(),
+                savedUser.getUserRole() != null ? savedUser.getUserRole().getRoleName() : "FUNCIONARIO",
                 savedUser.getCreatedAt(),
                 savedUser.getUpdatedAt(),
                 "Usuário atualizado com sucesso!"
@@ -235,6 +261,21 @@ public class UserService {
         User user = findById(id);
         user.setAtivo(!user.getAtivo());
         return userRepository.save(user);
+    }
+
+    /**
+     * Buscar todas as roles disponíveis
+     */
+    public java.util.List<UserRole> getAllRoles() {
+        return userRoleRepository.findAll();
+    }
+
+    /**
+     * Buscar role por nome
+     */
+    public UserRole findRoleByName(String roleName) {
+        return userRoleRepository.findByRoleNameIgnoreCase(roleName)
+                .orElseThrow(() -> new EntityNotFoundException("Role não encontrada: " + roleName));
     }
 
     /**
