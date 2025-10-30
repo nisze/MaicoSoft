@@ -21,8 +21,8 @@ public class UserResponseDTO {
     @Schema(description = "Status ativo do usuário", example = "true")
     private Boolean ativo;
 
-    @Schema(description = "Tipo de usuário", example = "FUNCIONARIO")
-    private String tipoUsuario;
+    @Schema(description = "Nome da role/perfil do usuário", example = "FUNCIONARIO")
+    private String roleName;
 
     @Schema(description = "Data de criação", example = "2025-10-23T15:12:00")
     private LocalDateTime createdAt;
@@ -36,13 +36,13 @@ public class UserResponseDTO {
     public UserResponseDTO() {}
 
     public UserResponseDTO(Long id, String nome, String email, String codigoAcesso, Boolean ativo, 
-                          String tipoUsuario, LocalDateTime createdAt, LocalDateTime updatedAt, String mensagem) {
+                          String roleName, LocalDateTime createdAt, LocalDateTime updatedAt, String mensagem) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.codigoAcesso = codigoAcesso;
         this.ativo = ativo;
-        this.tipoUsuario = tipoUsuario;
+        this.roleName = roleName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.mensagem = mensagem;
@@ -89,12 +89,12 @@ public class UserResponseDTO {
         this.ativo = ativo;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public LocalDateTime getCreatedAt() {

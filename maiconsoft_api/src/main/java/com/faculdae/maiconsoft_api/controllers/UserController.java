@@ -5,6 +5,7 @@ import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginResponseDTO;
 import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.User;
+import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.services.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,5 +101,20 @@ public class UserController {
             @Parameter(description = "Código de acesso a verificar") @PathVariable String codigoAcesso) {
         boolean exists = userService.existsByCodigoAcesso(codigoAcesso);
         return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/roles")
+    @Operation(summary = "Listar roles disponíveis", description = "Lista todas as roles/perfis disponíveis no sistema")
+    public ResponseEntity<java.util.List<UserRole>> getAllRoles() {
+        java.util.List<UserRole> roles = userService.getAllRoles();
+        return ResponseEntity.ok(roles);
+    }
+
+    @GetMapping("/roles/{roleName}")
+    @Operation(summary = "Buscar role por nome", description = "Busca uma role específica pelo nome")
+    public ResponseEntity<UserRole> getRoleByName(
+            @Parameter(description = "Nome da role") @PathVariable String roleName) {
+        UserRole role = userService.findRoleByName(roleName);
+        return ResponseEntity.ok(role);
     }
 }

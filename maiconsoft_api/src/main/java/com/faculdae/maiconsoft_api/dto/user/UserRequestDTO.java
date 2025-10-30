@@ -36,8 +36,11 @@ public class UserRequestDTO {
     @Schema(description = "Status ativo do usuário", example = "true")
     private Boolean ativo = true;
 
-    @Schema(description = "Tipo de usuário", example = "FUNCIONARIO")
-    private String tipoUsuario = "FUNCIONARIO";
+    @Schema(description = "Nome da role/perfil do usuário", example = "FUNCIONARIO")
+    private String roleName = "FUNCIONARIO";
+
+    @Schema(description = "Caminho da foto de perfil do usuário", example = "uploads/profiles/user123.jpg")
+    private String profilePhotoPath;
 
     // Getters e Setters
     public String getNome() {
@@ -96,11 +99,19 @@ public class UserRequestDTO {
         this.ativo = ativo;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getProfilePhotoPath() {
+        return profilePhotoPath;
+    }
+
+    public void setProfilePhotoPath(String profilePhotoPath) {
+        this.profilePhotoPath = profilePhotoPath;
     }
 }

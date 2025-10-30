@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "preserve",
+    "noEmit": true,
+    "isolatedModules": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "ignoreDeprecations": "6.0"
+  },
+  "include": [
+    "frontend/**/*",
+    "maiconsoft_api/**/*",
+    "*.js",
+    "*.json"
+  ],
+  "exclude": [
+    "node_modules",
+    "target",
+    "*.min.js"
+  ]
+}

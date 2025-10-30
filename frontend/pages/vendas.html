@@ -117,10 +117,39 @@
                     <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
                     Relatórios
                 </a>
-                <a href="#" onclick="fazerLogout()" style="color: #ff6b6b; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
-                    <span class="material-icons" style="font-size: 1.1rem;">logout</span>
-                    Sair
-                </a>
+                
+                <!-- Menu do Usuário -->
+                <div style="position: relative; display: inline-block;">
+                    <button id="userMenuBtn" onclick="toggleUserMenu()" style="background: #333333; color: #ffffff; border: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#444444'" onmouseout="this.style.background='#333333'">
+                        <span class="material-icons" style="font-size: 1.1rem;">account_circle</span>
+                        <span id="userName">Usuário</span>
+                        <span class="material-icons" style="font-size: 1rem;">arrow_drop_down</span>
+                    </button>
+                    
+                    <div id="userDropdown" style="display: none; position: absolute; right: 0; top: 100%; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.3); border-radius: 8px; min-width: 200px; z-index: 1000; border: 1px solid #e5e7eb; margin-top: 0.5rem;">
+                        <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;" id="userNameDisplay">Nome do Usuário</div>
+                            <div style="font-size: 0.8rem; color: #6b7280;" id="userRoleDisplay">Cargo</div>
+                        </div>
+                        
+                        <a href="perfil.html" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #374151; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #3b82f6;">person</span>
+                            Meu Perfil
+                        </a>
+                        
+                        <a href="perfil.html#configuracoes" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #374151; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #6b7280;">settings</span>
+                            Configurações
+                        </a>
+                        
+                        <div style="border-top: 1px solid #e5e7eb; margin: 0.5rem 0;"></div>
+                        
+                        <a href="#" onclick="fazerLogout()" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #ef4444; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                            <span class="material-icons" style="font-size: 1.1rem;">logout</span>
+                            Sair do Sistema
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -1739,8 +1768,65 @@
             }).format(value);
         }
 
+        // Função para toggle do menu do usuário
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+        
+        // Fechar dropdown quando cliccar fora
+        document.addEventListener('click', function(event) {
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            if (userMenuBtn && userDropdown && !userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.style.display = 'none';
+            }
+        });
+        
+        // Carregar dados do usuário
+        function loadUserData() {
+            try {
+                const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    const userName = user.nome || user.name || 'Usuário';
+                    
+                    const userNameEl = document.getElementById('userName');
+                    const userNameDisplayEl = document.getElementById('userNameDisplay');
+                    const userRoleDisplayEl = document.getElementById('userRoleDisplay');
+                    
+                    // Mostrar apenas o primeiro nome no botão
+                    if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
+                    if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
+                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.role);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do usuário:', error);
+            }
+        }
+        
+        // Função para obter nome do cargo
+        function getRoleDisplayName(role) {
+            const roles = {
+                'FUNCIONARIO': 'Funcionário',
+                'VENDEDOR': 'Vendedor',
+                'SUPERVISOR': 'Supervisor',
+                'GERENTE': 'Gerente',
+                'DIRETOR': 'Diretor',
+                'ADMIN': 'Administrador'
+            };
+            return roles[role] || role || 'Funcionário';
+        }
+
         // Format currency input
         document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            
             const valorInput = document.getElementById('valor-venda');
             if (valorInput) {
                 valorInput.addEventListener('input', function(e) {

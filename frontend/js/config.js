@@ -167,12 +167,18 @@ class PermissionManager {
     }
     
     static getUserPermissions(userType = null) {
-        const user = userType ? { tipoUsuario: userType } : this.getCurrentUser();
-        if (!user || !user.tipoUsuario) {
+        const user = userType ? { roleName: userType } : this.getCurrentUser();
+        if (!user) {
             return [];
         }
         
-        return USER_PERMISSIONS[user.tipoUsuario.toUpperCase()] || [];
+        // Suporte para ambos roleName (novo) e tipoUsuario (compatibilidade)
+        const roleType = user.roleName || user.tipoUsuario;
+        if (!roleType) {
+            return [];
+        }
+        
+        return USER_PERMISSIONS[roleType.toUpperCase()] || [];
     }
     
     static hasPermission(permission, userType = null) {
@@ -200,23 +206,23 @@ class PermissionManager {
     }
     
     static getAccessiblePages(userType = null) {
-        const user = userType ? { tipoUsuario: userType } : this.getCurrentUser();
+        const user = userType ? { roleName: userType } : this.getCurrentUser();
         if (!user) return [];
         
         const accessiblePages = [];
         
         // Dashboard
-        if (this.canAccessModule('DASHBOARD', user.tipoUsuario)) {
+        if (this.canAccessModule('DASHBOARD', user.roleName)) {
             accessiblePages.push('dashboard');
         }
         
         // Clientes
-        if (this.canAccessModule('CLIENTES', user.tipoUsuario)) {
+        if (this.canAccessModule('CLIENTES', user.roleName)) {
             accessiblePages.push('clientes');
         }
         
         // Vendas
-        if (this.canAccessModule('VENDAS', user.tipoUsuario)) {
+        if (this.canAccessModule('VENDAS', user.roleName)) {
             accessiblePages.push('vendas');
         }
         
@@ -245,7 +251,7 @@ class PermissionManager {
         const user = this.getCurrentUser();
         console.log(`🔐 Tentativa de acesso: ${action}`, {
             user: user?.nome,
-            type: user?.tipoUsuario,
+            type: user?.roleName,
             allowed: allowed,
             timestamp: new Date().toISOString()
         });
@@ -461,6 +467,54 @@ const APIService = {
             return APIService.request(`/users/${id}`, {
                 method: 'DELETE'
             });
+        },
+
+        async uploadProfilePhoto(userId, file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('userId', userId);
+
+            return fetch(`${APIService.baseURL}/uploads/profile-photo`, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json());
+        },
+
+        async deleteProfilePhoto(filePath) {
+            return APIService.request(`/uploads/profile-photo?filePath=${encodeURIComponent(filePath)}`, {
+                method: 'DELETE'
+            });
+        }
+    },
+
+    // Métodos específicos para user roles
+    userRoles: {
+        async getAll() {
+            return APIService.request('/users/roles');
+        },
+
+        async getById(id) {
+            return APIService.request(`/users/roles/${id}`);
+        },
+
+        async create(roleData) {
+            return APIService.request('/users/roles', {
+                method: 'POST',
+                body: JSON.stringify(roleData)
+            });
+        },
+
+        async update(id, roleData) {
+            return APIService.request(`/users/roles/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(roleData)
+            });
+        },
+
+        async delete(id) {
+            return APIService.request(`/users/roles/${id}`, {
+                method: 'DELETE'
+            });
         }
     },
 
@@ -594,6 +648,64 @@ window.PAGE_ROUTES = PAGE_ROUTES;
 window.MOCK_USERS = MOCK_USERS;
 window.checkBackendConnection = checkBackendConnection;
 window.APIService = APIService;
+
+// Service para gerenciar roles do usuário
+class UserRoleService {
+    static async getAllRoles() {
+        try {
+            console.log('🔄 UserRoleService: Buscando roles do backend...');
+            const response = await APIService.userRoles.getAll();
+            console.log('✅ UserRoleService: Roles recebidas do backend:', response);
+            return response.data || response;
+        } catch (error) {
+            console.error('❌ UserRoleService: Erro ao buscar roles:', error);
+            console.log('🔄 UserRoleService: Aplicando fallback para roles padrão...');
+            // Fallback para roles padrão
+            const fallbackRoles = [
+                { idRole: 1, roleName: 'ADMIN' },
+                { idRole: 2, roleName: 'DIRETOR' },
+                { idRole: 3, roleName: 'FUNCIONARIO' },
+                { idRole: 4, roleName: 'VENDEDOR' }
+            ];
+            console.log('✅ UserRoleService: Usando fallback:', fallbackRoles);
+            return fallbackRoles;
+        }
+    }
+    
+    static async getUserWithRole(userId) {
+        try {
+            const response = await APIService.users.getById(userId);
+            return response.data || response;
+        } catch (error) {
+            console.error('Erro ao buscar usuário com role:', error);
+            return null;
+        }
+    }
+    
+    static getRoleDisplayName(roleName) {
+        const roleNames = {
+            'ADMIN': 'Administrador',
+            'DIRETOR': 'Diretor',
+            'FUNCIONARIO': 'Funcionário',
+            'VENDEDOR': 'Vendedor',
+            'SUPERVISOR': 'Supervisor',
+            'GERENTE': 'Gerente'
+        };
+        return roleNames[roleName?.toUpperCase()] || roleName || 'Funcionário';
+    }
+    
+    static getRolePermissions(roleName) {
+        return USER_PERMISSIONS[roleName?.toUpperCase()] || [];
+    }
+    
+    static canRolePerformAction(roleName, permission) {
+        const permissions = this.getRolePermissions(roleName);
+        return permissions.includes(permission);
+    }
+}
+
+// Expor UserRoleService globalmente
+window.UserRoleService = UserRoleService;
 
 // Definir API_BASE_URL como variável global para compatibilidade
 window.API_BASE_URL = CONFIG.API_BASE_URL;
