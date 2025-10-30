@@ -32,7 +32,7 @@ const PERMISSIONS = {
 
 // Configuração da API
 const API_CONFIG = {
-    baseURL: 'http://localhost:8080/api',
+    baseURL: 'http://localhost:8090/api',
     endpoints: {
         auth: {
             login: '/auth/login',

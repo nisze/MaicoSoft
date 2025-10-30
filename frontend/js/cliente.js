@@ -8,6 +8,107 @@
 
 // @ts-nocheck
 
+// Objetos globais de fallback caso não estejam carregados
+window.API_CONFIG = window.API_CONFIG || {
+    baseURL: window.API_BASE_URL || 'http://localhost:8090/api'
+};
+
+// Garantir que sempre use a configuração oficial se disponível
+if (window.APIService && window.APIService.baseURL) {
+    window.API_CONFIG.baseURL = window.APIService.baseURL;
+    console.log('🔧 Usando configuração oficial do APIService:', window.API_CONFIG.baseURL);
+} else if (window.API_BASE_URL) {
+    window.API_CONFIG.baseURL = window.API_BASE_URL;
+    console.log('🔧 Usando configuração global API_BASE_URL:', window.API_CONFIG.baseURL);
+}
+
+window.ajax = window.ajax || {
+    get: async (url, options = {}) => {
+        console.log('🌐 AJAX GET:', url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const data = await response.json();
+            console.log('✅ AJAX GET Success:', data);
+            return data;
+        } catch (error) {
+            console.error('❌ AJAX GET Error:', error);
+            throw error;
+        }
+    },
+    post: async (url, data, options = {}) => {
+        console.log('🌐 AJAX POST:', url, data);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const result = await response.json();
+            console.log('✅ AJAX POST Success:', result);
+            return result;
+        } catch (error) {
+            console.error('❌ AJAX POST Error:', error);
+            throw error;
+        }
+    },
+    notify: (message, type = 'info', duration = 3000) => {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+        
+        // Criar notificação visual se não houver sistema de notificação
+        if (!document.querySelector('.notification-system')) {
+            const notification = document.createElement('div');
+            notification.className = `ajax-notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Adicionar estilos de animação se não existirem
+            if (!document.querySelector('#ajax-animations')) {
+                const style = document.createElement('style');
+                style.id = 'ajax-animations';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOutRight {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+        }
+    }
+};
+
+window.AuthService = window.AuthService || {
+    logout: () => {
+        localStorage.removeItem('authToken');
+        window.location.href = '/login.html';
+    }
+};
+
 class ClienteManager {
     constructor() {
         // Usar APIService do config.js em vez de ApiClient
@@ -28,6 +129,12 @@ class ClienteManager {
             return;
         }
         console.log('✅ APIService disponível:', this.apiService.baseURL);
+        
+        // Sincronizar configuração
+        if (this.apiService && this.apiService.baseURL) {
+            API_CONFIG.baseURL = this.apiService.baseURL;
+            console.log('🔧 Sincronizando com APIService:', API_CONFIG.baseURL);
+        }
         
         this.setupEventListeners();
         this.setupTabs();
@@ -258,23 +365,41 @@ class ClienteManager {
 
             const url = `${API_CONFIG.baseURL}/clientes?${params}`;
             
-            // Usar novo sistema AJAX
-            const response = await ajax.get(url, {
-                cache: true,
-                showLoading: true
+            // DEBUG: Verificar qual URL está sendo usada
+            console.log('🔍 API_CONFIG.baseURL:', API_CONFIG.baseURL);
+            console.log('🔍 URL completa:', url);
+            
+            // Usar fetch direto para evitar problemas com ajax-utils
+            console.log('🌐 AJAX GET:', url);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
             });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log('✅ AJAX GET Success:', data);
 
-            this.renderClientes(response);
+            this.renderClientes(data);
             ajax.notify('Clientes carregados com sucesso!', 'success', 2000);
             
         } catch (error) {
             console.error('Erro ao carregar clientes:', error);
             
-            // Fallback para dados mock em caso de erro
-            if (error.message.includes('Failed to fetch') || error.message.includes('HTTP 500')) {
+            // Tentar fallback para dados mock
+            try {
+                console.log('📊 Usando dados de demonstração...');
                 ajax.notify('Modo demonstração - usando dados locais', 'warning', 3000);
                 this.renderClientesMock();
-            } else {
+            } catch (fallbackError) {
+                console.error('Erro no fallback:', fallbackError);
                 ajax.notify('Erro ao carregar clientes', 'error');
                 this.renderClientesError();
             }
@@ -460,66 +585,143 @@ class ClienteManager {
     }
 
     /**
-     * Continua na próxima parte...
+     * Métodos auxiliares faltantes
      */
-        // Form submission
-        const clienteForm = document.getElementById('clienteForm');
-        if (clienteForm) {
-            clienteForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
-        }
-
-        // Tab buttons
-        const tabCadastro = document.getElementById('tab-cadastro-btn');
-        const tabLista = document.getElementById('tab-lista-btn');
+    
+    // Método para formatar documentos (CPF/CNPJ)
+    formatDocument(document, type) {
+        if (!document) return '-';
         
-        if (tabCadastro) {
-            tabCadastro.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.switchTab('cadastro');
-            });
-        }
+        const cleanDoc = document.replace(/\D/g, '');
         
-        if (tabLista) {
-            tabLista.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.switchTab('lista');
+        if (type === 'F' || type === 'pf') {
+            // Formatar CPF: XXX.XXX.XXX-XX
+            return cleanDoc.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else {
+            // Formatar CNPJ: XX.XXX.XXX/XXXX-XX
+            return cleanDoc.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+        }
+    }
+
+    // Converter tabela para cards (mobile)
+    convertTableToCards() {
+        const table = document.querySelector('.cliente-table');
+        if (!table) return;
+        
+        const container = table.parentElement;
+        const rows = table.querySelectorAll('tbody tr');
+        const clients = [];
+        
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 6) {
+                clients.push({
+                    idCliente: row.dataset.id,
+                    razaoSocial: cells[1].textContent.trim(),
+                    tipo: cells[2].textContent.includes('Física') ? 'F' : 'J',
+                    cpfCnpj: cells[3].textContent.trim(),
+                    email: cells[4].textContent.trim(),
+                    telefone: cells[5].textContent.trim(),
+                    cidade: cells[6].textContent.trim()
+                });
+            }
+        });
+        
+        container.innerHTML = this.renderClientesCards(clients);
+    }
+
+    // Converter cards para tabela (desktop)
+    convertCardsToTable() {
+        const cardsContainer = document.querySelector('.clientes-cards');
+        if (!cardsContainer) return;
+        
+        const cards = cardsContainer.querySelectorAll('.cliente-card');
+        const clients = [];
+        
+        cards.forEach(card => {
+            const id = card.dataset.id;
+            const title = card.querySelector('.card-title').textContent;
+            const type = card.querySelector('.client-type').textContent.trim();
+            
+            clients.push({
+                idCliente: id,
+                razaoSocial: title,
+                tipo: type === 'PF' ? 'F' : 'J',
+                cpfCnpj: '', // Extrair do card se necessário
+                email: '',
+                telefone: '',
+                cidade: ''
             });
-        }
+        });
+        
+        const container = cardsContainer.parentElement;
+        container.innerHTML = this.renderClientesTable(clients);
+    }
 
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            let searchTimeout;
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    this.handleSearch(e.target.value);
-                }, 300);
-            });
+    // Mostrar formulário de novo cliente
+    showNewClientForm() {
+        // Limpar formulário
+        this.clearForm();
+        
+        // Mudar para aba de cadastro
+        this.switchTab('cadastro');
+        
+        // Focar no primeiro campo
+        const firstField = document.getElementById('tipoCliente');
+        if (firstField) {
+            setTimeout(() => firstField.focus(), 100);
         }
+    }
 
-        // CEP lookup
-        const cepInput = document.getElementById('cep');
-        const cepButton = document.querySelector('.cep-button');
-        if (cepInput && cepButton) {
-            cepButton.addEventListener('click', () => this.buscarCEP());
-            cepInput.addEventListener('blur', () => this.buscarCEP());
+    // Buscar CEP (método alternativo ao buscarCEP)
+    lookupCEP(cep) {
+        if (cep && cep.length >= 8) {
+            this.buscarCEP();
         }
+    }
 
-        // Clear form button
-        const clearFormBtn = document.getElementById('clearForm');
-        if (clearFormBtn) {
-            clearFormBtn.addEventListener('click', () => this.clearForm());
+    // Função de teste para VIACEP
+    async testViaCEP(cep = '01310100') {
+        console.log('🧪 Testando VIACEP com CEP:', cep);
+        
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+            
+            console.log('📍 Resposta VIACEP:', data);
+            
+            if (!data.erro) {
+                console.log('✅ VIACEP funcionando corretamente!');
+                console.log('📍 Endereço:', {
+                    logradouro: data.logradouro,
+                    bairro: data.bairro,
+                    cidade: data.localidade,
+                    estado: data.uf
+                });
+                
+                this.showSuccess(`VIACEP OK: ${data.logradouro}, ${data.localidade}/${data.uf}`);
+                return data;
+            } else {
+                console.warn('⚠️ CEP não encontrado');
+                this.showError('CEP não encontrado na base do ViaCEP');
+                return null;
+            }
+        } catch (error) {
+            console.error('❌ Erro no teste VIACEP:', error);
+            this.showError('Erro ao testar VIACEP: ' + error.message);
+            return null;
         }
+    }
 
-        // Logout
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => this.handleLogout());
-        }
-
-        // Form validation on field change
-        this.setupFormValidation();
+    // Renderizar dados mock quando API falha
+    renderClientesMock() {
+        const mockData = {
+            content: this.getMockClients(),
+            totalPages: 1,
+            totalElements: this.getMockClients().length
+        };
+        
+        this.renderClientes(mockData);
     }
 
     setupTabs() {
@@ -808,12 +1010,17 @@ class ClienteManager {
     }
 
     async buscarCEP() {
+        console.log('🎯 BUSCARCEP CHAMADA - método da classe!');
+        
         const cepInput = document.getElementById('cep');
         const cep = cepInput?.value?.replace(/\D/g, '');
         
         if (!cep || cep.length !== 8) {
+            console.log('CEP inválido ou incompleto:', cep);
             return;
         }
+
+        console.log('🔍 Buscando CEP:', cep);
 
         const cepButton = document.querySelector('.cep-button');
         if (cepButton) {
@@ -823,24 +1030,63 @@ class ClienteManager {
 
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const data = await response.json();
+            console.log('📍 Dados do CEP recebidos:', data);
             
             if (!data.erro) {
-                document.getElementById('endereco').value = data.logradouro || '';
-                document.getElementById('bairro').value = data.bairro || '';
-                document.getElementById('cidade').value = data.localidade || '';
-                document.getElementById('estado').value = data.uf || '';
+                // Tentar múltiplos IDs para compatibilidade
+                const logradouroField = document.getElementById('logradouro') || document.getElementById('endereco');
+                const bairroField = document.getElementById('bairro');
+                const cidadeField = document.getElementById('cidade') || document.getElementById('localidade');
+                const estadoField = document.getElementById('estado') || document.getElementById('uf');
                 
-                // Focus on number field
-                document.getElementById('numero')?.focus();
+                if (logradouroField) {
+                    logradouroField.value = data.logradouro || '';
+                    console.log('✅ Logradouro preenchido:', data.logradouro);
+                }
+                
+                if (bairroField) {
+                    bairroField.value = data.bairro || '';
+                    console.log('✅ Bairro preenchido:', data.bairro);
+                }
+                
+                if (cidadeField) {
+                    cidadeField.value = data.localidade || '';
+                    console.log('✅ Cidade preenchida:', data.localidade);
+                }
+                
+                if (estadoField) {
+                    estadoField.value = data.uf || '';
+                    console.log('✅ Estado preenchido:', data.uf);
+                }
+                
+                // Focus on number field if exists
+                const numeroField = document.getElementById('numero');
+                if (numeroField) {
+                    setTimeout(() => numeroField.focus(), 100);
+                }
                 
                 this.showSuccess('Endereço preenchido automaticamente');
             } else {
+                console.warn('CEP não encontrado na base do ViaCEP');
                 this.showError('CEP não encontrado');
             }
         } catch (error) {
-            console.error('CEP lookup error:', error);
-            this.showError('Erro ao buscar CEP');
+            console.error('❌ Erro ao buscar CEP:', error);
+            
+            // Feedback mais específico
+            if (error.message.includes('Failed to fetch')) {
+                this.showError('Erro de conexão. Verifique sua internet.');
+            } else if (error.message.includes('CORS')) {
+                this.showError('Erro de CORS. Tente novamente.');
+            } else {
+                this.showError('Erro ao buscar CEP: ' + error.message);
+            }
         } finally {
             if (cepButton) {
                 cepButton.disabled = false;
@@ -854,8 +1100,26 @@ class ClienteManager {
         this.showTableLoading(true);
         
         try {
-            const response = await APIService.clientes.getAll();
-            const clients = response.data || response;
+            // Usar fetch direto para evitar problemas com ajax-utils
+            const url = `${API_CONFIG.baseURL}/clientes`;
+            console.log('🔍 API_CONFIG.baseURL (loadClients):', API_CONFIG.baseURL);
+            console.log('🌐 AJAX GET:', url);
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            const clients = data.clientes || data.content || data;
             console.log('📋 Clientes carregados:', clients.length, 'registros');
             
             this.renderClientsTable(clients);
@@ -1018,6 +1282,7 @@ class ClienteManager {
             console.log('📊 Contadores atualizados:', `${endItem} de ${totalItems} clientes`);
         }
 
+        const paginationControls = document.getElementById('paginationControls') || document.querySelector('.pagination-controls');
         if (paginationControls) {
             let controls = `
                 <button class="page-btn" ${this.currentPage === 1 ? 'disabled' : ''} onclick="clienteManager.goToPage(${this.currentPage - 1})">
@@ -1576,6 +1841,30 @@ window.buscarClientes = function() {
     }
 };
 
+window.buscarCEP = function() {
+    console.log('🌍 FUNÇÃO GLOBAL buscarCEP chamada!');
+    
+    if (window.clienteManager) {
+        console.log('✅ ClienteManager encontrado, delegando...');
+        window.clienteManager.buscarCEP();
+    } else {
+        console.error('❌ ClienteManager não inicializado!');
+        console.log('📊 Tentando inicializar ClienteManager...');
+        
+        // Tentar inicializar se não existir
+        try {
+            window.clienteManager = new ClienteManager();
+            setTimeout(() => {
+                if (window.clienteManager) {
+                    window.clienteManager.buscarCEP();
+                }
+            }, 100);
+        } catch (error) {
+            console.error('❌ Erro ao inicializar ClienteManager:', error);
+        }
+    }
+};
+
 window.closeViewModal = function() {
     if (window.clienteManager) {
         window.clienteManager.closeViewModal();
@@ -1587,3 +1876,59 @@ window.closeEditModal = function() {
         window.clienteManager.closeEditModal();
     }
 };
+
+// Função global para testar VIACEP
+window.testViacep = async function(cep = '01310100') {
+    console.log('🧪 Testando VIACEP...');
+    
+    try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await response.json();
+        
+        console.log('📍 Resultado:', data);
+        
+        if (!data.erro) {
+            console.log('✅ VIACEP funcionando!');
+            console.log(`📍 ${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`);
+        } else {
+            console.warn('⚠️ CEP não encontrado');
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('❌ Erro:', error);
+        return null;
+    }
+};
+
+// Auto-inicializar ClienteManager quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📚 DOM carregado, inicializando ClienteManager...');
+    
+    if (!window.clienteManager) {
+        try {
+            window.clienteManager = new ClienteManager();
+            console.log('✅ ClienteManager inicializado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao inicializar ClienteManager:', error);
+        }
+    } else {
+        console.log('✅ ClienteManager já estava inicializado');
+    }
+});
+
+// Fallback para inicialização se DOMContentLoaded já passou
+if (document.readyState === 'loading') {
+    console.log('📖 Documento ainda carregando, aguardando DOMContentLoaded...');
+} else {
+    console.log('📚 Documento já carregado, inicializando ClienteManager imediatamente...');
+    
+    if (!window.clienteManager) {
+        try {
+            window.clienteManager = new ClienteManager();
+            console.log('✅ ClienteManager inicializado (fallback)!');
+        } catch (error) {
+            console.error('❌ Erro ao inicializar ClienteManager (fallback):', error);
+        }
+    }
+}
