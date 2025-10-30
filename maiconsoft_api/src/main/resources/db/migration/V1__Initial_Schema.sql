@@ -113,11 +113,7 @@ CREATE TABLE pagamentos (
     id_venda BIGINT NOT NULL REFERENCES vendas(id_venda) ON DELETE CASCADE,
     forma_pagamento VARCHAR(50) NOT NULL CHECK (forma_pagamento IN ('DINHEIRO', 'CARTAO_CREDITO', 'CARTAO_DEBITO', 'PIX', 'TRANSFERENCIA', 'BOLETO')),
     valor DECIMAL(10,2) NOT NULL CHECK (valor > 0),
-    data_pagamento TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Índice para melhorar performance nas consultas
-    INDEX idx_pagamentos_venda (id_venda),
-    INDEX idx_pagamentos_data (data_pagamento)
+    data_pagamento TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Criação da tabela de logs do dashboard (auditoria)
@@ -132,17 +128,21 @@ CREATE TABLE dashboard_log (
     ip_origem VARCHAR(45),
     user_agent VARCHAR(500),
     descricao TEXT,
-    metadados TEXT, -- JSON para dados adicionais
-    
-    -- Índices para melhorar performance
-    INDEX idx_dashboard_log_data (data_hora),
-    INDEX idx_dashboard_log_usuario (id_usuario),
-    INDEX idx_dashboard_log_entidade (entidade, entidade_id)
+    metadados TEXT -- JSON para dados adicionais
 );
 
 -- ================================================
 -- ÍNDICES ADICIONAIS PARA PERFORMANCE
 -- ================================================
+
+-- Índices para tabela de pagamentos
+CREATE INDEX idx_pagamentos_venda ON pagamentos(id_venda);
+CREATE INDEX idx_pagamentos_data ON pagamentos(data_pagamento);
+
+-- Índices para tabela de logs do dashboard
+CREATE INDEX idx_dashboard_log_data ON dashboard_log(data_hora);
+CREATE INDEX idx_dashboard_log_usuario ON dashboard_log(id_usuario);
+CREATE INDEX idx_dashboard_log_entidade ON dashboard_log(entidade, entidade_id);
 
 -- Índices para tabela de clientes
 CREATE INDEX idx_clientes_codigo ON clientes(codigo);
