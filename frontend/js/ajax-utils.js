@@ -87,10 +87,15 @@ class AjaxUtils {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), config.timeout);
 
-            const response = await fetch(url, {
-                ...config,
+            // Criar config do fetch removendo propriedades customizadas
+            const fetchConfig = {
+                method: config.method,
+                headers: config.headers,
+                body: config.body,
                 signal: controller.signal
-            });
+            };
+
+            const response = await fetch(url, fetchConfig);
 
             clearTimeout(timeoutId);
 
