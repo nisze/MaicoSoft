@@ -292,4 +292,53 @@ public class UserService {
         String codigoNormalizado = codigoAcessoService.normalizarCodigo(codigoAcesso);
         return userRepository.existsByCodigoAcessoIgnoreCase(codigoNormalizado);
     }
+
+    /**
+     * Converter User para UserResponseDTO
+     */
+    public UserResponseDTO convertToResponseDTO(User user) {
+        return new UserResponseDTO(
+                user.getIdUser(),
+                user.getNome(),
+                user.getEmail(),
+                user.getCodigoAcesso(),
+                user.getAtivo(),
+                user.getUserRole() != null ? user.getUserRole().getRoleName() : "FUNCIONARIO",
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+                "Dados do usuário"
+        );
+    }
+
+    /**
+     * Buscar usuário por ID retornando DTO
+     */
+    public UserResponseDTO findByIdAsDTO(Long id) {
+        User user = findById(id);
+        return convertToResponseDTO(user);
+    }
+
+    /**
+     * Listar usuários retornando DTOs
+     */
+    public Page<UserResponseDTO> findAllAsDTO(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(this::convertToResponseDTO);
+    }
+
+    /**
+     * Listar usuários ativos retornando DTOs
+     */
+    public Page<UserResponseDTO> findAllActiveAsDTO(Pageable pageable) {
+        Page<User> activeUsers = userRepository.findByAtivoTrue(pageable);
+        return activeUsers.map(this::convertToResponseDTO);
+    }
+
+    /**
+     * Toggle status do usuário retornando DTO
+     */
+    public UserResponseDTO toggleStatusAsDTO(Long id) {
+        User user = toggleStatus(id);
+        return convertToResponseDTO(user);
+    }
 }

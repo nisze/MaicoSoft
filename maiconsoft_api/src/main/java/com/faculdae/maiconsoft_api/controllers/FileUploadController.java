@@ -27,8 +27,8 @@ public class FileUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
     
-    // Pasta onde as imagens serão salvas
-    @Value("${app.upload.directory:${user.home}/maiconsoft-uploads}")
+    // Pasta onde as imagens serão salvas (relativa ao projeto)
+    @Value("${app.upload.directory:./uploads}")
     private String uploadDirectory;
 
     // Tamanho máximo do arquivo (5MB)

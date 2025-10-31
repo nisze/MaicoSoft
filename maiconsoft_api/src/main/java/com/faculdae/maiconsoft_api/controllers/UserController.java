@@ -4,7 +4,6 @@ import com.faculdae.maiconsoft_api.dto.user.UserRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginResponseDTO;
 import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
-import com.faculdae.maiconsoft_api.entities.User;
 import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.services.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,15 +42,15 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Listar usuários", description = "Lista todos os usuários com paginação")
-    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable) {
-        Page<User> users = userService.findAll(pageable);
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable) {
+        Page<UserResponseDTO> users = userService.findAllAsDTO(pageable);
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuário por ID", description = "Busca um usuário específico pelo ID")
-    public ResponseEntity<User> getUserById(@Parameter(description = "ID do usuário") @PathVariable Long id) {
-        User user = userService.findById(id);
+    public ResponseEntity<UserResponseDTO> getUserById(@Parameter(description = "ID do usuário") @PathVariable Long id) {
+        UserResponseDTO user = userService.findByIdAsDTO(id);
         return ResponseEntity.ok(user);
     }
 
@@ -83,15 +82,15 @@ public class UserController {
 
     @PatchMapping("/{id}/toggle-status")
     @Operation(summary = "Ativar/Desativar usuário", description = "Alterna o status ativo/inativo do usuário")
-    public ResponseEntity<User> toggleUserStatus(@Parameter(description = "ID do usuário") @PathVariable Long id) {
-        User user = userService.toggleStatus(id);
+    public ResponseEntity<UserResponseDTO> toggleUserStatus(@Parameter(description = "ID do usuário") @PathVariable Long id) {
+        UserResponseDTO user = userService.toggleStatusAsDTO(id);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/active")
     @Operation(summary = "Listar usuários ativos", description = "Lista apenas os usuários ativos")
-    public ResponseEntity<Page<User>> getActiveUsers(Pageable pageable) {
-        Page<User> activeUsers = userService.findAllActive(pageable);
+    public ResponseEntity<Page<UserResponseDTO>> getActiveUsers(Pageable pageable) {
+        Page<UserResponseDTO> activeUsers = userService.findAllActiveAsDTO(pageable);
         return ResponseEntity.ok(activeUsers);
     }
 
