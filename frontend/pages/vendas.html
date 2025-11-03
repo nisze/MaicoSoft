@@ -81,8 +81,6 @@
     </style>
 </head>
 <body>
-    <!-- Container de Alertas -->
-    <div id="alert-container"></div>
 
     <!-- Navigation Bar -->
     <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
@@ -196,7 +194,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Vendas</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">R$ 0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">...</h3>
                         </div>
                         <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">monetization_on</span>
@@ -208,7 +206,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Vendas Este Mês</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="vendas-mes">0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="vendas-mes">...</h3>
                         </div>
                         <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">trending_up</span>
@@ -220,7 +218,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Orçamentos Pendentes</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="orcamentos-pendentes">0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="orcamentos-pendentes">...</h3>
                         </div>
                         <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">pending</span>
@@ -232,7 +230,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Ticket Médio</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">R$ 0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">...</h3>
                         </div>
                         <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">analytics</span>
@@ -599,18 +597,138 @@
         // Configuração da API
         const API_BASE_URL = window.API_BASE_URL || window.CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
         
-        // Função de notificação simples
+        // Função de notificação moderna
         function showNotification(message, type, duration = 3000) {
-            // Fallback para alert se não houver sistema de notificação
-            if (type === 'error') {
-                alert('❌ ' + message);
-            } else if (type === 'success') {
-                alert('✅ ' + message);
-            } else if (type === 'warning') {
-                alert('⚠️ ' + message);
-            } else {
-                alert(message);
-            }
+            // Criar notificação toast moderna
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10001;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                transform: translateX(400px);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            // Adicionar ícone baseado no tipo
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            toast.textContent = `${icon} ${message}`;
+            
+            document.body.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remover após duração especificada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Função de confirmação moderna
+        function showConfirmation(message, title = 'Confirmação') {
+            return new Promise((resolve) => {
+                // Criar overlay
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease-out;
+                `;
+                
+                // Criar modal de confirmação
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    background: white;
+                    border-radius: 16px;
+                    padding: 2rem;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                    animation: slideIn 0.4s ease-out;
+                    max-width: 400px;
+                    margin: 1rem;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
+                        <span class="material-icons" style="font-size: 3rem;">help_outline</span>
+                    </div>
+                    <h3 style="color: #1f2937; margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 600;">
+                        ${title}
+                    </h3>
+                    <p style="color: #6b7280; margin: 0 0 2rem 0; font-size: 1rem; line-height: 1.5;">
+                        ${message}
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button id="confirmCancel" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.3s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
+                            Cancelar
+                        </button>
+                        <button id="confirmOk" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.3s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                            Confirmar
+                        </button>
+                    </div>
+                `;
+                
+                overlay.appendChild(modal);
+                document.body.appendChild(overlay);
+                
+                // Adicionar animações CSS
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    
+                    @keyframes slideIn {
+                        from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                        to { transform: scale(1) translateY(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Event listeners
+                document.getElementById('confirmOk').addEventListener('click', () => {
+                    overlay.remove();
+                    style.remove();
+                    resolve(true);
+                });
+                
+                document.getElementById('confirmCancel').addEventListener('click', () => {
+                    overlay.remove();
+                    style.remove();
+                    resolve(false);
+                });
+                
+                // Fechar com ESC
+                const escHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        overlay.remove();
+                        style.remove();
+                        document.removeEventListener('keydown', escHandler);
+                        resolve(false);
+                    }
+                };
+                document.addEventListener('keydown', escHandler);
+            });
         }
         
         // Função para alternar entre tabs de vendas
@@ -801,55 +919,13 @@
             }
         });
 
-        // Função para mostrar alertas
-        function showAlert(message, type = 'info') {
-            const alertContainer = document.getElementById('alert-container');
-            if (!alertContainer) {
-                // Criar container se não existir
-                const container = document.createElement('div');
-                container.id = 'alert-container';
-                container.style.cssText = 'position: fixed; top: 0; right: 0; z-index: 10000; pointer-events: none;';
-                document.body.appendChild(container);
-            }
-            
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 10001;
-                max-width: 400px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-                pointer-events: auto;
-                transform: translateX(400px);
-                transition: transform 0.3s ease-out;
-            `;
-            alertDiv.textContent = message;
-            
-            document.body.appendChild(alertDiv);
-            
-            // Animar entrada
-            setTimeout(() => {
-                alertDiv.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // Remover após 4 segundos
-            setTimeout(() => {
-                alertDiv.style.transform = 'translateX(400px)';
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 4000);
-        }
-
         
         async function loadMetricas() {
             try {
                 console.log('📊 Carregando métricas de vendas...');
+                
+                // Mostrar indicadores de carregamento
+                showLoadingIndicators();
                 
                 // Buscar métricas da API de dashboard
                 const response = await fetch(`${API_BASE_URL}/dashboard/metrics?days=30`);
@@ -860,15 +936,21 @@
                 const data = await response.json();
                 console.log('📈 Métricas carregadas:', data);
                 
+                // Buscar dados de vendas diretamente da API para calcular orçamentos pendentes
+                const vendasResponse = await fetch(`${API_BASE_URL}/vendas?page=0&size=100`);
+                let orcamentosPendentes = 0;
+                
+                if (vendasResponse.ok) {
+                    const vendasData = await vendasResponse.json();
+                    const vendas = vendasData.vendas || vendasData.content || [];
+                    orcamentosPendentes = vendas.filter(venda => (venda.status || venda.statusVenda) === 'PENDENTE').length;
+                } else {
+                    console.warn('Erro ao buscar vendas para orçamentos pendentes');
+                }
+                
                 // Atualizar interface com dados reais
                 document.getElementById('total-vendas').textContent = `R$ ${parseFloat(data.totalRevenue || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
                 document.getElementById('vendas-mes').textContent = (data.salesThisPeriod || 0).toString();
-                
-                // Buscar orçamentos pendentes separadamente
-                const vendasResponse = await APIService.vendas.getAll(0, 100);
-                const vendas = vendasResponse.vendas || vendasResponse.content || [];
-                const orcamentosPendentes = vendas.filter(venda => venda.status === 'PENDENTE').length;
-                
                 document.getElementById('orcamentos-pendentes').textContent = orcamentosPendentes.toString();
                 document.getElementById('ticket-medio').textContent = `R$ ${parseFloat(data.averageTicket || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
                 
@@ -886,9 +968,34 @@
             }
         }
         
+        // Função para mostrar indicadores de carregamento
+        function showLoadingIndicators() {
+            document.getElementById('total-vendas').textContent = '...';
+            document.getElementById('vendas-mes').textContent = '...';
+            document.getElementById('orcamentos-pendentes').textContent = '...';
+            document.getElementById('ticket-medio').textContent = '...';
+        }
+        
         async function loadVendasData() {
             try {
                 console.log('📋 Carregando dados de vendas...');
+                
+                // Mostrar indicadores de carregamento para vendas recentes
+                let recentSales = document.getElementById('vendas-recentes');
+                if (recentSales) {
+                    recentSales.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Carregando vendas...</p>';
+                }
+                
+                let allSales = document.getElementById('sales-tbody');
+                if (allSales) {
+                    allSales.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #6b7280; padding: 2rem;">
+                                Carregando vendas...
+                            </td>
+                        </tr>
+                    `;
+                }
                 
                 // Buscar vendas reais da API usando fetch direto
                 const response = await fetch(`${API_BASE_URL}/vendas?page=0&size=20`);
@@ -915,7 +1022,7 @@
                 }));
                 
                 // Load recent sales (resumo)
-                const recentSales = document.getElementById('vendas-recentes');
+                recentSales = document.getElementById('vendas-recentes');
                 if (recentSales) {
                     if (vendasFormatadas.length === 0) {
                         recentSales.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Nenhuma venda encontrada</p>';
@@ -937,7 +1044,7 @@
                 }
                 
                 // Load all sales (lista)
-                const allSales = document.getElementById('sales-tbody');
+                allSales = document.getElementById('sales-tbody');
                 if (allSales) {
                     if (vendasFormatadas.length === 0) {
                         allSales.innerHTML = `
@@ -984,8 +1091,9 @@
                                             <button onclick="removerComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Remover comprovante">
                                                 <span class="material-icons" style="font-size: 0.9rem;">delete_forever</span>
                                             </button>` : 
-                                            `<button onclick="uploadComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
+                                            `<button onclick="enviarComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
                                                 <span class="material-icons" style="font-size: 0.9rem;">upload</span>
+                                                <span style="font-size: 0.8rem;">Enviar</span>
                                             </button>`
                                         }
                                         <button onclick="editVenda(${venda.id})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Editar">
@@ -1045,7 +1153,12 @@
         
         // Função para deletar venda
         async function deleteVenda(id) {
-            if (!confirm('Tem certeza que deseja excluir esta venda? Esta ação não pode ser desfeita.')) {
+            const confirmed = await showConfirmation(
+                'Esta ação não pode ser desfeita.',
+                'Tem certeza que deseja excluir esta venda?'
+            );
+            
+            if (!confirmed) {
                 return;
             }
             
@@ -1424,8 +1537,13 @@
         }
         
         // Funções do formulário
-        function limparFormularioVenda() {
-            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+        async function limparFormularioVenda() {
+            const confirmed = await showConfirmation(
+                'Todos os campos preenchidos serão perdidos.',
+                'Tem certeza que deseja limpar todos os campos?'
+            );
+            
+            if (confirmed) {
                 document.getElementById('nova-venda-form').reset();
                 const hoje = new Date().toISOString().split('T')[0];
                 document.getElementById('data-venda').value = hoje;
@@ -1672,7 +1790,7 @@
         }
 
         // Função para editar venda
-        async function editVenda(id) {
+        async function editVenda(id, focusComprovante = false) {
             try {
                 console.log('✏️ Carregando venda para edição:', id);
                 
@@ -1748,10 +1866,41 @@
                 
                 document.body.style.overflow = 'hidden';
                 
+                // Se foi solicitado foco no comprovante, rolar até a seção
+                if (focusComprovante) {
+                    setTimeout(() => {
+                        // Buscar pela seção de comprovante no modal
+                        const comprovanteSection = modal.querySelector('div[style*="background: #f8fafc"]');
+                        if (comprovanteSection) {
+                            comprovanteSection.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'center' 
+                            });
+                            
+                            // Destacar a seção por um momento
+                            const originalBorder = comprovanteSection.style.border;
+                            const originalBackground = comprovanteSection.style.background;
+                            comprovanteSection.style.border = '2px solid #4f46e5';
+                            comprovanteSection.style.background = '#eef2ff';
+                            comprovanteSection.style.transition = 'all 0.3s ease';
+                            
+                            setTimeout(() => {
+                                comprovanteSection.style.border = originalBorder;
+                                comprovanteSection.style.background = originalBackground;
+                            }, 2000);
+                        }
+                    }, 300);
+                }
+                
             } catch (error) {
                 console.error('❌ Erro ao carregar venda:', error);
                 showNotification('❌ Erro ao carregar venda: ' + error.message, 'error');
             }
+        }
+
+        // Função específica para enviar comprovante (abre modal com foco na seção)
+        async function enviarComprovante(id) {
+            await editVenda(id, true);
         }
 
         // Função para fechar modal de edição
@@ -1929,7 +2078,12 @@
                 return;
             }
             
-            if (!confirm('Tem certeza que deseja remover o comprovante? O status da venda voltará para PENDENTE.')) {
+            const confirmed = await showConfirmation(
+                'O status da venda voltará para PENDENTE.',
+                'Tem certeza que deseja remover o comprovante?'
+            );
+            
+            if (!confirmed) {
                 return;
             }
             

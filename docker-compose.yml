@@ -1,0 +1,136 @@
+version: '3.8'
+
+# ===============================
+# MAICONSOFT - DOCKER COMPOSE
+# ===============================
+
+services:
+  # ===============================
+  # BACKEND - SPRING BOOT API
+  # ===============================
+  maiconsoft-api:
+    build:
+      context: ./maiconsoft_api
+      dockerfile: Dockerfile
+    container_name: maiconsoft-api
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      # ===============================
+      # SPRING CONFIGURATION
+      # ===============================
+      SPRING_PROFILES_ACTIVE: supabase
+      SERVER_PORT: 8090
+      
+      # ===============================
+      # SUPABASE DATABASE
+      # ===============================
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db.hmjldrzvmaqgetjcepay.supabase.co:5432/postgres?sslmode=require
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${SUPABASE_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      
+      # ===============================
+      # JPA/HIBERNATE
+      # ===============================
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: false
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      
+      # ===============================
+      # FLYWAY
+      # ===============================
+      SPRING_FLYWAY_ENABLED: true
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: true
+      
+      # ===============================
+      # EMAIL CONFIGURATION (SE NECESSÁRIO)
+      # ===============================
+      SPRING_MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      SPRING_MAIL_PORT: ${MAIL_PORT:-587}
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+      
+      # ===============================
+      # FILE UPLOAD
+      # ===============================
+      SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE: 10MB
+      SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE: 10MB
+      
+      # ===============================
+      # CACHE
+      # ===============================
+      SPRING_CACHE_TYPE: caffeine
+      
+      # ===============================
+      # JVM CONFIGURATION
+      # ===============================
+      JAVA_OPTS: "-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+      
+    volumes:
+      # Persistir uploads
+      - ./uploads:/app/uploads
+      # Persistir logs
+      - ./logs:/app/logs
+    networks:
+      - maiconsoft-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===============================
+  # FRONTEND - NGINX
+  # ===============================
+  maiconsoft-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: maiconsoft-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"  # Para HTTPS futuro
+    environment:
+      # ===============================
+      # FRONTEND CONFIGURATION
+      # ===============================
+      API_BASE_URL: http://maiconsoft-api:8090/api
+      ENVIRONMENT: production
+      
+    depends_on:
+      maiconsoft-api:
+        condition: service_healthy
+    networks:
+      - maiconsoft-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# ===============================
+# VOLUMES
+# ===============================
+volumes:
+  uploads:
+    driver: local
+  logs:
+    driver: local
+
+# ===============================
+# NETWORKS
+# ===============================
+networks:
+  maiconsoft-network:
+    driver: bridge
+    name: maiconsoft-network

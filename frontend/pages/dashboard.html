@@ -130,7 +130,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div>
                         <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Total de Clientes</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="total-clientes">1.247</h3>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="total-clientes">...</h3>
                         <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
                             <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
                             +12 esta semana
@@ -147,7 +147,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div>
                         <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Vendas do Mês</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="vendas-mes">R$ 485.200</h3>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="vendas-mes">...</h3>
                         <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
                             <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
                             +15% vs anterior
@@ -164,7 +164,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div>
                         <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Orçamentos Ativos</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="orcamentos-ativos">32</h3>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="orcamentos-ativos">...</h3>
                         <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #f59e0b; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
                             <span class="material-icons" style="font-size: 0.9rem;">schedule</span>
                             18 pendentes
@@ -181,7 +181,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div>
                         <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Receita Total</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="receita-total">R$ 2.340.000</h3>
+                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="receita-total">...</h3>
                         <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
                             <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
                             +22% este ano
@@ -248,6 +248,47 @@
     <script src="../js/app.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
+        // Configuração da API
+        const API_BASE_URL = window.API_BASE_URL || window.CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
+        
+        // Função de notificação moderna
+        function showNotification(message, type, duration = 3000) {
+            // Criar notificação toast moderna
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10001;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                transform: translateX(400px);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            // Adicionar ícone baseado no tipo
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            toast.textContent = `${icon} ${message}`;
+            
+            document.body.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remover após duração especificada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
         // Função de logout com notificação moderna
         function fazerLogout() {
             // Mostrar notificação de logout
@@ -360,30 +401,29 @@
             // const user = AppState.user;
             // const userRole = user?.perfil?.toLowerCase();
             
-            // Check if user can access dashboard
-            if (userRole !== 'admin' && userRole !== 'diretor') {
-                window.location.href = 'clientes.html';
-                return;
-            }
+            // Liberar acesso para todos os usuários logados (removido o filtro de role)
+            // if (userRole !== 'admin' && userRole !== 'diretor') {
+            //     window.location.href = 'clientes.html';
+            //     return;
+            // }
             
             // Set current date
             document.getElementById('dashboard-date').textContent = 
                 new Date().toLocaleDateString('pt-BR');
                 
-            // Load dashboard data
+            // Load dashboard data with real API data
             loadDashboardData();
         });
         
 
         
         async function loadDashboardData() {
-            // Load KPIs from backend or mock data
+            // Carregar métricas reais da API
             try {
-                // Mock data for now - replace with actual API calls
-                document.getElementById('total-clientes').textContent = '1,247';
-                document.getElementById('vendas-mes').textContent = 'R$ 89.543';
-                document.getElementById('receita-total').textContent = 'R$ 2.340.000';
-                document.getElementById('orcamentos-ativos').textContent = '23';
+                console.log('📊 Carregando métricas do dashboard...');
+                
+                // Buscar métricas principais
+                await loadMetricasPrincipais();
                 
                 // Load recent activities
                 loadAtividadesRecentes();
@@ -395,7 +435,100 @@
                 loadMetaVendas();
                 
             } catch (error) {
-                console.error('Erro ao carregar dados:', error);
+                console.error('❌ Erro ao carregar dados do dashboard:', error);
+                showNotification('Erro ao carregar dados do dashboard', 'error');
+            }
+        }
+
+        // Função para carregar métricas principais
+        async function loadMetricasPrincipais() {
+            try {
+                // Mostrar indicadores de carregamento
+                showLoadingIndicators();
+                
+                // 1. Total de Clientes
+                const clientesResponse = await fetch(`${API_BASE_URL}/clientes?page=0&size=1`);
+                if (clientesResponse.ok) {
+                    const clientesData = await clientesResponse.json();
+                    const totalClientes = clientesData.totalItems || clientesData.totalElements || clientesData.total || 0;
+                    
+                    document.getElementById('total-clientes').textContent = totalClientes.toLocaleString('pt-BR');
+                    console.log('✅ Total de clientes:', totalClientes);
+                } else {
+                    throw new Error('Erro ao buscar total de clientes');
+                }
+
+                // 2. Vendas do Mês e Receita Total
+                const vendasResponse = await fetch(`${API_BASE_URL}/vendas?page=0&size=1000`);
+                if (vendasResponse.ok) {
+                    const vendasData = await vendasResponse.json();
+                    const vendas = vendasData.vendas || vendasData.content || [];
+                    
+                    // Calcular vendas do mês atual
+                    const agora = new Date();
+                    const mesAtual = agora.getMonth();
+                    const anoAtual = agora.getFullYear();
+                    
+                    const vendasMesAtual = vendas.filter(venda => {
+                        const dataVenda = new Date(venda.dataVenda || venda.datahoraCadastro);
+                        return dataVenda.getMonth() === mesAtual && 
+                               dataVenda.getFullYear() === anoAtual &&
+                               venda.status !== 'CANCELADA';
+                    });
+                    
+                    const receitaMes = vendasMesAtual.reduce((total, venda) => {
+                        return total + (venda.valorTotal || venda.valorVenda || 0);
+                    }, 0);
+                    
+                    // Receita total (todas as vendas confirmadas/finalizadas)
+                    const vendasConfirmadas = vendas.filter(venda => 
+                        venda.status === 'CONFIRMADA' || venda.status === 'FINALIZADA'
+                    );
+                    
+                    const receitaTotal = vendasConfirmadas.reduce((total, venda) => {
+                        return total + (venda.valorTotal || venda.valorVenda || 0);
+                    }, 0);
+                    
+                    document.getElementById('vendas-mes').textContent = 
+                        `R$ ${receitaMes.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    
+                    document.getElementById('receita-total').textContent = 
+                        `R$ ${receitaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    
+                    console.log('✅ Receita do mês:', receitaMes);
+                    console.log('✅ Receita total:', receitaTotal);
+                } else {
+                    throw new Error('Erro ao buscar dados de vendas');
+                }
+
+                // 3. Orçamentos Ativos (vendas pendentes)
+                const orcamentosResponse = await fetch(`${API_BASE_URL}/vendas?page=0&size=1000`);
+                if (orcamentosResponse.ok) {
+                    const orcamentosData = await orcamentosResponse.json();
+                    const todasVendas = orcamentosData.vendas || orcamentosData.content || [];
+                    
+                    const orcamentosPendentes = todasVendas.filter(venda => 
+                        venda.status === 'PENDENTE'
+                    );
+                    
+                    document.getElementById('orcamentos-ativos').textContent = orcamentosPendentes.length;
+                    console.log('✅ Orçamentos pendentes:', orcamentosPendentes.length);
+                } else {
+                    throw new Error('Erro ao buscar orçamentos');
+                }
+
+                console.log('✅ Todas as métricas foram carregadas com sucesso!');
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar métricas:', error);
+                
+                // Fallback para valores padrão em caso de erro
+                document.getElementById('total-clientes').textContent = '0';
+                document.getElementById('vendas-mes').textContent = 'R$ 0,00';
+                document.getElementById('receita-total').textContent = 'R$ 0,00';
+                document.getElementById('orcamentos-ativos').textContent = '0';
+                
+                showNotification('Erro ao carregar métricas. Usando valores padrão.', 'warning');
             }
         }
         
@@ -573,6 +706,22 @@
                 avatarPlaceholder.textContent = firstLetter;
                 avatarPlaceholder.style.fontSize = '1rem';
             }
+        }
+        
+        // Função para mostrar indicadores de carregamento
+        function showLoadingIndicators() {
+            document.getElementById('total-clientes').textContent = '...';
+            document.getElementById('vendas-mes').textContent = '...';
+            document.getElementById('receita-total').textContent = '...';
+            document.getElementById('orcamentos-ativos').textContent = '...';
+        }
+        
+        // Função para atualizar dados manualmente
+        async function atualizarDados() {
+            showNotification('🔄 Atualizando dados...', 'info', 2000);
+            showLoadingIndicators();
+            await loadDashboardData();
+            showNotification('✅ Dados atualizados!', 'success', 2000);
         }
         
         // Função para obter nome do cargo

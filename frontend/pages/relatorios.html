@@ -195,7 +195,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Vendas</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">156</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">...</h3>
                             <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 600;">+15% este mês</p>
                         </div>
                         <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
@@ -208,7 +208,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Receita Total</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="receita-total">R$ 2.340.000</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="receita-total">...</h3>
                             <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #3b82f6; font-weight: 600;">+22% este mês</p>
                         </div>
                         <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
@@ -221,7 +221,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Novos Clientes</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="novos-clientes">43</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="novos-clientes">...</h3>
                             <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #8b5cf6; font-weight: 600;">+8% este mês</p>
                         </div>
                         <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
@@ -234,7 +234,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Ticket Médio</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">R$ 15.000</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">...</h3>
                             <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #f59e0b; font-weight: 600;">+5% este mês</p>
                         </div>
                         <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
@@ -750,8 +750,68 @@
             loadDetailTabData(tabName);
         }
 
+        // Função para exibir indicadores de carregamento
+        function showLoadingIndicators() {
+            document.getElementById('total-vendas').textContent = '...';
+            document.getElementById('receita-total').textContent = '...';
+            document.getElementById('novos-clientes').textContent = '...';
+            document.getElementById('ticket-medio').textContent = '...';
+        }
+
+        // Função para carregar métricas principais do backend
+        async function loadMetricasPrincipais() {
+            try {
+                showLoadingIndicators();
+
+                // Buscar dados de vendas
+                const vendasResponse = await fetch('http://localhost:8090/api/vendas');
+                const vendasData = await vendasResponse.json();
+                
+                // Buscar dados de clientes
+                const clientesResponse = await fetch('http://localhost:8090/api/clientes');
+                const clientesData = await clientesResponse.json();
+
+                // Calcular métricas
+                const totalVendas = vendasData.totalItems || 0;
+                const receitaTotal = vendasData.content ? 
+                    vendasData.content.reduce((acc, venda) => acc + parseFloat(venda.valorTotal || 0), 0) : 0;
+                const totalClientes = clientesData.totalItems || 0;
+                const ticketMedio = totalVendas > 0 ? receitaTotal / totalVendas : 0;
+
+                // Atualizar elementos da página
+                document.getElementById('total-vendas').textContent = totalVendas.toString();
+                document.getElementById('receita-total').textContent = 
+                    'R$ ' + receitaTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('novos-clientes').textContent = totalClientes.toString();
+                document.getElementById('ticket-medio').textContent = 
+                    'R$ ' + ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                console.log('Métricas carregadas com sucesso:', {
+                    totalVendas,
+                    receitaTotal,
+                    totalClientes,
+                    ticketMedio
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar métricas:', error);
+                
+                // Valores de fallback em caso de erro
+                document.getElementById('total-vendas').textContent = '0';
+                document.getElementById('receita-total').textContent = 'R$ 0,00';
+                document.getElementById('novos-clientes').textContent = '0';
+                document.getElementById('ticket-medio').textContent = 'R$ 0,00';
+
+                // Mostrar notificação de erro
+                showNotification('Erro ao carregar métricas. Dados padrão exibidos.', 'error');
+            }
+        }
+
         // Carregar dados do dashboard
         function loadDashboardData() {
+            // Carregar métricas principais
+            loadMetricasPrincipais();
+
             // Carregar top performers
             const topPerformers = [
                 { nome: 'Maria Santos', vendas: 23, valor: 345000, rating: 'Excelente' },
@@ -1037,35 +1097,35 @@
         }
 
         // Funções de exportação para Relatórios Detalhados
-        function exportarTabela(tipo) {
+        async function exportarTabela(tipo) {
             const loadingId = showLoading(`Exportando tabela de ${tipo} para Excel...`);
             
-            setTimeout(() => {
-                try {
-                    const dadosTabela = getDadosTabelaDetalhada(tipo);
-                    exportarTabelaExcel(tipo, dadosTabela);
-                    hideLoading(loadingId);
-                    showSuccess(`Tabela de ${tipo} exportada com sucesso em Excel!`);
-                } catch (error) {
-                    hideLoading(loadingId);
-                    showError(`Erro ao exportar tabela: ${error.message}`);
-                }
-            }, 1000);
+            try {
+                console.log('📊 Buscando dados reais da API para exportação...', tipo);
+                const dadosTabela = await getDadosTabelaDetalhadaAPI(tipo);
+                exportarTabelaExcel(tipo, dadosTabela);
+                hideLoading(loadingId);
+                showNotification(`✅ Tabela de ${tipo} exportada com sucesso!`, 'success');
+            } catch (error) {
+                console.error('❌ Erro ao exportar tabela:', error);
+                hideLoading(loadingId);
+                showNotification(`❌ Erro ao exportar tabela: ${error.message}`, 'error');
+            }
         }
 
-        function imprimirTabela(tipo) {
+        async function imprimirTabela(tipo) {
             const loadingId = showLoading(`Preparando impressão da tabela de ${tipo}...`);
             
-            setTimeout(() => {
-                try {
-                    imprimirTabelaDetalhada(tipo);
-                    hideLoading(loadingId);
-                    showSuccess(`Tabela de ${tipo} enviada para impressão!`);
-                } catch (error) {
-                    hideLoading(loadingId);
-                    showError(`Erro ao imprimir tabela: ${error.message}`);
-                }
-            }, 800);
+            try {
+                console.log('🖨️ Buscando dados reais da API para impressão...', tipo);
+                await imprimirTabelaDetalhadaAPI(tipo);
+                hideLoading(loadingId);
+                showNotification(`✅ Tabela de ${tipo} enviada para impressão!`, 'success');
+            } catch (error) {
+                console.error('❌ Erro ao imprimir tabela:', error);
+                hideLoading(loadingId);
+                showNotification(`❌ Erro ao imprimir tabela: ${error.message}`, 'error');
+            }
         }
 
         function getDadosTabelaDetalhada(tipo) {
