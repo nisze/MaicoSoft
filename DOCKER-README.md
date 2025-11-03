@@ -8,6 +8,51 @@ Sistema completo containerizado com Docker para fácil deploy e desenvolvimento.
 - **Docker Compose** (geralmente incluído no Docker Desktop)
 - **Git** (para clonar o repositório)
 
+## 📥 Para Quem Vai Clonar o Projeto
+
+### 🔑 Informações Essenciais:
+
+**1. Senha do Supabase (OBRIGATÓRIA):**
+```
+SUPABASE_PASSWORD=CkTMz5oUISI5gIUn
+```
+
+**2. Configurações de Email (JÁ CONFIGURADAS):**
+O projeto já vem com credenciais de email configuradas no `application.properties`:
+```
+spring.mail.username=empresamaiconsoft@gmail.com
+spring.mail.password=cvjznokkvtzuaqzm
+```
+> ✅ **Sistema de email funciona automaticamente!**
+
+**3. Configurações Opcionais (.env):**
+```
+# Se quiser usar suas próprias credenciais de email
+MAIL_USERNAME=seu-email@gmail.com
+MAIL_PASSWORD=sua-senha-de-app-do-gmail
+```
+
+### 🚀 Passo a Passo Rápido:
+
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/nisze/MaicoSoft.git
+cd MaicoSoft
+
+# 2. Copiar arquivo de ambiente
+cp .env.example .env
+
+# 3. Executar com Docker
+docker-compose up --build -d
+
+# 4. Acessar a aplicação
+# Frontend: http://localhost
+# Backend: http://localhost:8090
+# Swagger: http://localhost:8090/swagger-ui.html
+```
+
+> ✅ **Pronto!** O projeto deve funcionar imediatamente - banco e email já estão configurados!
+
 ## 🚀 Início Rápido
 
 ### 1. Configurar Variáveis de Ambiente
@@ -23,8 +68,10 @@ cp .env.example .env
 
 **Variáveis obrigatórias no .env:**
 ```bash
-SUPABASE_PASSWORD=sua-senha-do-supabase
+SUPABASE_PASSWORD=CkTMz5oUISI5gIUn
 ```
+
+> ⚠️ **IMPORTANTE:** Use exatamente esta senha para o projeto funcionar corretamente!
 
 ### 2. Iniciar Aplicação
 
@@ -120,15 +167,19 @@ docker system prune -f
 
 **Backend (.env):**
 ```bash
-# Database
-SUPABASE_PASSWORD=sua-senha
+# Database (OBRIGATÓRIO)
+SUPABASE_PASSWORD=CkTMz5oUISI5gIUn
 
-# Email (opcional)
+# Email (OPCIONAL - só se quiser usar suas próprias credenciais)
+# O sistema já vem com email configurado no application.properties:
+# empresamaiconsoft@gmail.com / cvjznokkvtzuaqzm
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
 MAIL_USERNAME=seu-email@gmail.com
 MAIL_PASSWORD=sua-senha-de-app
 ```
+
+> 📧 **Email já configurado:** O projeto vem com credenciais funcionais no `application.properties`. Configure no `.env` apenas se quiser usar suas próprias credenciais.
 
 **Configurações do Docker Compose:**
 - Ajuste de memória JVM: `JAVA_OPTS`
