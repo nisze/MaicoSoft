@@ -81,8 +81,6 @@
     </style>
 </head>
 <body>
-    <!-- Container de Alertas -->
-    <div id="alert-container"></div>
 
     <!-- Navigation Bar -->
     <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
@@ -599,18 +597,138 @@
         // Configuração da API
         const API_BASE_URL = window.API_BASE_URL || window.CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
         
-        // Função de notificação simples
+        // Função de notificação moderna
         function showNotification(message, type, duration = 3000) {
-            // Fallback para alert se não houver sistema de notificação
-            if (type === 'error') {
-                alert('❌ ' + message);
-            } else if (type === 'success') {
-                alert('✅ ' + message);
-            } else if (type === 'warning') {
-                alert('⚠️ ' + message);
-            } else {
-                alert(message);
-            }
+            // Criar notificação toast moderna
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10001;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                transform: translateX(400px);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            // Adicionar ícone baseado no tipo
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            toast.textContent = `${icon} ${message}`;
+            
+            document.body.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remover após duração especificada
+            setTimeout(() => {
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Função de confirmação moderna
+        function showConfirmation(message, title = 'Confirmação') {
+            return new Promise((resolve) => {
+                // Criar overlay
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease-out;
+                `;
+                
+                // Criar modal de confirmação
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    background: white;
+                    border-radius: 16px;
+                    padding: 2rem;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                    animation: slideIn 0.4s ease-out;
+                    max-width: 400px;
+                    margin: 1rem;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
+                        <span class="material-icons" style="font-size: 3rem;">help_outline</span>
+                    </div>
+                    <h3 style="color: #1f2937; margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 600;">
+                        ${title}
+                    </h3>
+                    <p style="color: #6b7280; margin: 0 0 2rem 0; font-size: 1rem; line-height: 1.5;">
+                        ${message}
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button id="confirmCancel" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.3s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
+                            Cancelar
+                        </button>
+                        <button id="confirmOk" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.3s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                            Confirmar
+                        </button>
+                    </div>
+                `;
+                
+                overlay.appendChild(modal);
+                document.body.appendChild(overlay);
+                
+                // Adicionar animações CSS
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    
+                    @keyframes slideIn {
+                        from { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                        to { transform: scale(1) translateY(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Event listeners
+                document.getElementById('confirmOk').addEventListener('click', () => {
+                    overlay.remove();
+                    style.remove();
+                    resolve(true);
+                });
+                
+                document.getElementById('confirmCancel').addEventListener('click', () => {
+                    overlay.remove();
+                    style.remove();
+                    resolve(false);
+                });
+                
+                // Fechar com ESC
+                const escHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        overlay.remove();
+                        style.remove();
+                        document.removeEventListener('keydown', escHandler);
+                        resolve(false);
+                    }
+                };
+                document.addEventListener('keydown', escHandler);
+            });
         }
         
         // Função para alternar entre tabs de vendas
@@ -800,51 +918,6 @@
                 });
             }
         });
-
-        // Função para mostrar alertas
-        function showAlert(message, type = 'info') {
-            const alertContainer = document.getElementById('alert-container');
-            if (!alertContainer) {
-                // Criar container se não existir
-                const container = document.createElement('div');
-                container.id = 'alert-container';
-                container.style.cssText = 'position: fixed; top: 0; right: 0; z-index: 10000; pointer-events: none;';
-                document.body.appendChild(container);
-            }
-            
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 10001;
-                max-width: 400px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-                pointer-events: auto;
-                transform: translateX(400px);
-                transition: transform 0.3s ease-out;
-            `;
-            alertDiv.textContent = message;
-            
-            document.body.appendChild(alertDiv);
-            
-            // Animar entrada
-            setTimeout(() => {
-                alertDiv.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // Remover após 4 segundos
-            setTimeout(() => {
-                alertDiv.style.transform = 'translateX(400px)';
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 4000);
-        }
 
         
         async function loadMetricas() {
@@ -1046,7 +1119,12 @@
         
         // Função para deletar venda
         async function deleteVenda(id) {
-            if (!confirm('Tem certeza que deseja excluir esta venda? Esta ação não pode ser desfeita.')) {
+            const confirmed = await showConfirmation(
+                'Esta ação não pode ser desfeita.',
+                'Tem certeza que deseja excluir esta venda?'
+            );
+            
+            if (!confirmed) {
                 return;
             }
             
@@ -1425,8 +1503,13 @@
         }
         
         // Funções do formulário
-        function limparFormularioVenda() {
-            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+        async function limparFormularioVenda() {
+            const confirmed = await showConfirmation(
+                'Todos os campos preenchidos serão perdidos.',
+                'Tem certeza que deseja limpar todos os campos?'
+            );
+            
+            if (confirmed) {
                 document.getElementById('nova-venda-form').reset();
                 const hoje = new Date().toISOString().split('T')[0];
                 document.getElementById('data-venda').value = hoje;
@@ -1961,7 +2044,12 @@
                 return;
             }
             
-            if (!confirm('Tem certeza que deseja remover o comprovante? O status da venda voltará para PENDENTE.')) {
+            const confirmed = await showConfirmation(
+                'O status da venda voltará para PENDENTE.',
+                'Tem certeza que deseja remover o comprovante?'
+            );
+            
+            if (!confirmed) {
                 return;
             }
             
