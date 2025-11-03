@@ -32,7 +32,8 @@ public class CupomRequestDTO {
     @DecimalMin(value = "0.0", inclusive = false, message = "Desconto em valor deve ser maior que 0")
     private Double descontoValor;
 
-    @Future(message = "Data de validade deve ser no futuro")
+    // Removendo @Future para permitir desativar cupons expirados
+    // A validação de data será feita no service quando o status for ATIVO
     private LocalDate validade;
 
     @NotBlank(message = "Status é obrigatório")

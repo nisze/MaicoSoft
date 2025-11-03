@@ -79,15 +79,7 @@ public interface VendaRepository extends JpaRepository<Venda, Long>, JpaSpecific
      */
     @Query("SELECT COALESCE(SUM(v.valorTotal), 0) FROM Venda v WHERE v.dataVenda BETWEEN :startDate AND :endDate")
     BigDecimal sumValueByPeriod(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
-    
-    /**
-     * Conta vendas entre duas datas
-     * @param startDate Data inicial
-     * @param endDate Data final
-     * @return Número de vendas no período
-     */
-    long countByDataVendaBetween(LocalDate startDate, LocalDate endDate);
-    
+
     /**
      * Busca vendas entre duas datas ordenadas por data
      * @param startDate Data inicial
@@ -135,4 +127,45 @@ public interface VendaRepository extends JpaRepository<Venda, Long>, JpaSpecific
            "ORDER BY SUM(v.valor_total) DESC", nativeQuery = true)
     List<Object[]> findUserPerformance(@Param("startDate") LocalDateTime startDate, 
                                       @Param("endDate") LocalDateTime endDate);
+
+    /**
+     * Conta vendas entre LocalDateTime
+     * @param startDate Data inicial
+     * @param endDate Data final
+     * @return Número de vendas no período
+     */
+    @Query("SELECT COUNT(v) FROM Venda v WHERE v.dataVenda >= :startDate AND v.dataVenda <= :endDate")
+    long countByDataVendaBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    /**
+     * Busca vendas entre LocalDateTime ordenadas por data
+     * @param startDate Data inicial
+     * @param endDate Data final
+     * @return Lista de vendas no período
+     */
+    @Query("SELECT v FROM Venda v WHERE v.dataVenda >= :startDate AND v.dataVenda <= :endDate ORDER BY v.dataVenda DESC")
+    List<Venda> findByDataVendaBetweenOrderByDataVendaDesc(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    /**
+     * Soma valor das vendas por cliente
+     * @param clienteId ID do cliente
+     * @return Soma do valor das vendas do cliente
+     */
+    @Query("SELECT COALESCE(SUM(v.valorTotal), 0) FROM Venda v WHERE v.cliente.idCliente = :clienteId")
+    BigDecimal sumValueByCliente(@Param("clienteId") Long clienteId);
+
+    /**
+     * Conta clientes distintos que fizeram vendas em um período
+     * @param startDate Data inicial
+     * @param endDate Data final
+     * @return Número de clientes únicos que fizeram vendas
+     */
+    @Query("SELECT COUNT(DISTINCT v.cliente.idCliente) FROM Venda v WHERE v.dataVenda >= :startDate AND v.dataVenda <= :endDate")
+    long countDistinctClientesByPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    /**
+     * Busca todas as vendas ordenadas por data
+     * @return Lista de todas as vendas
+     */
+    List<Venda> findAllByOrderByDataVendaDesc();
 }

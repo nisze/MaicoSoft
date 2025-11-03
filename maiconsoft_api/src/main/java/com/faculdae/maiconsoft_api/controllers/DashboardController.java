@@ -104,4 +104,48 @@ public class DashboardController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/vendas-detail")
+    public ResponseEntity<Map<String, Object>> getVendasDetail(
+            @RequestParam(defaultValue = "6") int months) {
+        try {
+            Map<String, Object> data = dashboardService.getVendasDetailReport(months);
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/clientes-detail")
+    public ResponseEntity<Map<String, Object>> getClientesDetail(
+            @RequestParam(defaultValue = "6") int months) {
+        try {
+            Map<String, Object> data = dashboardService.getClientesDetailReport(months);
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/export/vendas")
+    public ResponseEntity<Map<String, Object>> getVendasForExport(
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+        try {
+            Map<String, Object> data = dashboardService.getVendasForExport(startDate, endDate);
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/export/clientes")
+    public ResponseEntity<Map<String, Object>> getClientesForExport() {
+        try {
+            Map<String, Object> data = dashboardService.getClientesForExport();
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

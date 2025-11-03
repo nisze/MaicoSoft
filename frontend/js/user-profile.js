@@ -414,7 +414,7 @@ class UserProfileManager {
         }
 
         if (userRoleElement) {
-            userRoleElement.textContent = this.getRoleDisplayName(this.currentUser.tipoUsuario || this.currentUser.role);
+            userRoleElement.textContent = this.getRoleDisplayName(this.currentUser.tipoUsuario || this.currentUser.roleName || this.currentUser.role);
         }
 
         if (userAvatarElement) {

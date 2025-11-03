@@ -69,4 +69,24 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
      */
     @Query(value = "SELECT * FROM CLIENTES ORDER BY datahora_cadastro DESC LIMIT :limit", nativeQuery = true)
     List<Cliente> findTopByOrderByDatahoraCadastroDesc(@Param("limit") int limit);
+
+    /**
+     * Conta clientes cadastrados até uma data
+     * @param endDate Data limite
+     * @return Número de clientes cadastrados até a data
+     */
+    long countByDatahoraCadastroLessThanEqual(LocalDateTime endDate);
+
+    /**
+     * Conta clientes cadastrados antes de uma data
+     * @param endDate Data limite
+     * @return Número de clientes cadastrados antes da data
+     */
+    long countByDatahoraCadastroBefore(LocalDateTime endDate);
+
+    /**
+     * Busca todos os clientes ordenados por data de cadastro
+     * @return Lista de todos os clientes
+     */
+    List<Cliente> findAllByOrderByDatahoraCadastroDesc();
 }

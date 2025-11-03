@@ -27,6 +27,11 @@ public class VendaResponseDTO {
     private LocalDateTime datahoraCadastro;
     private String observacao;
     
+    // Dados do comprovante
+    private String comprovantePath;
+    private LocalDateTime comprovanteUploadDate;
+    private Boolean comprovanteAnexado;
+    
     // Dados do cliente
     private Long clienteId;
     private String clienteCodigo;

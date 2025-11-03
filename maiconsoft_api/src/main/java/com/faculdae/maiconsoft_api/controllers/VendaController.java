@@ -18,8 +18,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Controller REST para operações de Venda
@@ -313,5 +322,101 @@ public class VendaController {
         log.info("Venda excluída com sucesso - ID: {}", id);
         
         return ResponseEntity.noContent().build();
+    }
+    
+    @Operation(summary = "Upload de comprovante de venda", 
+               description = "Faz upload do comprovante e atualiza o status da venda automaticamente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comprovante enviado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Arquivo inválido"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Venda não encontrada")
+    })
+    @PostMapping("/{id}/comprovante")
+    public ResponseEntity<Map<String, Object>> uploadComprovante(
+            @Parameter(description = "ID da venda") @PathVariable Long id,
+            @Parameter(description = "Arquivo do comprovante") @RequestParam("file") MultipartFile file) {
+        
+        log.info("Recebendo upload de comprovante para venda ID: {}", id);
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Validações do arquivo
+            if (file.isEmpty()) {
+                response.put("erro", "Arquivo não pode estar vazio");
+                return ResponseEntity.badRequest().body(response);
+            }
+            
+            // Validar tipo de arquivo (opcional)
+            String contentType = file.getContentType();
+            if (contentType == null || 
+                (!contentType.equals("image/jpeg") && 
+                 !contentType.equals("image/png") && 
+                 !contentType.equals("image/jpg") &&
+                 !contentType.equals("application/pdf"))) {
+                response.put("erro", "Tipo de arquivo não suportado. Use JPEG, PNG ou PDF");
+                return ResponseEntity.badRequest().body(response);
+            }
+            
+            // Criar diretório se não existir
+            String uploadDir = "uploads/comprovantes/";
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            
+            // Gerar nome único para o arquivo
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename != null && originalFilename.contains(".") 
+                    ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
+            String uniqueFilename = "comprovante_venda_" + id + "_" + UUID.randomUUID().toString() + extension;
+            
+            // Salvar arquivo
+            Path filePath = uploadPath.resolve(uniqueFilename);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            
+            // Atualizar venda com caminho do comprovante
+            String relativePath = uploadDir + uniqueFilename;
+            VendaResponseDTO vendaAtualizada = vendaService.atualizarComprovante(id, relativePath);
+            
+            log.info("Comprovante enviado com sucesso para venda ID: {} - Arquivo: {}", id, uniqueFilename);
+            
+            response.put("message", "Comprovante enviado com sucesso");
+            response.put("filename", uniqueFilename);
+            response.put("path", relativePath);
+            response.put("venda", vendaAtualizada);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (IOException e) {
+            log.error("Erro ao salvar arquivo de comprovante: {}", e.getMessage());
+            response.put("erro", "Erro interno ao salvar arquivo");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        } catch (Exception e) {
+            log.error("Erro inesperado no upload de comprovante: {}", e.getMessage());
+            response.put("erro", "Erro inesperado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    
+    @Operation(summary = "Remover comprovante de venda", 
+               description = "Remove o comprovante e altera o status da venda para PENDENTE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comprovante removido com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Venda não encontrada")
+    })
+    @DeleteMapping("/{id}/comprovante")
+    public ResponseEntity<VendaResponseDTO> removerComprovante(
+            @Parameter(description = "ID da venda") @PathVariable Long id) {
+        
+        log.info("Removendo comprovante da venda ID: {}", id);
+        
+        VendaResponseDTO vendaAtualizada = vendaService.atualizarComprovante(id, null);
+        
+        log.info("Comprovante removido com sucesso da venda ID: {}", id);
+        
+        return ResponseEntity.ok(vendaAtualizada);
     }
 }

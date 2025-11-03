@@ -69,6 +69,13 @@ public class CupomController {
         return ResponseEntity.ok(cupom);
     }
 
+    @PutMapping("/{id}/toggle-status")
+    public ResponseEntity<CupomResponseDTO> toggleStatus(@PathVariable Long id) {
+        log.info("Alternando status do cupom ID: {}", id);
+        CupomResponseDTO cupom = cupomService.toggleStatus(id);
+        return ResponseEntity.ok(cupom);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("Excluindo cupom ID: {}", id);

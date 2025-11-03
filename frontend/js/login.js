@@ -154,15 +154,16 @@ class LoginManager {
             const response = await APIService.users.login(codigoAcesso, senha);
             console.log('✅ Resposta da API:', response);
             
-            if (response.ativo) {
+            if (response.success) {
                 // Salvar dados do usuário no localStorage no formato correto
                 const userData = {
-                    id: response.id,
+                    id: response.idUser,
                     nome: response.nome,
                     email: response.email,
                     codigoAcesso: response.codigoAcesso,
-                    tipoUsuario: response.tipoUsuario, // Adicionar tipo de usuário
-                    ativo: response.ativo,
+                    tipoUsuario: response.tipoUsuario,
+                    roleName: response.tipoUsuario,    // Manter compatibilidade 
+                    ativo: true, // Usuário logado com sucesso significa que está ativo
                     loginTime: new Date().toISOString()
                 };
                 
@@ -173,7 +174,7 @@ class LoginManager {
                 
                 console.log('💾 Dados salvos no localStorage:', userData);
                 
-                this.showMessage('Login realizado com sucesso!', 'success');
+                this.showMessage(response.message || 'Login realizado com sucesso!', 'success');
                 
                 // Desabilitar formulário para prevenir resubmissão
                 const form = document.getElementById('loginForm');
@@ -196,7 +197,7 @@ class LoginManager {
                 }, 800); // Pequeno delay para mostrar mensagem de sucesso
                 
             } else {
-                this.showMessage('Usuário inativo. Contate o administrador.', 'error');
+                this.showMessage(response.message || 'Falha no login. Verifique suas credenciais.', 'error');
             }
             
         } catch (error) {

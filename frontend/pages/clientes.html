@@ -127,8 +127,9 @@
     <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
             <div style="display: flex; align-items: center;">
-                <a href="dashboard.html" style="text-decoration: none;">
-                    <img src="../images/teste.webp" alt="Maiconsoft" style="height: 40px; width: auto;">
+                <a href="dashboard.html" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <img src="../images/maiconsoft-logo.svg" alt="Maiconsoft" style="height: 40px; width: auto;" 
+                         onerror="this.onerror=null; this.src='../images/teste.webp';">
                 </a>
             </div>
             <div style="display: flex; gap: 0.5rem;">
@@ -1733,7 +1734,7 @@
                     // Mostrar apenas o primeiro nome no botão
                     document.getElementById('userName').textContent = userName.split(' ')[0]; // Primeiro nome
                     document.getElementById('userNameDisplay').textContent = userName;
-                    document.getElementById('userRoleDisplay').textContent = getRoleDisplayName(user.tipoUsuario || user.role);
+                    document.getElementById('userRoleDisplay').textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || user.role);
                     
                     // Carregar foto de perfil na navbar
                     loadUserProfilePhoto(user);

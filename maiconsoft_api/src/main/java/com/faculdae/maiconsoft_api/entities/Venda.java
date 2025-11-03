@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Getter
@@ -59,7 +60,16 @@ public class Venda {
     @Column(name = "OBSERVACAO", columnDefinition = "TEXT")
     private String observacao;
 
+    @Column(name = "COMPROVANTE_PATH", length = 255)
+    private String comprovantePath;
+
+    @Column(name = "COMPROVANTE_UPLOAD_DATE")
+    private LocalDateTime comprovanteUploadDate;
+
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO_CADASTRO")
     private User usuarioCadastro;
+
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pagamento> pagamentos;
 }

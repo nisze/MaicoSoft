@@ -1368,11 +1368,11 @@
         });
         
         // Carregar dados do usuário
-        function loadUserDataNav() {
+        async function loadUserDataNav() {
             try {
-                const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
-                if (userData) {
-                    const user = JSON.parse(userData);
+                // Buscar dados atualizados do backend
+                const user = await updateUserDataFromBackend();
+                if (user) {
                     const userName = user.nome || user.name || 'Usuário';
                     
                     const userNameEl = document.getElementById('userName');
@@ -1382,7 +1382,7 @@
                     // Mostrar apenas o primeiro nome no botão
                     if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
                     if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
-                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.roleName || 'FUNCIONARIO');
+                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || 'FUNCIONARIO');
                     
                     // Carregar foto de perfil na navbar
                     loadUserProfilePhoto(user);
@@ -1517,7 +1517,7 @@
             console.log('📄 Página de usuários carregada');
             
             // Carregar dados do usuário para navbar
-            loadUserDataNav();
+            await loadUserDataNav();
             
             // Verificar permissões antes de inicializar
             if (!initPermissions()) {

@@ -328,20 +328,38 @@
                                     <option value="boleto">Boleto</option>
                                 </select>
                             </div>
-                            <div>
-                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Status</label>
-                                <select id="status-venda" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
-                                    <option value="PENDENTE">Pendente</option>
-                                    <option value="CONFIRMADA">Confirmada</option>
-                                    <option value="CANCELADA">Cancelada</option>
-                                    <option value="FINALIZADA">Finalizada</option>
-                                </select>
-                            </div>
                         </div>
 
                         <div>
                             <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Descrição/Observações</label>
                             <textarea id="descricao-venda" rows="3" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; resize: vertical;" placeholder="Descreva os produtos/serviços vendidos e observações importantes"></textarea>
+                        </div>
+
+                        <!-- Upload de Comprovante -->
+                        <div style="margin-top: 1rem; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-icons" style="font-size: 1rem; color: #3b82f6;">receipt</span>
+                                Comprovante de Pagamento (Opcional)
+                            </label>
+                            <div style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: end;">
+                                <div style="flex: 1;">
+                                    <input type="file" 
+                                           id="comprovante-venda" 
+                                           accept=".jpg,.jpeg,.png,.pdf" 
+                                           style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.9rem; background: white; cursor: pointer;">
+                                </div>
+                                <button type="button" 
+                                        onclick="limparArquivoComprovante('comprovante-venda')" 
+                                        style="background: #ef4444; color: white; border: none; padding: 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap;" 
+                                        title="Limpar arquivo selecionado">
+                                    <span class="material-icons" style="font-size: 0.9rem;">clear</span>
+                                    Limpar
+                                </button>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #6b7280; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-icons" style="font-size: 0.9rem;">info</span>
+                                Anexe o comprovante para confirmar automaticamente a venda. Formatos: JPG, PNG ou PDF (máx. 5MB)
+                            </div>
                         </div>
                     </div>
 
@@ -393,6 +411,7 @@
                                 <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Cliente</th>
                                 <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Valor</th>
                                 <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Status</th>
+                                <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Comprovante</th>
                                 <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Data</th>
                                 <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">Ações</th>
                             </tr>
@@ -455,8 +474,16 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                         <div>
-                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Valor Total *</label>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
+                                <span id="edit-valor-label">Valor da Venda *</span>
+                            </label>
                             <input type="text" id="edit-valor-venda" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; background: white;" placeholder="R$ 0,00">
+                            <!-- Informações de desconto e valor bruto -->
+                            <div id="edit-valor-info" style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280; display: none;">
+                                <div>Valor Bruto: <span id="edit-valor-bruto-info">R$ 0,00</span></div>
+                                <div>Desconto: <span id="edit-valor-desconto">R$ 0,00</span></div>
+                                <div style="font-weight: 600; color: #ef4444; font-size: 0.7rem;">Este valor não pode ser editado diretamente</div>
+                            </div>
                         </div>
                         <div>
                             <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Forma de Pagamento</label>
@@ -485,6 +512,69 @@
                         <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Descrição/Observações</label>
                         <textarea id="edit-descricao-venda" rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; resize: vertical; background: white; font-family: inherit;" placeholder="Descreva os produtos/serviços vendidos e observações importantes"></textarea>
                     </div>
+
+                    <!-- Seção de Comprovante -->
+                    <div style="margin-top: 1.5rem; padding: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <h5 style="margin: 0 0 1rem 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1rem; color: #3b82f6;">receipt</span>
+                            Comprovante de Pagamento
+                        </h5>
+                        
+                        <!-- Status atual do comprovante -->
+                        <div id="comprovante-status" style="margin-bottom: 1rem; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                            <!-- Será preenchido via JavaScript -->
+                        </div>
+                        
+                        <!-- Upload de novo comprovante -->
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
+                                Anexar/Atualizar Comprovante
+                            </label>
+                            <div style="display: flex; gap: 0.5rem; align-items: end;">
+                                <div style="flex: 1;">
+                                    <input type="file" 
+                                           id="edit-comprovante-venda" 
+                                           accept=".jpg,.jpeg,.png,.pdf" 
+                                           style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.85rem; background: white; cursor: pointer;">
+                                </div>
+                                <button type="button" 
+                                        onclick="limparArquivoComprovante('edit-comprovante-venda')" 
+                                        style="background: #ef4444; color: white; border: none; padding: 0.6rem; cursor: pointer; font-size: 0.75rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap;" 
+                                        title="Limpar arquivo selecionado">
+                                    <span class="material-icons" style="font-size: 0.85rem;">clear</span>
+                                    Limpar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Botões de ação para comprovante -->
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <button type="button" 
+                                    id="upload-comprovante-btn" 
+                                    onclick="uploadComprovante()" 
+                                    style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; border-radius: 4px; transition: background-color 0.3s;" 
+                                    onmouseover="this.style.background='#2563eb'" 
+                                    onmouseout="this.style.background='#3b82f6'">
+                                <span class="material-icons" style="font-size: 0.9rem;">upload</span>
+                                Enviar Comprovante
+                            </button>
+                            
+                            <button type="button" 
+                                    id="remove-comprovante-btn" 
+                                    onclick="removerComprovante()" 
+                                    style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; border-radius: 4px; transition: background-color 0.3s; display: none;" 
+                                    onmouseover="this.style.background='#dc2626'" 
+                                    onmouseout="this.style.background='#ef4444'">
+                                <span class="material-icons" style="font-size: 0.9rem;">delete</span>
+                                Remover Comprovante
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 0.75rem; font-size: 0.7rem; color: #6b7280; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 0.8rem;">info</span>
+                            Formatos aceitos: JPG, PNG ou PDF (máx. 5MB). O status da venda será atualizado automaticamente.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Botões de Ação -->
@@ -506,6 +596,23 @@
     <script src="../js/config.js"></script>
     <script src="../js/app.js"></script>
     <script>
+        // Configuração da API
+        const API_BASE_URL = window.API_BASE_URL || window.CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
+        
+        // Função de notificação simples
+        function showNotification(message, type, duration = 3000) {
+            // Fallback para alert se não houver sistema de notificação
+            if (type === 'error') {
+                alert('❌ ' + message);
+            } else if (type === 'success') {
+                alert('✅ ' + message);
+            } else if (type === 'warning') {
+                alert('⚠️ ' + message);
+            } else {
+                alert(message);
+            }
+        }
+        
         // Função para alternar entre tabs de vendas
         function switchVendasTab(tabName) {
             console.log('switchVendasTab chamado com:', tabName);
@@ -641,6 +748,9 @@
             const usuario = JSON.parse(usuarioLogado);
             console.log('Usuário logado:', usuario);
             
+            // Atualizar informações do usuário na navbar
+            updateUserInfo(usuario);
+            
             // Liberar acesso para todos os usuários logados
             // Comentado para evitar erros - AppState não existe
             // const user = AppState.user;
@@ -741,34 +851,33 @@
             try {
                 console.log('📊 Carregando métricas de vendas...');
                 
-                // Buscar dados reais das vendas
-                const response = await APIService.vendas.getAll(0, 100); // Buscar muitas vendas para calcular métricas
-                const vendas = response.vendas || response.content || [];
+                // Buscar métricas da API de dashboard
+                const response = await fetch(`${API_BASE_URL}/dashboard/metrics?days=30`);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar métricas');
+                }
                 
-                console.log('📈 Vendas carregadas:', vendas.length);
+                const data = await response.json();
+                console.log('📈 Métricas carregadas:', data);
                 
-                // Calcular métricas baseadas nos dados reais
-                const totalVendas = vendas.reduce((sum, venda) => {
-                    if (venda.status === 'FINALIZADA') {
-                        return sum + (venda.valorTotal || venda.valorVenda || 0);
-                    }
-                    return sum;
-                }, 0);
+                // Atualizar interface com dados reais
+                document.getElementById('total-vendas').textContent = `R$ ${parseFloat(data.totalRevenue || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                document.getElementById('vendas-mes').textContent = (data.salesThisPeriod || 0).toString();
                 
-                const vendasFinalizadas = vendas.filter(venda => venda.status === 'FINALIZADA').length;
+                // Buscar orçamentos pendentes separadamente
+                const vendasResponse = await APIService.vendas.getAll(0, 100);
+                const vendas = vendasResponse.vendas || vendasResponse.content || [];
                 const orcamentosPendentes = vendas.filter(venda => venda.status === 'PENDENTE').length;
-                const ticketMedio = vendasFinalizadas > 0 ? totalVendas / vendasFinalizadas : 0;
                 
-                // Atualizar interface
-                document.getElementById('total-vendas').textContent = `R$ ${totalVendas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                document.getElementById('vendas-mes').textContent = vendasFinalizadas.toString();
                 document.getElementById('orcamentos-pendentes').textContent = orcamentosPendentes.toString();
-                document.getElementById('ticket-medio').textContent = `R$ ${ticketMedio.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                document.getElementById('ticket-medio').textContent = `R$ ${parseFloat(data.averageTicket || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
                 
-                console.log('✅ Métricas atualizadas com dados reais');
+                console.log('✅ Métricas atualizadas com dados reais do dashboard');
                 
             } catch (error) {
                 console.error('❌ Erro ao carregar métricas:', error);
+                showNotification('Erro ao carregar métricas', 'error');
+                
                 // Fallback para valores padrão em caso de erro
                 document.getElementById('total-vendas').textContent = 'R$ 0,00';
                 document.getElementById('vendas-mes').textContent = '0';
@@ -781,9 +890,13 @@
             try {
                 console.log('📋 Carregando dados de vendas...');
                 
-                // Buscar vendas reais da API
-                const response = await APIService.vendas.getAll(0, 20); // Buscar últimas 20 vendas
-                const vendas = response.vendas || response.content || [];
+                // Buscar vendas reais da API usando fetch direto
+                const response = await fetch(`${API_BASE_URL}/vendas?page=0&size=20`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                const vendas = data.vendas || data.content || [];
                 
                 console.log('📊 Vendas carregadas:', vendas.length, vendas);
                 
@@ -795,7 +908,10 @@
                     status: getStatusPortugues(venda.status || venda.statusVenda),
                     data: venda.dataVenda || venda.datahoraCadastro || new Date().toISOString(),
                     descricao: venda.observacao || venda.descricao || 'Sem descrição',
-                    numeroOrcamento: venda.numeroOrcamento || `#${String(venda.idVenda || venda.id).padStart(4, '0')}`
+                    numeroOrcamento: venda.numeroOrcamento || `#${String(venda.idVenda || venda.id).padStart(4, '0')}`,
+                    comprovanteAnexado: venda.comprovanteAnexado || false,
+                    comprovantePath: venda.comprovantePath || null,
+                    comprovanteUploadDate: venda.comprovanteUploadDate || null
                 }));
                 
                 // Load recent sales (resumo)
@@ -826,7 +942,7 @@
                     if (vendasFormatadas.length === 0) {
                         allSales.innerHTML = `
                             <tr>
-                                <td colspan="6" style="text-align: center; color: #6b7280; padding: 2rem;">
+                                <td colspan="7" style="text-align: center; color: #6b7280; padding: 2rem;">
                                     <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                                         <span class="material-icons" style="font-size: 3rem; color: #d1d5db;">receipt_long</span>
                                         <p style="margin: 0; font-size: 1.1rem;">Nenhuma venda encontrada</p>
@@ -846,9 +962,32 @@
                                         ${venda.status}
                                     </span>
                                 </td>
+                                <td style="padding: 0.75rem;">
+                                    ${venda.comprovanteAnexado ? 
+                                        `<div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span class="material-icons" style="font-size: 1rem; color: #10b981;">check_circle</span>
+                                            <span style="font-size: 0.8rem; color: #10b981; font-weight: 500;">Anexado</span>
+                                        </div>` : 
+                                        `<div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span class="material-icons" style="font-size: 1rem; color: #f59e0b;">pending</span>
+                                            <span style="font-size: 0.8rem; color: #f59e0b; font-weight: 500;">Pendente</span>
+                                        </div>`
+                                    }
+                                </td>
                                 <td style="padding: 0.75rem; color: #6b7280; font-size: 0.9rem;">${formatarData(venda.data)}</td>
                                 <td style="padding: 0.75rem;">
                                     <div style="display: flex; gap: 0.5rem;">
+                                        ${venda.comprovantePath ? 
+                                            `<button onclick="visualizarComprovante('${venda.comprovantePath}')" style="background: #10b981; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Ver comprovante">
+                                                <span class="material-icons" style="font-size: 0.9rem;">visibility</span>
+                                            </button>
+                                            <button onclick="removerComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Remover comprovante">
+                                                <span class="material-icons" style="font-size: 0.9rem;">delete_forever</span>
+                                            </button>` : 
+                                            `<button onclick="uploadComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
+                                                <span class="material-icons" style="font-size: 0.9rem;">upload</span>
+                                            </button>`
+                                        }
                                         <button onclick="editVenda(${venda.id})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Editar">
                                             <span class="material-icons" style="font-size: 0.9rem;">edit</span>
                                         </button>
@@ -913,8 +1052,19 @@
             try {
                 console.log('🗑️ Excluindo venda:', id);
                 
-                await APIService.vendas.delete(id);
-                showAlert('✅ Venda excluída com sucesso!', 'success');
+                const response = await fetch(`${API_BASE_URL}/vendas/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    throw new Error(errorData || 'Erro ao excluir venda');
+                }
+                
+                showNotification('✅ Venda excluída com sucesso!', 'success');
                 
                 // Recarregar dados
                 await loadVendasData();
@@ -922,7 +1072,7 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao excluir venda:', error);
-                showAlert('❌ Erro ao excluir venda: ' + error.message, 'error');
+                showNotification('❌ Erro ao excluir venda: ' + error.message, 'error');
             }
         }
         
@@ -1287,7 +1437,7 @@
             const formData = new FormData(document.getElementById('nova-venda-form'));
             const data = Object.fromEntries(formData);
             localStorage.setItem('rascunho_venda', JSON.stringify(data));
-            alert('Rascunho da venda salvo com sucesso!');
+            showNotification('✅ Rascunho da venda salvo com sucesso!', 'success');
         }
         
         // Submissão do formulário
@@ -1313,13 +1463,13 @@
                     });
                     
                     if (!clienteId) {
-                        alert('❌ Por favor, selecione um cliente válido da lista de sugestões!\n\nDigite o nome do cliente e clique em uma das opções que aparecer na lista.');
+                        showNotification('❌ Por favor, selecione um cliente válido da lista de sugestões!', 'error');
                         document.getElementById('cliente-search').focus();
                         return;
                     }
                     
                     if (!valorVenda || valorVenda.trim() === '') {
-                        alert('❌ Por favor, preencha o valor total da venda!');
+                        showNotification('❌ Por favor, preencha o valor total da venda!', 'error');
                         document.getElementById('valor-venda').focus();
                         return;
                     }
@@ -1337,21 +1487,20 @@
                         const valorNumerico = parseFloat(valorLimpo);
                         
                         if (isNaN(valorNumerico) || valorNumerico <= 0) {
-                            alert('❌ Valor da venda inválido! Use formato: R$ 1.500,00');
+                            showNotification('❌ Valor da venda inválido! Use formato: R$ 1.500,00', 'error');
                             document.getElementById('valor-venda').focus();
                             return;
                         }
                         
                         // Preparar dados para a API
                         const dataVenda = document.getElementById('data-venda').value;
-                        const statusVenda = document.getElementById('status-venda').value;
                         const descricaoVenda = document.getElementById('descricao-venda').value;
                         const cupomCodigo = document.getElementById('cupom-desconto').value;
                         
                         const vendaPayload = {
                             clienteId: parseInt(clienteId),
                             valorBruto: valorNumerico,
-                            status: statusVenda || 'PENDENTE',
+                            status: 'PENDENTE', // Status será determinado pelo backend baseado no comprovante
                             dataVenda: dataVenda || new Date().toISOString().split('T')[0],
                             observacao: descricaoVenda || ''
                         };
@@ -1368,11 +1517,16 @@
                         const response = await APIService.vendas.create(vendaPayload);
                         console.log('✅ Venda criada com sucesso:', response);
                         
+                        // Processar upload de comprovante se houver arquivo selecionado
+                        if (response.idVenda) {
+                            await processComprovanteUpload(response.idVenda);
+                        }
+                        
                         localStorage.removeItem('rascunho_venda');
                         
                         // Mostrar mensagem de sucesso com número do orçamento
                         const numeroOrcamento = response.numeroOrcamento || `#${response.idVenda}`;
-                        showAlert(`✅ Venda registrada com sucesso! Orçamento: ${numeroOrcamento}`, 'success');
+                        showNotification(`✅ Venda registrada com sucesso! Orçamento: ${numeroOrcamento}`, 'success');
                         
                         this.reset();
                         const hoje = new Date().toISOString().split('T')[0];
@@ -1392,7 +1546,7 @@
                             errorMessage = 'Valor da venda é inválido.';
                         }
                         
-                        showAlert(`❌ ${errorMessage}`, 'error');
+                        showNotification(`❌ ${errorMessage}`, 'error');
                     } finally {
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
@@ -1420,18 +1574,34 @@
                         // Obter clienteId do campo hidden
                         const clienteId = document.getElementById('edit-cliente-id').value;
                         if (!clienteId) {
-                            alert('❌ Por favor, selecione um cliente!');
+                            showNotification('❌ Por favor, selecione um cliente!', 'error');
                             return;
                         }
                         
+                        // Obter dados do formulário
+                        const valorInput = document.getElementById('edit-valor-venda').value;
+                        const valorEditavel = !document.getElementById('edit-valor-venda').readOnly;
+                        
+                        // Se o campo está editável, é valor bruto; se não, é valor final
+                        let valorBruto;
+                        if (valorEditavel) {
+                            // Campo editável = valor bruto
+                            valorBruto = parseFloat(valorInput.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+                        } else {
+                            // Campo não editável = valor final, usar valor bruto da venda original
+                            valorBruto = currentEditingVendaData?.valorBruto || 0;
+                        }
+
                         const vendaData = {
                             id: vendaId,
                             clienteId: parseInt(clienteId),
                             dataVenda: formData.get('edit-data-venda') || document.getElementById('edit-data-venda').value,
-                            valor: parseFloat(document.getElementById('edit-valor-venda').value.replace(/[^\d,]/g, '').replace(',', '.')) || 0,
-                            formaPagamento: formData.get('edit-forma-pagamento') || document.getElementById('edit-forma-pagamento').value,
+                            valorBruto: valorBruto,
                             status: formData.get('edit-status-venda') || document.getElementById('edit-status-venda').value,
-                            descricao: formData.get('edit-descricao-venda') || document.getElementById('edit-descricao-venda').value
+                            observacao: formData.get('edit-descricao-venda') || document.getElementById('edit-descricao-venda').value,
+                            // Incluir comprovantePath atual para manter informação de comprovante
+                            comprovantePath: currentEditingVendaData?.comprovantePath || null,
+                            cupomCodigo: currentEditingVendaData?.cupomCodigo || null // Preservar cupom existente
                         };
                         
                         console.log('💾 Atualizando venda:', vendaData);
@@ -1447,7 +1617,7 @@
                             await new Promise(resolve => setTimeout(resolve, 1000));
                         }
                         
-                        alert('✅ Venda atualizada com sucesso!');
+                        showNotification('✅ Venda atualizada com sucesso!', 'success');
                         
                         // Fechar modal
                         closeEditModal();
@@ -1458,7 +1628,7 @@
                         
                     } catch (error) {
                         console.error('❌ Erro ao atualizar venda:', error);
-                        alert('❌ Erro ao atualizar venda. Tente novamente.');
+                        showNotification('❌ Erro ao atualizar venda. Tente novamente.', 'error');
                     } finally {
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
@@ -1467,84 +1637,29 @@
             }
         });
         
-        async function editVenda(id) {
-            console.log('🔄 Carregando dados da venda para edição:', id);
-            
-            try {
-                // Buscar dados da venda na API
-                const venda = await APIService.vendas.getById(id);
-                console.log('📋 Dados da venda carregados:', venda);
-                
-                if (venda) {
-                    // Preencher o formulário de edição
-                    document.getElementById('edit-venda-id').value = venda.idVenda || venda.id;
-                    document.getElementById('edit-data-venda').value = venda.dataVenda ? venda.dataVenda.split('T')[0] : '';
-                    document.getElementById('edit-valor-venda').value = venda.valorTotal || venda.valorVenda || 0;
-                    document.getElementById('edit-desconto').value = venda.valorDesconto || 0;
-                    document.getElementById('edit-status-venda').value = venda.status || 'PENDENTE';
-                    document.getElementById('edit-observacoes').value = venda.observacao || '';
-                    
-                    // Pré-preencher o campo de cliente com os dados da venda
-                    const editClienteSearch = document.getElementById('edit-cliente-search');
-                    const editClienteId = document.getElementById('edit-cliente-id');
-                    if (editClienteSearch && editClienteId && venda.cliente) {
-                        editClienteSearch.value = venda.cliente.nome || venda.clienteNome || '';
-                        editClienteId.value = venda.cliente.idCliente || venda.cliente.id || '';
-                    }
-                    
-                    // Abrir o modal e forçar posicionamento correto
-                    const modal = document.getElementById('edit-venda-modal');
-                    modal.style.display = 'block';
-                    
-                    // Forçar CSS correto
-                    modal.style.position = 'fixed';
-                    modal.style.top = '0';
-                    modal.style.left = '0';
-                    modal.style.width = '100%';
-                    modal.style.height = '100%';
-                    modal.style.zIndex = '9999';
-                    
-                    // Corrigir footer dos botões
-                    const footer = modal.querySelector('.modal-footer');
-                    if (footer) {
-                        footer.style.position = 'relative';
-                        footer.style.bottom = 'auto';
-                        footer.style.left = 'auto';
-                        footer.style.right = 'auto';
-                        footer.style.width = 'auto';
-                        footer.style.flexShrink = '0';
-                    }
-                    
-                    document.body.style.overflow = 'hidden'; // Impedir scroll do body
-                    
-                } else {
-                    showAlert('❌ Erro ao carregar dados da venda!', 'error');
-                }
-                
-            } catch (error) {
-                console.error('❌ Erro ao carregar venda para edição:', error);
-                showAlert('❌ Erro ao carregar dados da venda: ' + error.message, 'error');
+        // Função para limpar arquivo de comprovante selecionado
+        function limparArquivoComprovante(inputId) {
+            const fileInput = document.getElementById(inputId);
+            if (fileInput) {
+                fileInput.value = '';
+                console.log(`🗑️ Arquivo limpo do campo: ${inputId}`);
             }
         }
 
-        function deleteVenda(id) {
-            if (confirm('Tem certeza que deseja excluir esta venda? Esta ação não pode ser desfeita.')) {
-                console.log('🗑️ Excluindo venda:', id);
-                
-                // Implementar exclusão via API
-                APIService.vendas.delete(id)
-                    .then(() => {
-                        console.log('✅ Venda excluída com sucesso');
-                        showAlert('✅ Venda excluída com sucesso!', 'success');
-                        
-                        // Recarregar dados
-                        loadVendasData();
-                        loadMetricas();
-                    })
-                    .catch(error => {
-                        console.error('❌ Erro ao excluir venda:', error);
-                        showAlert('❌ Erro ao excluir venda: ' + error.message, 'error');
-                    });
+        // Função para atualizar informações de valor no modal de edição
+        function updateEditValorInfo(venda) {
+            const valorInfo = document.getElementById('edit-valor-info');
+            const valorBrutoInfo = document.getElementById('edit-valor-bruto-info');
+            const valorDesconto = document.getElementById('edit-valor-desconto');
+            
+            if (venda.valorDesconto && venda.valorDesconto > 0) {
+                // Mostrar informações de desconto se houver
+                valorInfo.style.display = 'block';
+                valorBrutoInfo.textContent = `R$ ${venda.valorBruto.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                valorDesconto.textContent = `R$ ${venda.valorDesconto.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            } else {
+                // Esconder se não houver desconto
+                valorInfo.style.display = 'none';
             }
         }
 
@@ -1552,50 +1667,8 @@
         function closeEditModal() {
             document.getElementById('edit-venda-modal').style.display = 'none';
             document.body.style.overflow = 'auto'; // Restaurar scroll do body
-        }
-
-        // Função para deletar venda com confirmação melhorada
-        function deleteVenda(id) {
-            showNotification(
-                `Tem certeza que deseja excluir esta venda?`,
-                'warning',
-                [
-                    {
-                        text: 'Cancelar',
-                        action: () => {/* Não faz nada */}
-                    },
-                    {
-                        text: 'Excluir',
-                        action: () => confirmarExclusaoVenda(id),
-                        class: 'btn-danger'
-                    }
-                ]
-            );
-        }
-
-        // Função para confirmar exclusão da venda
-        async function confirmarExclusaoVenda(id) {
-            try {
-                console.log('🗑️ Excluindo venda:', id);
-                
-                const response = await fetch(`${API_BASE_URL}/vendas/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Erro ao excluir venda');
-                }
-                
-                showNotification('✅ Venda excluída com sucesso!', 'success');
-                
-                // Recarregar dados
-                await loadVendasData();
-                await loadMetricas();
-                
-            } catch (error) {
-                console.error('❌ Erro ao excluir venda:', error);
-                showNotification('❌ Erro ao excluir venda: ' + error.message, 'error');
-            }
+            currentEditingVendaId = null; // Limpar ID da venda sendo editada
+            currentEditingVendaData = null; // Limpar dados da venda sendo editada
         }
 
         // Função para editar venda
@@ -1613,25 +1686,42 @@
                 const venda = await response.json();
                 console.log('📊 Dados da venda carregados:', venda);
                 
+                // Definir ID e dados da venda sendo editada
+                currentEditingVendaId = venda.idVenda || id;
+                currentEditingVendaData = venda; // Armazenar dados completos
+                
                 // Preencher modal de edição
                 document.getElementById('edit-venda-id').value = venda.idVenda;
                 document.getElementById('edit-cliente-search').value = venda.clienteNome || '';
                 document.getElementById('edit-cliente-id').value = venda.clienteId || '';
-                document.getElementById('edit-valor-venda').value = formatCurrency(venda.valorBruto || 0);
+                
+                // Lógica inteligente para mostrar valor: se há desconto, mostra valor final (read-only), senão valor bruto (editável)
+                if (venda.valorDesconto && venda.valorDesconto > 0) {
+                    // Há desconto: mostrar valor final e tornar campo não editável
+                    document.getElementById('edit-valor-venda').value = formatCurrency(venda.valorTotal || 0);
+                    document.getElementById('edit-valor-venda').readOnly = true;
+                    document.getElementById('edit-valor-venda').style.backgroundColor = '#f3f4f6';
+                    document.getElementById('edit-valor-label').textContent = 'Valor Final (com desconto) *';
+                } else {
+                    // Sem desconto: mostrar valor bruto e permitir edição
+                    document.getElementById('edit-valor-venda').value = formatCurrency(venda.valorBruto || 0);
+                    document.getElementById('edit-valor-venda').readOnly = false;
+                    document.getElementById('edit-valor-venda').style.backgroundColor = 'white';
+                    document.getElementById('edit-valor-label').textContent = 'Valor da Venda *';
+                }
+                
                 document.getElementById('edit-status-venda').value = venda.status || 'PENDENTE';
                 document.getElementById('edit-data-venda').value = venda.dataVenda || '';
                 document.getElementById('edit-descricao-venda').value = venda.observacao || '';
                 
-                // Selecionar cupom se houver
-                const cupomSelect = document.getElementById('edit-cupom-desconto');
-                if (venda.cupomCodigo && cupomSelect) {
-                    for (let option of cupomSelect.options) {
-                        if (option.value === venda.cupomCodigo) {
-                            option.selected = true;
-                            break;
-                        }
-                    }
-                }
+                // Atualizar informações de valor (desconto e valor final)
+                updateEditValorInfo(venda);
+                
+                // Atualizar status do comprovante
+                await updateComprovanteStatus(venda);
+                
+                // Selecionar cupom se houver (campo não existe no modal de edição)
+                // TODO: Adicionar campo de cupom no modal de edição se necessário
                 
                 // Mostrar modal e forçar posicionamento correto
                 const modal = document.getElementById('edit-venda-modal');
@@ -1683,7 +1773,8 @@
                         const status = document.getElementById('edit-status-venda').value;
                         const dataVenda = document.getElementById('edit-data-venda').value;
                         const observacao = document.getElementById('edit-descricao-venda').value;
-                        const cupomCodigo = document.getElementById('edit-cupom-desconto').value;
+                        // Campo de cupom não existe no modal de edição
+                        const cupomCodigo = null;
                         
                         // Validações
                         if (!clienteId) {
@@ -1763,6 +1854,180 @@
             }
         });
 
+        // Variáveis globais para armazenar dados da venda sendo editada
+        let currentEditingVendaId = null;
+        let currentEditingVendaData = null;
+
+        // Função para upload de comprovante
+        async function uploadComprovante() {
+            const fileInput = document.getElementById('edit-comprovante-venda');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showNotification('⚠️ Selecione um arquivo para upload', 'warning');
+                return;
+            }
+            
+            if (!currentEditingVendaId) {
+                showNotification('❌ ID da venda não encontrado', 'error');
+                return;
+            }
+            
+            // Validar tamanho do arquivo (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('❌ Arquivo muito grande. Máximo 5MB permitido', 'error');
+                return;
+            }
+            
+            // Validar tipo do arquivo
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+            if (!allowedTypes.includes(file.type)) {
+                showNotification('❌ Tipo de arquivo não suportado. Use JPG, PNG ou PDF', 'error');
+                return;
+            }
+            
+            try {
+                showNotification('📤 Enviando comprovante...', 'info');
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${API_BASE_URL}/vendas/${currentEditingVendaId}/comprovante`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.erro || 'Erro ao enviar comprovante');
+                }
+                
+                const result = await response.json();
+                console.log('✅ Comprovante enviado:', result);
+                
+                showNotification('✅ Comprovante enviado com sucesso!', 'success');
+                
+                // Atualizar interface
+                await updateComprovanteStatus(result.venda);
+                
+                // Limpar input de arquivo
+                fileInput.value = '';
+                
+                // Recarregar dados das vendas
+                await loadVendasData();
+                
+            } catch (error) {
+                console.error('❌ Erro ao enviar comprovante:', error);
+                showNotification('❌ Erro ao enviar comprovante: ' + error.message, 'error');
+            }
+        }
+
+        // Função para remover comprovante
+        async function removerComprovante() {
+            if (!currentEditingVendaId) {
+                showNotification('❌ ID da venda não encontrado', 'error');
+                return;
+            }
+            
+            if (!confirm('Tem certeza que deseja remover o comprovante? O status da venda voltará para PENDENTE.')) {
+                return;
+            }
+            
+            try {
+                showNotification('🗑️ Removendo comprovante...', 'info');
+                
+                const response = await fetch(`${API_BASE_URL}/vendas/${currentEditingVendaId}/comprovante`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.erro || 'Erro ao remover comprovante');
+                }
+                
+                const result = await response.json();
+                console.log('✅ Comprovante removido:', result);
+                
+                showNotification('✅ Comprovante removido com sucesso!', 'success');
+                
+                // Atualizar interface
+                await updateComprovanteStatus(result);
+                
+                // Recarregar dados das vendas
+                await loadVendasData();
+                
+            } catch (error) {
+                console.error('❌ Erro ao remover comprovante:', error);
+                showNotification('❌ Erro ao remover comprovante: ' + error.message, 'error');
+            }
+        }
+
+        // Função para atualizar o status do comprovante na interface
+        async function updateComprovanteStatus(vendaData) {
+            const statusDiv = document.getElementById('comprovante-status');
+            const removeBtn = document.getElementById('remove-comprovante-btn');
+            
+            if (!statusDiv) return;
+            
+            const hasComprovante = vendaData.comprovanteAnexado || (vendaData.comprovantePath && vendaData.comprovantePath.trim() !== '');
+            
+            if (hasComprovante) {
+                statusDiv.innerHTML = `
+                    <span class="material-icons" style="color: #10b981;">check_circle</span>
+                    <span style="color: #10b981;">Comprovante anexado</span>
+                    ${vendaData.comprovanteUploadDate ? 
+                        `<span style="color: #6b7280; font-size: 0.75rem; margin-left: auto;">
+                            ${new Date(vendaData.comprovanteUploadDate).toLocaleDateString('pt-BR')}
+                        </span>` : ''}
+                `;
+                statusDiv.style.background = '#dcfce7';
+                statusDiv.style.border = '1px solid #bbf7d0';
+                
+                if (removeBtn) removeBtn.style.display = 'flex';
+            } else {
+                statusDiv.innerHTML = `
+                    <span class="material-icons" style="color: #f59e0b;">pending</span>
+                    <span style="color: #f59e0b;">Comprovante não anexado</span>
+                    <span style="color: #6b7280; font-size: 0.75rem; margin-left: auto;">Status: ${vendaData.status || 'PENDENTE'}</span>
+                `;
+                statusDiv.style.background = '#fef3c7';
+                statusDiv.style.border = '1px solid #fde68a';
+                
+                if (removeBtn) removeBtn.style.display = 'none';
+            }
+        }
+
+        // Função para processar upload de comprovante ao criar venda
+        async function processComprovanteUpload(vendaId) {
+            const fileInput = document.getElementById('comprovante-venda');
+            const file = fileInput.files[0];
+            
+            if (!file || !vendaId) return;
+            
+            try {
+                console.log('📤 Processando upload de comprovante para venda:', vendaId);
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${API_BASE_URL}/vendas/${vendaId}/comprovante`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    console.warn('Falha no upload do comprovante, mas venda foi criada');
+                    return;
+                }
+                
+                const result = await response.json();
+                console.log('✅ Comprovante da nova venda enviado:', result);
+                
+            } catch (error) {
+                console.warn('Erro no upload do comprovante, mas venda foi criada:', error);
+            }
+        }
+
         // Função para formatar valor como moeda
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', {
@@ -1792,10 +2057,37 @@
             }
         });
         
+        // Funções do menu do usuário
+        function updateUserInfo(usuario) {
+            const userName = usuario.nome || usuario.name || 'Usuário';
+            const userRole = usuario.tipoUsuario || usuario.role || 'FUNCIONARIO';
+            
+            // Atualizar nome na navbar
+            document.getElementById('userName').textContent = userName.split(' ')[0]; // Primeiro nome
+            document.getElementById('userNameDisplay').textContent = userName;
+            document.getElementById('userRoleDisplay').textContent = getRoleDisplayName(userRole);
+            
+            // Atualizar avatar se houver foto de perfil
+            if (usuario.profilePhotoPath) {
+                const avatarImage = document.getElementById('userAvatarImage');
+                const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
+                const photoUrl = `${API_BASE_URL.replace('/api', '')}/uploads/${usuario.profilePhotoPath}`;
+                
+                avatarImage.src = photoUrl;
+                avatarImage.style.display = 'block';
+                avatarPlaceholder.style.display = 'none';
+                
+                avatarImage.onerror = function() {
+                    avatarImage.style.display = 'none';
+                    avatarPlaceholder.style.display = 'block';
+                };
+            }
+        }
+        
         // Carregar dados do usuário
         function loadUserData() {
             try {
-                const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
+                const userData = localStorage.getItem('usuarioLogado');
                 if (userData) {
                     const user = JSON.parse(userData);
                     const userName = user.nome || user.name || 'Usuário';
@@ -1807,7 +2099,7 @@
                     // Mostrar apenas o primeiro nome no botão
                     if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
                     if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
-                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.role);
+                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || user.role);
                     
                     // Carregar foto de perfil na navbar
                     loadUserProfilePhoto(user);
@@ -1823,7 +2115,7 @@
             const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
             
             if (user?.profilePhotoPath) {
-                const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
+                const imageUrl = `${API_BASE_URL.replace('/api', '')}/uploads/${user.profilePhotoPath}`;
                 
                 // Configurar eventos de carregamento
                 avatarImage.onload = () => {

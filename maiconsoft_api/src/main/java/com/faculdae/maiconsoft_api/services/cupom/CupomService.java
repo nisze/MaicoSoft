@@ -43,6 +43,9 @@ public class CupomService {
     public Page<CupomResponseDTO> findAll(Pageable pageable) {
         log.info("Buscando todos os cupons - Página: {}", pageable.getPageNumber());
         
+        // Desativar cupons expirados antes de retornar
+        desativarCuponsExpirados();
+        
         return cupomRepository.findAll(pageable)
                 .map(this::convertToResponseDTO);
     }
@@ -82,6 +85,9 @@ public class CupomService {
             throw new RuntimeException("Já existe um cupom com o código: " + cupomRequest.getCodigo());
         }
         
+        // Validação de data para cupons ativos
+        validateCupomData(cupomRequest);
+        
         Cupom cupom = convertToEntity(cupomRequest);
         Cupom savedCupom = cupomRepository.save(cupom);
         
@@ -106,10 +112,44 @@ public class CupomService {
                     }
                 });
         
+        // Validação de data APENAS se estiver tentando ativar um cupom
+        // Permite desativar cupons expirados sem erro
+        if ("ATIVO".equals(cupomRequest.getStatus())) {
+            validateCupomData(cupomRequest);
+        }
+        
         updateEntityFromRequest(cupom, cupomRequest);
         Cupom savedCupom = cupomRepository.save(cupom);
         
         log.info("Cupom atualizado com sucesso - ID: {}", savedCupom.getIdCupom());
+        return convertToResponseDTO(savedCupom);
+    }
+
+    /**
+     * Alterna o status do cupom entre ATIVO e INATIVO
+     */
+    public CupomResponseDTO toggleStatus(Long id) {
+        log.info("Alternando status do cupom ID: {}", id);
+        
+        Cupom cupom = cupomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cupom não encontrado com ID: " + id));
+        
+        // Alternar status
+        String novoStatus = "ATIVO".equals(cupom.getStatus()) ? "INATIVO" : "ATIVO";
+        cupom.setStatus(novoStatus);
+        
+        // Se está ativando, verificar se a data é válida
+        if ("ATIVO".equals(novoStatus)) {
+            if (cupom.getValidade() != null && cupom.getValidade().isBefore(LocalDate.now())) {
+                throw new RuntimeException("Não é possível ativar cupom com data de validade expirada");
+            }
+        }
+        
+        Cupom savedCupom = cupomRepository.save(cupom);
+        
+        String action = "ATIVO".equals(novoStatus) ? "ativado" : "desativado";
+        log.info("Cupom {} com sucesso - ID: {}", action, savedCupom.getIdCupom());
+        
         return convertToResponseDTO(savedCupom);
     }
 
@@ -177,6 +217,100 @@ public class CupomService {
         // Manter o valor atual de usosAtual quando atualizando cupom
         if (dto.getUsosAtuais() != null) {
             cupom.setUsosAtual(dto.getUsosAtuais());
+        }
+    }
+
+    /**
+     * Valida dados do cupom baseado no status
+     */
+    private void validateCupomData(CupomRequestDTO cupomRequest) {
+        // Só validar data futura se o cupom estiver ATIVO
+        if ("ATIVO".equals(cupomRequest.getStatus())) {
+            if (cupomRequest.getValidade() != null && cupomRequest.getValidade().isBefore(LocalDate.now())) {
+                throw new RuntimeException("Cupons ativos devem ter data de validade no futuro");
+            }
+        }
+    }
+
+    /**
+     * Incrementa o uso do cupom
+     * @param cupomCodigo Código do cupom
+     * @throws RuntimeException se cupom não puder ser usado
+     */
+    public void incrementarUsoCupom(String cupomCodigo) {
+        log.info("Incrementando uso do cupom: {}", cupomCodigo);
+        
+        Cupom cupom = findByCodigo(cupomCodigo);
+        
+        // Verificar se cupom pode ser usado
+        if (!"ATIVO".equals(cupom.getStatus())) {
+            throw new RuntimeException("Cupom não está ativo: " + cupomCodigo);
+        }
+        
+        if (cupom.getValidade() != null && cupom.getValidade().isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cupom expirado: " + cupomCodigo);
+        }
+        
+        int usosAtuais = cupom.getUsosAtual() != null ? cupom.getUsosAtual() : 0;
+        if (cupom.getMaxUsos() != null && usosAtuais >= cupom.getMaxUsos()) {
+            throw new RuntimeException("Cupom atingiu o limite máximo de usos: " + cupomCodigo);
+        }
+        
+        // Incrementar uso
+        cupom.setUsosAtual(usosAtuais + 1);
+        cupomRepository.save(cupom);
+        
+        log.info("Uso incrementado para cupom {} - Usos atuais: {}", cupomCodigo, cupom.getUsosAtual());
+    }
+
+    /**
+     * Verifica se um cupom pode ser usado (sem incrementar o uso)
+     * @param cupomCodigo Código do cupom
+     * @return true se o cupom pode ser usado
+     */
+    public boolean podeUsarCupom(String cupomCodigo) {
+        try {
+            Cupom cupom = findByCodigo(cupomCodigo);
+            
+            // Verificar se cupom está ativo
+            if (!"ATIVO".equals(cupom.getStatus())) {
+                return false;
+            }
+            
+            // Verificar se não expirou
+            if (cupom.getValidade() != null && cupom.getValidade().isBefore(LocalDate.now())) {
+                return false;
+            }
+            
+            // Verificar limite de usos
+            int usosAtuais = cupom.getUsosAtual() != null ? cupom.getUsosAtual() : 0;
+            if (cupom.getMaxUsos() != null && usosAtuais >= cupom.getMaxUsos()) {
+                return false;
+            }
+            
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Desativa automaticamente cupons que expiraram
+     */
+    private void desativarCuponsExpirados() {
+        log.info("Verificando cupons expirados para desativação automática");
+        
+        LocalDate hoje = LocalDate.now();
+        List<Cupom> cuponsExpirados = cupomRepository.findByStatusAndValidadeBefore("ATIVO", hoje);
+        
+        if (!cuponsExpirados.isEmpty()) {
+            cuponsExpirados.forEach(cupom -> {
+                log.info("Desativando cupom expirado: {} (venceu em {})", cupom.getCodigo(), cupom.getValidade());
+                cupom.setStatus("INATIVO");
+            });
+            
+            cupomRepository.saveAll(cuponsExpirados);
+            log.info("Desativados {} cupons expirados", cuponsExpirados.size());
         }
     }
 }

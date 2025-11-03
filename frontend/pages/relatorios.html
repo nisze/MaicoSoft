@@ -800,7 +800,79 @@
         }
 
         // Dados detalhados de vendas
-        function loadVendasDetailData() {
+        async function loadVendasDetailData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/vendas-detail?months=6`);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar dados de vendas');
+                }
+                
+                const data = await response.json();
+                const vendasData = data.vendasDetail || [];
+
+                document.getElementById('vendas-detail-tbody').innerHTML = vendasData.map(item => `
+                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                        <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.periodo}</td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.vendas}</td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${parseFloat(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${parseFloat(item.ticket || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td style="padding: 0.75rem; text-align: center;">
+                            <span style="background: ${parseFloat(item.crescimento || 0) >= 0 ? '#d1fae5' : '#fee2e2'}; color: ${parseFloat(item.crescimento || 0) >= 0 ? '#059669' : '#dc2626'}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                                ${parseFloat(item.crescimento || 0) >= 0 ? '+' : ''}${parseFloat(item.crescimento || 0).toFixed(1)}%
+                            </span>
+                        </td>
+                        <td style="padding: 0.75rem; text-align: center;">
+                            <span style="background: ${getMetaColor(parseFloat(item.meta || 0).toFixed(0) + '%').bg}; color: ${getMetaColor(parseFloat(item.meta || 0).toFixed(0) + '%').text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                                ${parseFloat(item.meta || 0).toFixed(0)}%
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar dados de vendas:', error);
+                showNotification('Erro ao carregar dados de vendas', 'error');
+                
+                // Fallback para dados mock em caso de erro
+                loadVendasDetailDataFallback();
+            }
+        }
+
+        // Dados detalhados de clientes
+        async function loadClientesDetailData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/clientes-detail?months=6`);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar dados de clientes');
+                }
+                
+                const data = await response.json();
+                const clientesData = data.clientesDetail || [];
+
+                document.getElementById('clientes-detail-tbody').innerHTML = clientesData.map(item => `
+                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                        <td style="padding: 0.75rem; font-size: 0.9rem; color: #374151; font-weight: 500;">${item.periodo}</td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.novos}</td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.total.toLocaleString('pt-BR')}</td>
+                        <td style="padding: 0.75rem; text-align: center; font-size: 0.9rem; color: #374151; font-weight: 600;">${item.retencao}</td>
+                        <td style="padding: 0.75rem; text-align: center;">
+                            <span style="background: ${parseFloat(item.crescimento || 0) >= 0 ? '#d1fae5' : '#fee2e2'}; color: ${parseFloat(item.crescimento || 0) >= 0 ? '#059669' : '#dc2626'}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600;">
+                                ${parseFloat(item.crescimento || 0) >= 0 ? '+' : ''}${parseFloat(item.crescimento || 0).toFixed(1)}%
+                            </span>
+                        </td>
+                        <td style="padding: 0.75rem; text-align: right; font-size: 0.9rem; color: #374151; font-weight: 600;">R$ ${parseFloat(item.ltv || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar dados de clientes:', error);
+                showNotification('Erro ao carregar dados de clientes', 'error');
+                
+                // Fallback para dados mock em caso de erro
+                loadClientesDetailDataFallback();
+            }
+        }
+
+        // Funções de fallback para dados mock
+        function loadVendasDetailDataFallback() {
             const vendasData = [
                 { periodo: 'Janeiro 2024', vendas: 45, valor: 675000, ticket: 15000, crescimento: '+12%', meta: '92%' },
                 { periodo: 'Dezembro 2023', vendas: 38, valor: 570000, ticket: 15000, crescimento: '+8%', meta: '76%' },
@@ -830,8 +902,7 @@
             `).join('');
         }
 
-        // Dados detalhados de clientes
-        function loadClientesDetailData() {
+        function loadClientesDetailDataFallback() {
             const clientesData = [
                 { periodo: 'Janeiro 2024', novos: 43, total: 1247, retencao: '89%', crescimento: '+12%', ltv: 25000 },
                 { periodo: 'Dezembro 2023', novos: 35, total: 1204, retencao: '87%', crescimento: '+8%', ltv: 24500 },
@@ -1248,31 +1319,30 @@
             printWindow.focus();
         }
 
-        function exportarRelatorio(tipo, formato) {
+        async function exportarRelatorio(tipo, formato) {
             // Mostrar loading
             const loadingId = showLoading(`Gerando relatório de ${tipo} em ${formato.toUpperCase()}...`);
             
-            // Simular delay de processamento
-            setTimeout(() => {
-                try {
-                    const dados = getDadosRelatorio(tipo);
-                    
-                    if (formato === 'pdf') {
-                        exportarPDF(tipo, dados);
-                    } else if (formato === 'excel') {
-                        exportarExcel(tipo, dados);
-                    }
-                    
-                    hideLoading(loadingId);
-                    showSuccess(`Relatório de ${tipo} exportado com sucesso em ${formato.toUpperCase()}!`);
-                } catch (error) {
-                    hideLoading(loadingId);
-                    showError(`Erro ao exportar relatório: ${error.message}`);
+            try {
+                // Buscar dados reais do backend
+                const dados = await getDadosRelatorioBackend(tipo);
+                
+                if (formato === 'pdf') {
+                    exportarPDF(tipo, dados);
+                } else if (formato === 'excel') {
+                    exportarExcel(tipo, dados);
                 }
-            }, 1500);
+                
+                hideLoading(loadingId);
+                showNotification(`✅ Relatório de ${tipo} exportado com sucesso em ${formato.toUpperCase()}!`, 'success');
+            } catch (error) {
+                hideLoading(loadingId);
+                console.error('Erro ao exportar relatório:', error);
+                showNotification(`❌ Erro ao exportar relatório: ${error.message}`, 'error');
+            }
         }
 
-        function getDadosRelatorio(tipo) {
+        async function getDadosRelatorioBackend(tipo) {
             const dataAtual = new Date().toLocaleDateString('pt-BR');
             const dados = {
                 titulo: '',
@@ -1283,20 +1353,51 @@
 
             switch (tipo) {
                 case 'vendas':
+                    const startDate = document.getElementById('data-inicio').value ? 
+                        document.getElementById('data-inicio').value.split('/').reverse().join('-') : 
+                        null;
+                    const endDate = document.getElementById('data-fim').value ? 
+                        document.getElementById('data-fim').value.split('/').reverse().join('-') : 
+                        null;
+                    
+                    const vendasResponse = await fetch(`${API_BASE_URL}/dashboard/export/vendas?${startDate ? `startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}`);
+                    if (!vendasResponse.ok) throw new Error('Erro ao buscar dados de vendas');
+                    const vendasData = await vendasResponse.json();
+                    
                     dados.titulo = 'Relatório de Vendas';
-                    dados.dados = [
-                        ['Janeiro', 'R$ 45.230,00', '23 vendas', 'R$ 1.966,09'],
-                        ['Fevereiro', 'R$ 52.680,00', '28 vendas', 'R$ 1.881,43'],
-                        ['Março', 'R$ 38.420,00', '19 vendas', 'R$ 2.022,11'],
-                        ['Abril', 'R$ 61.340,00', '32 vendas', 'R$ 1.916,88'],
-                        ['Maio', 'R$ 49.780,00', '26 vendas', 'R$ 1.914,62'],
-                        ['Junho', 'R$ 57.920,00', '30 vendas', 'R$ 1.930,67']
-                    ];
-                    dados.cabecalho = ['Período', 'Receita Total', 'Total de Vendas', 'Ticket Médio'];
+                    dados.dados = vendasData.vendas.map(venda => [
+                        venda.data,
+                        venda.cliente,
+                        `R$ ${parseFloat(venda.valorTotal || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
+                        venda.status,
+                        venda.cupom || 'Sem cupom'
+                    ]);
+                    dados.cabecalho = ['Data', 'Cliente', 'Valor Total', 'Status', 'Cupom'];
+                    dados.resumo = {
+                        totalVendas: vendasData.total,
+                        valorTotal: `R$ ${parseFloat(vendasData.valorTotal || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
+                    };
                     break;
 
                 case 'clientes':
+                    const clientesResponse = await fetch(`${API_BASE_URL}/dashboard/export/clientes`);
+                    if (!clientesResponse.ok) throw new Error('Erro ao buscar dados de clientes');
+                    const clientesData = await clientesResponse.json();
+                    
                     dados.titulo = 'Relatório de Clientes';
+                    dados.dados = clientesData.clientes.map(cliente => [
+                        cliente.nome,
+                        cliente.email || 'Não informado',
+                        cliente.telefone || 'Não informado',
+                        cliente.dataCadastro,
+                        `R$ ${parseFloat(cliente.totalCompras || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
+                        cliente.totalVendas
+                    ]);
+                    dados.cabecalho = ['Nome', 'Email', 'Telefone', 'Data Cadastro', 'Total Compras', 'Nº Vendas'];
+                    dados.resumo = {
+                        totalClientes: clientesData.total
+                    };
+                    break;
                     dados.dados = [
                         ['João Silva', 'joão.silva@email.com', '(11) 99999-1111', 'R$ 12.450,00', 'Ativo'],
                         ['Maria Santos', 'maria.santos@email.com', '(11) 99999-2222', 'R$ 8.320,00', 'Ativo'],
@@ -1794,7 +1895,7 @@
                     // Mostrar apenas o primeiro nome no botão
                     if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
                     if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
-                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.role);
+                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || user.role);
                     
                     // Carregar foto de perfil na navbar
                     loadUserProfilePhoto(user);

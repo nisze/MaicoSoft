@@ -25,6 +25,11 @@ public class VendaResponseDTOMapper implements Function<Venda, VendaResponseDTO>
                 .datahoraCadastro(venda.getDatahoraCadastro())
                 .observacao(venda.getObservacao())
                 
+                // Dados do comprovante
+                .comprovantePath(venda.getComprovantePath())
+                .comprovanteUploadDate(venda.getComprovanteUploadDate())
+                .comprovanteAnexado(venda.getComprovantePath() != null && !venda.getComprovantePath().trim().isEmpty())
+                
                 // Dados do cliente
                 .clienteId(venda.getCliente() != null ? venda.getCliente().getIdCliente() : null)
                 .clienteCodigo(venda.getCliente() != null ? venda.getCliente().getCodigo() : null)

@@ -2,7 +2,7 @@ package com.faculdae.maiconsoft_api.controllers;
 
 import com.faculdae.maiconsoft_api.dto.user.UserRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
-import com.faculdae.maiconsoft_api.dto.LoginResponseDTO;
+import com.faculdae.maiconsoft_api.dto.user.LoginResponseDTO;
 import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.services.user.UserService;

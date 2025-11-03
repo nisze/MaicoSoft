@@ -707,6 +707,48 @@ class UserRoleService {
 // Expor UserRoleService globalmente
 window.UserRoleService = UserRoleService;
 
+// Função utilitária para atualizar dados do usuário
+async function updateUserDataFromBackend() {
+    const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
+    if (!userData) return null;
+    
+    try {
+        const user = JSON.parse(userData);
+        
+        // Tentar buscar dados atualizados do backend
+        if (user.id || user.idUser) {
+            try {
+                console.log('🔄 Buscando dados atualizados do usuário...');
+                const response = await APIService.users.getById(user.id || user.idUser);
+                const updatedUser = response.data || response;
+                
+                // Atualizar localStorage com dados atualizados
+                const mergedUser = {
+                    ...user,
+                    tipoUsuario: updatedUser.roleName || user.tipoUsuario,
+                    roleName: updatedUser.roleName || user.roleName
+                };
+                
+                localStorage.setItem('maiconsoft_user', JSON.stringify(mergedUser));
+                console.log('✅ Dados do usuário atualizados:', mergedUser);
+                
+                return mergedUser;
+            } catch (apiError) {
+                console.warn('⚠️ Erro ao buscar dados atualizados, usando dados locais:', apiError);
+                return user;
+            }
+        }
+        
+        return user;
+    } catch (error) {
+        console.error('Erro ao processar dados do usuário:', error);
+        return null;
+    }
+}
+
+// Expor função globalmente
+window.updateUserDataFromBackend = updateUserDataFromBackend;
+
 // Definir API_BASE_URL como variável global para compatibilidade
 window.API_BASE_URL = CONFIG.API_BASE_URL;
 

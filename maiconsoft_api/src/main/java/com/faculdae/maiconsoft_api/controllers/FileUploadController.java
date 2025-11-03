@@ -139,4 +139,152 @@ public class FileUploadController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
+    @PostMapping("/comprovante-venda")
+    @Operation(summary = "Upload de comprovante de venda", description = "Faz upload do comprovante de venda")
+    @ApiResponse(responseCode = "200", description = "Upload realizado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Arquivo inválido")
+    @ApiResponse(responseCode = "413", description = "Arquivo muito grande")
+    public ResponseEntity<Map<String, String>> uploadComprovanteVenda(
+            @Parameter(description = "Arquivo de imagem/documento") @RequestParam("file") MultipartFile file,
+            @Parameter(description = "ID da venda") @RequestParam("vendaId") Long vendaId) {
+        
+        Map<String, String> response = new HashMap<>();
+        
+        try {
+            // Validações
+            if (file.isEmpty()) {
+                response.put("error", "Arquivo não pode estar vazio");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            if (file.getSize() > MAX_FILE_SIZE) {
+                response.put("error", "Arquivo muito grande. Tamanho máximo: 5MB");
+                return ResponseEntity.status(413).body(response);
+            }
+
+            // Permitir também PDFs para comprovantes
+            String contentType = file.getContentType();
+            boolean isValidType = false;
+            for (String allowedType : ALLOWED_CONTENT_TYPES) {
+                if (allowedType.equals(contentType)) {
+                    isValidType = true;
+                    break;
+                }
+            }
+            
+            // Adicionar suporte a PDF
+            if ("application/pdf".equals(contentType)) {
+                isValidType = true;
+            }
+            
+            if (!isValidType) {
+                response.put("error", "Tipo de arquivo não suportado. Use JPG, PNG, GIF, WEBP ou PDF");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // Criar diretório se não existir
+            Path uploadPath = Paths.get(uploadDirectory, "comprovantes");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+                logger.info("Diretório de comprovantes criado: {}", uploadPath);
+            }
+
+            // Gerar nome único para o arquivo
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+            
+            String filename = "comprovante_venda_" + vendaId + "_" + UUID.randomUUID().toString() + fileExtension;
+            Path filePath = uploadPath.resolve(filename);
+
+            // Salvar arquivo
+            Files.copy(file.getInputStream(), filePath);
+            logger.info("Comprovante de venda salvo: {}", filePath);
+
+            // Retornar caminho relativo
+            String relativePath = "comprovantes/" + filename;
+            
+            response.put("message", "Comprovante de venda enviado com sucesso");
+            response.put("filename", filename);
+            response.put("path", relativePath);
+            response.put("vendaId", vendaId.toString());
+
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            logger.error("Erro ao fazer upload do comprovante de venda", e);
+            response.put("error", "Erro interno do servidor");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @DeleteMapping("/comprovante-venda/{vendaId}")
+    @Operation(summary = "Deletar comprovante de venda", description = "Remove o comprovante de venda do servidor")
+    public ResponseEntity<Map<String, String>> deleteComprovanteVenda(
+            @Parameter(description = "ID da venda") @PathVariable Long vendaId,
+            @Parameter(description = "Nome do arquivo") @RequestParam String filename) {
+        
+        Map<String, String> response = new HashMap<>();
+        
+        try {
+            Path filePath = Paths.get(uploadDirectory, "comprovantes", filename);
+            
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                logger.info("Comprovante de venda deletado: {}", filePath);
+                response.put("message", "Comprovante de venda deletado com sucesso");
+            } else {
+                response.put("message", "Arquivo não encontrado");
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            logger.error("Erro ao deletar comprovante de venda", e);
+            response.put("error", "Erro ao deletar arquivo");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @GetMapping("/comprovante/{filename}")
+    @Operation(summary = "Visualizar comprovante", description = "Retorna o arquivo do comprovante para visualização")
+    public ResponseEntity<byte[]> getComprovante(
+            @Parameter(description = "Nome do arquivo") @PathVariable String filename) {
+        
+        try {
+            Path filePath = Paths.get(uploadDirectory, "comprovantes", filename);
+            
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] fileContent = Files.readAllBytes(filePath);
+            
+            // Determinar tipo de conteúdo baseado na extensão
+            String contentType = "application/octet-stream";
+            String extension = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+            
+            switch (extension) {
+                case "jpg", "jpeg" -> contentType = "image/jpeg";
+                case "png" -> contentType = "image/png";
+                case "gif" -> contentType = "image/gif";
+                case "webp" -> contentType = "image/webp";
+                case "pdf" -> contentType = "application/pdf";
+                case "doc" -> contentType = "application/msword";
+                case "docx" -> contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            }
+
+            return ResponseEntity.ok()
+                    .header("Content-Type", contentType)
+                    .header("Content-Disposition", "inline; filename=\"" + filename + "\"")
+                    .body(fileContent);
+
+        } catch (IOException e) {
+            logger.error("Erro ao buscar comprovante: {}", filename, e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
