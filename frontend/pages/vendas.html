@@ -392,10 +392,6 @@
                         <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151;">Todas as Vendas</h3>
                         <div style="display: flex; gap: 1rem;">
                             <input type="text" id="search-vendas" placeholder="Buscar por cliente, valor..." style="padding: 0.6rem 1rem; border: 1px solid #d1d5db; font-size: 0.9rem; min-width: 250px;">
-                            <button style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                                <span class="material-icons" style="font-size: 1rem;">search</span>
-                                Buscar
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -898,6 +894,9 @@
             
             loadMetricas();
             
+            // Configurar busca em tempo real para vendas
+            setupSearchListeners();
+            
             // Setup valor formatting
             const valorInput = document.getElementById('valor-venda');
             if (valorInput) {
@@ -1136,6 +1135,171 @@
                     `;
                 }
             }
+        }
+        
+        // Array global para armazenar todas as vendas carregadas
+        let todasAsVendas = [];
+        
+        // Configurar listeners para busca em tempo real
+        function setupSearchListeners() {
+            console.log('🔧 Configurando listeners de busca de vendas...');
+            
+            const searchInput = document.getElementById('search-vendas');
+            
+            if (searchInput) {
+                // Busca em tempo real com debounce
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        console.log('🔍 Busca automática de vendas disparada');
+                        filtrarVendas();
+                    }, 500); // 500ms de delay
+                });
+                
+                // Busca ao pressionar Enter
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log('🔍 Busca de vendas por Enter');
+                        filtrarVendas();
+                    }
+                });
+                
+                console.log('✅ Listeners do campo de busca de vendas configurados');
+            }
+        }
+        
+        // Função para filtrar vendas
+        async function filtrarVendas() {
+            const searchTerm = document.getElementById('search-vendas').value.toLowerCase().trim();
+            
+            console.log('🔍 Filtrando vendas com termo:', searchTerm || '(vazio)');
+            
+            // Se ainda não temos vendas carregadas, carregar primeiro
+            if (todasAsVendas.length === 0) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/vendas?page=0&size=100`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const vendas = data.vendas || data.content || [];
+                    
+                    todasAsVendas = vendas.map(venda => ({
+                        id: venda.idVenda || venda.id,
+                        cliente: venda.clienteNome || venda.cliente?.nome || 'Cliente não informado',
+                        valor: venda.valorTotal || venda.valorVenda || 0,
+                        status: getStatusPortugues(venda.status || venda.statusVenda),
+                        data: venda.dataVenda || venda.datahoraCadastro || new Date().toISOString(),
+                        descricao: venda.observacao || venda.descricao || 'Sem descrição',
+                        numeroOrcamento: venda.numeroOrcamento || `#${String(venda.idVenda || venda.id).padStart(4, '0')}`,
+                        comprovanteAnexado: venda.comprovanteAnexado || false,
+                        comprovantePath: venda.comprovantePath || null,
+                        comprovanteUploadDate: venda.comprovanteUploadDate || null
+                    }));
+                } catch (error) {
+                    console.error('❌ Erro ao carregar vendas para filtro:', error);
+                    showNotification('Erro ao carregar vendas para filtro', 'error');
+                    return;
+                }
+            }
+            
+            // Se não há termo de busca, mostrar todas as vendas do cache
+            let vendasParaMostrar = todasAsVendas;
+            
+            if (searchTerm) {
+                // Filtrar vendas baseado no termo de busca
+                vendasParaMostrar = todasAsVendas.filter(venda => {
+                    return venda.cliente.toLowerCase().includes(searchTerm) ||
+                           venda.valor.toString().includes(searchTerm) ||
+                           venda.numeroOrcamento.toLowerCase().includes(searchTerm) ||
+                           venda.descricao.toLowerCase().includes(searchTerm) ||
+                           venda.status.toLowerCase().includes(searchTerm);
+                });
+            }
+            
+            console.log('📊 Vendas para mostrar:', vendasParaMostrar.length, 'de', todasAsVendas.length);
+            
+            // Atualizar tabela com vendas filtradas
+            const allSales = document.getElementById('sales-tbody');
+            if (allSales) {
+                if (vendasParaMostrar.length === 0) {
+                    const mensagem = searchTerm ? 'Nenhuma venda encontrada' : 'Nenhuma venda cadastrada';
+                    const submensagem = searchTerm ? 'Tente usar outros termos de busca' : 'Comece cadastrando uma nova venda';
+                    const botao = searchTerm ? 
+                        `<button onclick="limparFiltroVendas()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 6px; font-size: 0.9rem;">
+                            Limpar Filtro
+                        </button>` : '';
+                    
+                    allSales.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #6b7280; padding: 2rem;">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                                    <span class="material-icons" style="font-size: 3rem; color: #d1d5db;">${searchTerm ? 'search_off' : 'shopping_cart'}</span>
+                                    <p style="margin: 0; font-size: 1.1rem;">${mensagem}</p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: #9ca3af;">${submensagem}</p>
+                                    ${botao}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    allSales.innerHTML = vendasParaMostrar.map(venda => `
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 0.75rem; font-weight: 600; color: #1f2937;">${venda.numeroOrcamento}</td>
+                            <td style="padding: 0.75rem; color: #374151;">${venda.cliente}</td>
+                            <td style="padding: 0.75rem; font-weight: 600; color: #10b981;">R$ ${venda.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 0.75rem;">
+                                <span style="font-size: 0.8rem; padding: 0.3rem 0.6rem; border-radius: 4px; background: ${getStatusColor(venda.status)}; color: white; font-weight: 500;">
+                                    ${venda.status}
+                                </span>
+                            </td>
+                            <td style="padding: 0.75rem;">
+                                ${venda.comprovanteAnexado ? 
+                                    `<div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="material-icons" style="font-size: 1rem; color: #10b981;">check_circle</span>
+                                        <span style="font-size: 0.8rem; color: #10b981; font-weight: 500;">Anexado</span>
+                                    </div>` : 
+                                    `<div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="material-icons" style="font-size: 1rem; color: #f59e0b;">pending</span>
+                                        <span style="font-size: 0.8rem; color: #f59e0b; font-weight: 500;">Pendente</span>
+                                    </div>`
+                                }
+                            </td>
+                            <td style="padding: 0.75rem; color: #6b7280; font-size: 0.9rem;">${formatarData(venda.data)}</td>
+                            <td style="padding: 0.75rem;">
+                                <div style="display: flex; gap: 0.5rem;">
+                                    ${venda.comprovantePath ? 
+                                        `<button onclick="visualizarComprovante('${venda.comprovantePath}')" style="background: #10b981; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Ver comprovante">
+                                            <span class="material-icons" style="font-size: 0.9rem;">visibility</span>
+                                        </button>
+                                        <button onclick="removerComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Remover comprovante">
+                                            <span class="material-icons" style="font-size: 0.9rem;">delete_forever</span>
+                                        </button>` : 
+                                        `<button onclick="enviarComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
+                                            <span class="material-icons" style="font-size: 0.9rem;">upload</span>
+                                            <span style="font-size: 0.8rem;">Enviar</span>
+                                        </button>`
+                                    }
+                                    <button onclick="editVenda(${venda.id})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Editar">
+                                        <span class="material-icons" style="font-size: 0.9rem;">edit</span>
+                                    </button>
+                                    <button onclick="deleteVenda(${venda.id})" style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Excluir">
+                                        <span class="material-icons" style="font-size: 0.9rem;">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+        
+        // Função para limpar filtro de vendas
+        function limparFiltroVendas() {
+            document.getElementById('search-vendas').value = '';
+            loadVendasData();
         }
         
         // Função para formatar data
