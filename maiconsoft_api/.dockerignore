@@ -1,0 +1,57 @@
+# ===============================
+# MAICONSOFT API - DOCKERIGNORE
+# ===============================
+
+# Maven
+target/
+!target/*.jar
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Uploads (serão montados via volume)
+uploads/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Scripts
+*.bat
+*.sh
+run-*
+
+# Documentation
+*.md
+README*
+HELP*
+SETUP*
+TROUBLESHOOTING*
+
+# Test files
+test_*
+postman/
+*.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
