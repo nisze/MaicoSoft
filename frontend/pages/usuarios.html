@@ -813,6 +813,18 @@
             };
 
             try {
+                // Debug para verificar APIService
+                console.log('🔍 Verificando APIService:', {
+                    'window.APIService existe': typeof window.APIService,
+                    'APIService existe': typeof APIService,
+                    'APIService.users existe': typeof APIService?.users,
+                    'APIService.users.create existe': typeof APIService?.users?.create
+                });
+
+                if (!APIService?.users?.create) {
+                    throw new Error('APIService.users.create não está disponível. Verifique se config.js foi carregado corretamente.');
+                }
+
                 // Usar APIService para criar usuário
                 const result = await APIService.users.create(userData);
                 

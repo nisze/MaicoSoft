@@ -250,6 +250,15 @@ class UserProfileManager {
         try {
             await this.saveProfile(formData);
             this.showNotification('Perfil atualizado com sucesso!', 'success');
+            
+            // Atualizar cabeçalho/navbar
+            this.updateUserHeader();
+            
+            // Atualizar navbar se a função estiver disponível
+            if (typeof loadUserProfilePhoto === 'function') {
+                loadUserProfilePhoto(this.currentUser);
+            }
+            
             this.closeModal('profileModal');
         } catch (error) {
             console.error('Erro ao salvar perfil:', error);
@@ -426,6 +435,37 @@ class UserProfileManager {
                 userAvatarElement.textContent = '';
             } else {
                 userAvatarElement.textContent = (this.currentUser.nome || 'U').charAt(0).toUpperCase();
+            }
+        }
+
+        // Atualizar elementos padrão da navbar também
+        const avatarImage = document.getElementById('userAvatarImage');
+        const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
+        
+        if (avatarImage && avatarPlaceholder) {
+            if (this.currentUser.profilePhotoPath) {
+                const imageUrl = `${window.APIService?.baseURL?.replace('/api', '') || 'http://localhost:8090'}/${this.currentUser.profilePhotoPath}`;
+                
+                avatarImage.onload = () => {
+                    avatarImage.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                
+                avatarImage.onerror = () => {
+                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    avatarImage.style.display = 'none';
+                    avatarPlaceholder.style.display = 'flex';
+                    const firstLetter = (this.currentUser.nome || 'U').charAt(0).toUpperCase();
+                    avatarPlaceholder.textContent = firstLetter;
+                };
+                
+                avatarImage.src = imageUrl;
+            } else {
+                // Mostrar placeholder com inicial do nome
+                avatarImage.style.display = 'none';
+                avatarPlaceholder.style.display = 'flex';
+                const firstLetter = (this.currentUser.nome || 'U').charAt(0).toUpperCase();
+                avatarPlaceholder.textContent = firstLetter;
             }
         }
     }

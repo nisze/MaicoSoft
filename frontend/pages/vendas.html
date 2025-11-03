@@ -2268,23 +2268,35 @@
             const avatarImage = document.getElementById('userAvatarImage');
             const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
             
+            console.log('🔄 [VENDAS] Carregando foto de perfil:', {
+                user: user,
+                profilePhotoPath: user?.profilePhotoPath,
+                avatarImage: !!avatarImage,
+                avatarPlaceholder: !!avatarPlaceholder
+            });
+            
             if (user?.profilePhotoPath) {
-                const imageUrl = `${API_BASE_URL.replace('/api', '')}/uploads/${user.profilePhotoPath}`;
+                // Usar mesma lógica das outras páginas
+                const imageUrl = `${(window.APIService?.baseURL || API_BASE_URL).replace('/api', '')}/${user.profilePhotoPath}`;
+                
+                console.log('🖼️ [VENDAS] URL da imagem construída:', imageUrl);
                 
                 // Configurar eventos de carregamento
                 avatarImage.onload = () => {
+                    console.log('✅ [VENDAS] Foto carregada com sucesso');
                     avatarImage.style.display = 'block';
                     avatarPlaceholder.style.display = 'none';
                 };
                 
                 avatarImage.onerror = () => {
-                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    console.warn('❌ [VENDAS] Erro ao carregar foto de perfil na navbar:', imageUrl);
                     avatarImage.style.display = 'none';
                     avatarPlaceholder.style.display = 'flex';
                 };
                 
                 avatarImage.src = imageUrl;
             } else {
+                console.log('📝 [VENDAS] Usando placeholder - sem foto de perfil');
                 // Mostrar placeholder com inicial do nome
                 avatarImage.style.display = 'none';
                 avatarPlaceholder.style.display = 'flex';

@@ -1055,9 +1055,14 @@ function visualizarComprovante(path) {
 window.uploadComprovante = uploadComprovante;
 window.removerComprovante = removerComprovante;
 
-// Criar instância global do APIService
-window.APIService = {
-    clientes: {
+// Criar ou expandir instância global do APIService
+if (!window.APIService) {
+    window.APIService = {};
+}
+
+// Adicionar métodos específicos (sem sobrescrever métodos existentes)
+if (!window.APIService.clientes) {
+    window.APIService.clientes = {
         search: async function(searchTerm, page = 0, size = 10) {
             const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8090/api';
             const query = searchTerm ? `?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}` : `?page=${page}&size=${size}`;
@@ -1073,8 +1078,11 @@ window.APIService = {
                 throw error;
             }
         }
-    },
-    vendas: {
+    };
+}
+
+if (!window.APIService.vendas) {
+    window.APIService.vendas = {
         getAll: async function(page = 0, size = 20) {
             const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8090/api';
             
@@ -1089,5 +1097,5 @@ window.APIService = {
                 throw error;
             }
         }
-    }
-};
+    };
+}

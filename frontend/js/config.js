@@ -755,5 +755,6 @@ window.API_BASE_URL = CONFIG.API_BASE_URL;
 console.log(`🔧 Maiconsoft Config carregado - Ambiente: ${CURRENT_ENV}`);
 console.log(`🌐 API Base URL: ${CONFIG.API_BASE_URL}`);
 console.log(`🔍 Debug Mode: ${CONFIG.DEBUG}`);
+console.log(`✅ APIService.users.create disponível:`, typeof APIService.users?.create);
 
 } // Fechar bloco if
