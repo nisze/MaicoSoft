@@ -194,7 +194,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Vendas</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">R$ 0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-vendas">...</h3>
                         </div>
                         <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">monetization_on</span>
@@ -206,7 +206,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Vendas Este Mês</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="vendas-mes">0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="vendas-mes">...</h3>
                         </div>
                         <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">trending_up</span>
@@ -218,7 +218,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Orçamentos Pendentes</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="orcamentos-pendentes">0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="orcamentos-pendentes">...</h3>
                         </div>
                         <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">pending</span>
@@ -230,7 +230,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Ticket Médio</p>
-                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">R$ 0</h3>
+                            <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="ticket-medio">...</h3>
                         </div>
                         <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
                             <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">analytics</span>
@@ -924,6 +924,9 @@
             try {
                 console.log('📊 Carregando métricas de vendas...');
                 
+                // Mostrar indicadores de carregamento
+                showLoadingIndicators();
+                
                 // Buscar métricas da API de dashboard
                 const response = await fetch(`${API_BASE_URL}/dashboard/metrics?days=30`);
                 if (!response.ok) {
@@ -933,15 +936,21 @@
                 const data = await response.json();
                 console.log('📈 Métricas carregadas:', data);
                 
+                // Buscar dados de vendas diretamente da API para calcular orçamentos pendentes
+                const vendasResponse = await fetch(`${API_BASE_URL}/vendas?page=0&size=100`);
+                let orcamentosPendentes = 0;
+                
+                if (vendasResponse.ok) {
+                    const vendasData = await vendasResponse.json();
+                    const vendas = vendasData.vendas || vendasData.content || [];
+                    orcamentosPendentes = vendas.filter(venda => (venda.status || venda.statusVenda) === 'PENDENTE').length;
+                } else {
+                    console.warn('Erro ao buscar vendas para orçamentos pendentes');
+                }
+                
                 // Atualizar interface com dados reais
                 document.getElementById('total-vendas').textContent = `R$ ${parseFloat(data.totalRevenue || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
                 document.getElementById('vendas-mes').textContent = (data.salesThisPeriod || 0).toString();
-                
-                // Buscar orçamentos pendentes separadamente
-                const vendasResponse = await APIService.vendas.getAll(0, 100);
-                const vendas = vendasResponse.vendas || vendasResponse.content || [];
-                const orcamentosPendentes = vendas.filter(venda => venda.status === 'PENDENTE').length;
-                
                 document.getElementById('orcamentos-pendentes').textContent = orcamentosPendentes.toString();
                 document.getElementById('ticket-medio').textContent = `R$ ${parseFloat(data.averageTicket || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
                 
@@ -959,9 +968,34 @@
             }
         }
         
+        // Função para mostrar indicadores de carregamento
+        function showLoadingIndicators() {
+            document.getElementById('total-vendas').textContent = '...';
+            document.getElementById('vendas-mes').textContent = '...';
+            document.getElementById('orcamentos-pendentes').textContent = '...';
+            document.getElementById('ticket-medio').textContent = '...';
+        }
+        
         async function loadVendasData() {
             try {
                 console.log('📋 Carregando dados de vendas...');
+                
+                // Mostrar indicadores de carregamento para vendas recentes
+                let recentSales = document.getElementById('vendas-recentes');
+                if (recentSales) {
+                    recentSales.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Carregando vendas...</p>';
+                }
+                
+                let allSales = document.getElementById('sales-tbody');
+                if (allSales) {
+                    allSales.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #6b7280; padding: 2rem;">
+                                Carregando vendas...
+                            </td>
+                        </tr>
+                    `;
+                }
                 
                 // Buscar vendas reais da API usando fetch direto
                 const response = await fetch(`${API_BASE_URL}/vendas?page=0&size=20`);
@@ -988,7 +1022,7 @@
                 }));
                 
                 // Load recent sales (resumo)
-                const recentSales = document.getElementById('vendas-recentes');
+                recentSales = document.getElementById('vendas-recentes');
                 if (recentSales) {
                     if (vendasFormatadas.length === 0) {
                         recentSales.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Nenhuma venda encontrada</p>';
@@ -1010,7 +1044,7 @@
                 }
                 
                 // Load all sales (lista)
-                const allSales = document.getElementById('sales-tbody');
+                allSales = document.getElementById('sales-tbody');
                 if (allSales) {
                     if (vendasFormatadas.length === 0) {
                         allSales.innerHTML = `
