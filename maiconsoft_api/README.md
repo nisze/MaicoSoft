@@ -513,7 +513,7 @@ Este projeto é propriedade da Maiconsoft. Todos os direitos reservados.
 
 Desenvolvido com ❤️ pela equipe Maiconsoft:
 
-- **Líder do Projeto & Gestão**: João Vinícius
+- **Gestão & Coordenação**: João Vinícius
 - **Full-Stack Developer & DBA**: Denise Oliveira
 - **Front-end Developer & UX/UI**: Luiz Antonio
 - **QA Specialist**: Leandro Nicolas
