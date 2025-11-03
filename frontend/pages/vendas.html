@@ -984,8 +984,9 @@
                                             <button onclick="removerComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Remover comprovante">
                                                 <span class="material-icons" style="font-size: 0.9rem;">delete_forever</span>
                                             </button>` : 
-                                            `<button onclick="uploadComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
+                                            `<button onclick="enviarComprovante(${venda.id})" style="background: #f59e0b; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Enviar comprovante">
                                                 <span class="material-icons" style="font-size: 0.9rem;">upload</span>
+                                                <span style="font-size: 0.8rem;">Enviar</span>
                                             </button>`
                                         }
                                         <button onclick="editVenda(${venda.id})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.3rem;" title="Editar">
@@ -1672,7 +1673,7 @@
         }
 
         // Função para editar venda
-        async function editVenda(id) {
+        async function editVenda(id, focusComprovante = false) {
             try {
                 console.log('✏️ Carregando venda para edição:', id);
                 
@@ -1748,10 +1749,41 @@
                 
                 document.body.style.overflow = 'hidden';
                 
+                // Se foi solicitado foco no comprovante, rolar até a seção
+                if (focusComprovante) {
+                    setTimeout(() => {
+                        // Buscar pela seção de comprovante no modal
+                        const comprovanteSection = modal.querySelector('div[style*="background: #f8fafc"]');
+                        if (comprovanteSection) {
+                            comprovanteSection.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'center' 
+                            });
+                            
+                            // Destacar a seção por um momento
+                            const originalBorder = comprovanteSection.style.border;
+                            const originalBackground = comprovanteSection.style.background;
+                            comprovanteSection.style.border = '2px solid #4f46e5';
+                            comprovanteSection.style.background = '#eef2ff';
+                            comprovanteSection.style.transition = 'all 0.3s ease';
+                            
+                            setTimeout(() => {
+                                comprovanteSection.style.border = originalBorder;
+                                comprovanteSection.style.background = originalBackground;
+                            }, 2000);
+                        }
+                    }, 300);
+                }
+                
             } catch (error) {
                 console.error('❌ Erro ao carregar venda:', error);
                 showNotification('❌ Erro ao carregar venda: ' + error.message, 'error');
             }
+        }
+
+        // Função específica para enviar comprovante (abre modal com foco na seção)
+        async function enviarComprovante(id) {
+            await editVenda(id, true);
         }
 
         // Função para fechar modal de edição
