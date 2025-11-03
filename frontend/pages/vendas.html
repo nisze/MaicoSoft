@@ -2239,27 +2239,60 @@
         }
         
         // Carregar dados do usuário
-        function loadUserData() {
+        async function loadUserData() {
             try {
-                const userData = localStorage.getItem('usuarioLogado');
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    const userName = user.nome || user.name || 'Usuário';
-                    
-                    const userNameEl = document.getElementById('userName');
-                    const userNameDisplayEl = document.getElementById('userNameDisplay');
-                    const userRoleDisplayEl = document.getElementById('userRoleDisplay');
-                    
-                    // Mostrar apenas o primeiro nome no botão
-                    if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
-                    if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
-                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || user.role);
-                    
-                    // Carregar foto de perfil na navbar
-                    loadUserProfilePhoto(user);
+                // Primeiro, tentar buscar dados atualizados do backend
+                const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('usuarioLogado');
+                if (!userData) return;
+                
+                const user = JSON.parse(userData);
+                
+                // Tentar buscar dados atualizados do backend se tiver APIService
+                if (window.updateUserDataFromBackend) {
+                    try {
+                        console.log('🔄 [VENDAS] Buscando dados atualizados do backend...');
+                        const mergedUser = await updateUserDataFromBackend();
+                        if (mergedUser) {
+                            const userName = mergedUser.nome || mergedUser.name || 'Usuário';
+                            const userRole = mergedUser.tipoUsuario || mergedUser.roleName || mergedUser.role || 'FUNCIONARIO';
+                            
+                            const userNameEl = document.getElementById('userName');
+                            const userNameDisplayEl = document.getElementById('userNameDisplay');
+                            const userRoleDisplayEl = document.getElementById('userRoleDisplay');
+                            
+                            if (userNameEl) userNameEl.textContent = userName.split(' ')[0];
+                            if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
+                            if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(userRole);
+                            
+                            // Carregar foto de perfil na navbar com dados atualizados
+                            loadUserProfilePhoto(mergedUser);
+                            
+                            console.log('✅ [VENDAS] Dados atualizados do backend aplicados');
+                            return;
+                        }
+                    } catch (apiError) {
+                        console.warn('⚠️ [VENDAS] Erro ao buscar dados atualizados, usando dados locais:', apiError);
+                    }
                 }
+                
+                // Fallback para dados locais
+                const userName = user.nome || user.name || 'Usuário';
+                const userRole = user.tipoUsuario || user.roleName || user.role || 'FUNCIONARIO';
+                
+                const userNameEl = document.getElementById('userName');
+                const userNameDisplayEl = document.getElementById('userNameDisplay');
+                const userRoleDisplayEl = document.getElementById('userRoleDisplay');
+                
+                if (userNameEl) userNameEl.textContent = userName.split(' ')[0];
+                if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
+                if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(userRole);
+                
+                // Carregar foto de perfil na navbar
+                loadUserProfilePhoto(user);
+                
+                console.log('📝 [VENDAS] Usando dados locais para carregar usuário');
             } catch (error) {
-                console.error('Erro ao carregar dados do usuário:', error);
+                console.error('❌ [VENDAS] Erro ao carregar dados do usuário:', error);
             }
         }
         
@@ -2275,11 +2308,21 @@
                 avatarPlaceholder: !!avatarPlaceholder
             });
             
+            if (!avatarImage || !avatarPlaceholder) {
+                console.warn('❌ [VENDAS] Elementos da navbar não encontrados');
+                return;
+            }
+            
             if (user?.profilePhotoPath) {
-                // Usar mesma lógica das outras páginas
-                const imageUrl = `${(window.APIService?.baseURL || API_BASE_URL).replace('/api', '')}/${user.profilePhotoPath}`;
+                // Usar mesma lógica das outras páginas que funcionam
+                const baseURL = window.APIService?.baseURL || window.API_BASE_URL || 'http://localhost:8090/api';
+                const imageUrl = `${baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
                 
                 console.log('🖼️ [VENDAS] URL da imagem construída:', imageUrl);
+                
+                // Limpar eventos anteriores
+                avatarImage.onload = null;
+                avatarImage.onerror = null;
                 
                 // Configurar eventos de carregamento
                 avatarImage.onload = () => {
@@ -2292,11 +2335,13 @@
                     console.warn('❌ [VENDAS] Erro ao carregar foto de perfil na navbar:', imageUrl);
                     avatarImage.style.display = 'none';
                     avatarPlaceholder.style.display = 'flex';
+                    const firstLetter = (user?.nome || user?.name || 'U').charAt(0).toUpperCase();
+                    avatarPlaceholder.textContent = firstLetter;
                 };
                 
                 avatarImage.src = imageUrl;
             } else {
-                console.log('📝 [VENDAS] Usando placeholder - sem foto de perfil');
+                console.log('📝 [VENDAS] Usando placeholder - sem foto de perfil definida');
                 // Mostrar placeholder com inicial do nome
                 avatarImage.style.display = 'none';
                 avatarPlaceholder.style.display = 'flex';
