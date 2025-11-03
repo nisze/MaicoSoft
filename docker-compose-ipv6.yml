@@ -26,7 +26,7 @@ services:
       # ===============================
       # SUPABASE DATABASE
       # ===============================
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db.hmjldrzvmaqgetjcepay.supabase.co:5432/postgres?sslmode=require
+      SPRING_DATASOURCE_URL: jdbc:postgresql://[2600:1f1e:75b:4b03:c516:ce6f:d367:7a88]:5432/postgres?sslmode=require
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${SUPABASE_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver

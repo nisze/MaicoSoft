@@ -2,11 +2,44 @@
 
 Sistema completo containerizado com Docker para fácil deploy e desenvolvimento.
 
+## 🎯 DUAS CONFIGURAÇÕES DISPONÍVEIS
+
+### 🏠 **EM CASA** → Docker + Supabase (Recomendado)
+- Banco de dados **Supabase** (PostgreSQL na nuvem)
+- Ideal para desenvolvimento pessoal
+- Dados persistem na nuvem
+
+### 🎓 **NA FACULDADE** → Docker + PostgreSQL Local
+- Banco **PostgreSQL** rodando em container
+- Funciona sem internet
+- Dados ficam no container local
+
+## 🚀 EXECUÇÃO RÁPIDA
+
+```bash
+# 🏠 PARA USAR EM CASA (Supabase)
+docker-casa.bat
+
+# 🎓 PARA USAR NA FACULDADE (PostgreSQL local)
+docker-faculdade.bat
+```
+
+> ✅ **Simples assim!** Os scripts automatizam tudo.
+
 ## 📋 Pré-requisitos
 
 - **Docker Desktop** (Windows/Mac) ou **Docker Engine** (Linux)
 - **Docker Compose** (geralmente incluído no Docker Desktop)
 - **Git** (para clonar o repositório)
+
+### ⚠️ ATENÇÃO USUÁRIOS WINDOWS
+
+Se você tiver **problemas de conectividade** com Supabase no Docker Desktop:
+1. **Primeiro teste:** Execute `./docker-diagnostico-windows.bat`
+2. **Se falhar:** Use `./docker-alternativo-windows.bat` (modo sem Docker)
+3. **Causas comuns:** Firewall, proxy corporativo, configuração WSL2
+
+> 🔧 **Solução rápida:** A maioria dos problemas é resolvida reiniciando o Docker Desktop
 
 ## 📥 Para Quem Vai Clonar o Projeto
 
@@ -34,6 +67,7 @@ MAIL_PASSWORD=sua-senha-de-app-do-gmail
 
 ### 🚀 Passo a Passo Rápido:
 
+**OPÇÃO 1 - Casa (Supabase):**
 ```bash
 # 1. Clonar o repositório
 git clone https://github.com/nisze/MaicoSoft.git
@@ -42,18 +76,119 @@ cd MaicoSoft
 # 2. Copiar arquivo de ambiente
 cp .env.example .env
 
-# 3. Executar com Docker
-docker-compose up --build -d
-
-# 4. Acessar a aplicação
-# Frontend: http://localhost
-# Backend: http://localhost:8090
-# Swagger: http://localhost:8090/swagger-ui.html
+# 3. Executar em casa
+docker-casa.bat
 ```
 
-> ✅ **Pronto!** O projeto deve funcionar imediatamente - banco e email já estão configurados!
+**OPÇÃO 2 - Faculdade (PostgreSQL local):**
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/nisze/MaicoSoft.git
+cd MaicoSoft
 
-## 🚀 Início Rápido
+# 2. Executar na faculdade
+docker-faculdade.bat
+```
+
+**Acessos:**
+- 🌐 **Frontend:** http://localhost
+- 📡 **Backend:** http://localhost:8090
+- 📖 **Swagger:** http://localhost:8090/swagger-ui.html
+
+> ✅ **Pronto!** O projeto funciona em qualquer lugar!
+
+## 🔄 DETALHES DAS CONFIGURAÇÕES
+
+### 🏠 **docker-casa.bat** (Supabase)
+- **Arquivo:** `docker-compose.supabase.yml`
+- **Banco:** Supabase PostgreSQL (nuvem)
+- **Vantagens:** 
+  - ✅ Dados persistem entre execuções
+  - ✅ Acesso remoto aos dados
+  - ✅ Backup automático
+- **Requisitos:** Internet para conectar com Supabase
+
+### 🎓 **docker-faculdade.bat** (PostgreSQL Local)
+- **Arquivo:** `docker-compose.local.yml`
+- **Banco:** PostgreSQL 15 em container
+- **Vantagens:**
+  - ✅ Funciona offline
+  - ✅ Performance local
+  - ✅ Controle total dos dados
+- **Credenciais:**
+  ```
+  Host: localhost:5432
+  Database: maiconsoft
+  User: postgres
+  Password: postgres123
+  ```
+
+## 🛠️ COMANDOS MANUAIS (Opcional)
+
+Se preferir executar manualmente:
+
+**Para Casa (Supabase):**
+```bash
+# Parar versão local (se estiver rodando)
+docker-compose -f docker-compose.local.yml down
+
+# Iniciar versão Supabase
+docker-compose -f docker-compose.supabase.yml up --build -d
+```
+
+**Para Faculdade (PostgreSQL local):**
+```bash
+# Parar versão Supabase (se estiver rodando)
+docker-compose -f docker-compose.supabase.yml down
+
+# Iniciar versão local
+docker-compose -f docker-compose.local.yml up --build -d
+```
+
+**Comandos úteis:**
+```bash
+# Ver logs
+docker-compose -f docker-compose.local.yml logs -f
+docker-compose -f docker-compose.supabase.yml logs -f
+
+# Parar tudo
+docker-compose -f docker-compose.local.yml down
+docker-compose -f docker-compose.supabase.yml down
+```
+
+## ⚠️ ATENÇÃO: Docker não instalado no Windows
+
+**SITUAÇÃO DETECTADA:** Docker/Docker Desktop não está instalado neste sistema.
+
+### 📋 Opções disponíveis:
+
+**Opção 1 - Instalar Docker Desktop (Recomendado):**
+1. Baixe: https://www.docker.com/products/docker-desktop/
+2. Instale Docker Desktop
+3. Reinicie o computador
+4. Execute: `resolver-docker-windows.bat`
+
+**Opção 2 - Executar Modo Local (IMEDIATO):**
+```bash
+# Executar sem Docker
+cd maiconsoft_api
+./run-with-supabase.bat
+```
+
+**Opção 3 - Frontend + Backend Separados:**
+```bash
+# Terminal 1 - Backend
+cd maiconsoft_api
+./run-with-supabase.bat
+
+# Terminal 2 - Frontend (servidor local)
+cd frontend
+python -m http.server 3000
+# ou
+npx serve -s . -l 3000
+```
+
+> ✅ **RECOMENDAÇÃO:** Use a **Opção 2** para testar imediatamente.
 
 ### 1. Configurar Variáveis de Ambiente
 
@@ -257,6 +392,102 @@ docker-compose exec maiconsoft-api env | grep SPRING
 # Testar conectividade
 docker-compose exec maiconsoft-api ping db.hmjldrzvmaqgetjcepay.supabase.co
 ```
+
+**🚨 PROBLEMA ESPECÍFICO WINDOWS + SUPABASE:**
+```bash
+# Se tiver erro "could not connect to server" no Windows:
+
+# 1. Verificar se Docker Desktop está usando WSL2
+docker version
+
+# 2. Testar conectividade do host
+ping db.hmjldrzvmaqgetjcepay.supabase.co
+
+# 3. Verificar configuração DNS do Docker
+docker run --rm alpine nslookup db.hmjldrzvmaqgetjcepay.supabase.co
+
+# 4. Se continuar falhando, usar IP direto:
+# Descobrir IP do Supabase
+nslookup db.hmjldrzvmaqgetjcepay.supabase.co
+
+# Então editar docker-compose.yml temporariamente:
+# SPRING_DATASOURCE_URL: jdbc:postgresql://[IP]:5432/postgres?sslmode=require
+```
+
+**💡 SOLUÇÕES PARA WINDOWS:**
+1. **Reiniciar Docker Desktop** - Resolve 80% dos problemas de rede
+2. **Verificar Windows Defender/Firewall** - Pode bloquear conexões
+3. **Usar WSL2 em vez de Hyper-V** no Docker Desktop
+4. **Verificar proxy corporativo** se estiver em rede da empresa
+
+### 🔧 Solução Alternativa para Windows
+
+Se os problemas de conexão persistirem, você pode usar o **modo desenvolvimento local:**
+
+**Opção 1 - Script Automático:**
+```bash
+# Execute o script que automatiza tudo
+./docker-alternativo-windows.bat
+```
+
+**Opção 2 - Manual:**
+```bash
+# 1. Parar containers
+docker-compose down
+
+# 2. Executar apenas o backend local
+cd maiconsoft_api
+./run-with-supabase.bat
+
+# 3. Executar frontend separadamente
+# Em outro terminal
+cd frontend
+# Servir arquivos estáticos (usar Live Server no VS Code ou similar)
+```
+
+**🔍 Script de Diagnóstico:**
+```bash
+# Execute para diagnosticar problemas
+./docker-diagnostico-windows.bat
+```
+
+Esta abordagem evita problemas de rede do Docker no Windows.
+
+**2. Erro de conexão com banco:**
+```bash
+# Verificar variáveis de ambiente
+docker-compose exec maiconsoft-api env | grep SPRING
+
+# Testar conectividade
+docker-compose exec maiconsoft-api ping db.hmjldrzvmaqgetjcepay.supabase.co
+```
+
+**🚨 PROBLEMA ESPECÍFICO WINDOWS + SUPABASE:**
+```bash
+# Se tiver erro "could not connect to server" no Windows:
+
+# 1. Verificar se Docker Desktop está usando WSL2
+docker version
+
+# 2. Testar conectividade do host
+ping db.hmjldrzvmaqgetjcepay.supabase.co
+
+# 3. Verificar configuração DNS do Docker
+docker run --rm alpine nslookup db.hmjldrzvmaqgetjcepay.supabase.co
+
+# 4. Se continuar falhando, usar IP direto:
+# Descobrir IP do Supabase
+nslookup db.hmjldrzvmaqgetjcepay.supabase.co
+
+# Então editar docker-compose.yml temporariamente:
+# SPRING_DATASOURCE_URL: jdbc:postgresql://[IP]:5432/postgres?sslmode=require
+```
+
+**💡 SOLUÇÕES PARA WINDOWS:**
+1. **Reiniciar Docker Desktop** - Resolve 80% dos problemas de rede
+2. **Verificar Windows Defender/Firewall** - Pode bloquear conexões
+3. **Usar WSL2 em vez de Hyper-V** no Docker Desktop
+4. **Verificar proxy corporativo** se estiver em rede da empresa
 
 **3. Frontend não carrega:**
 ```bash
