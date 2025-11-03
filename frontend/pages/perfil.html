@@ -867,6 +867,11 @@
                     // Atualizar o usuário com o novo caminho da foto
                     await this.updateUserProfilePhoto(response.filePath);
                     
+                    // Atualizar a navbar se a função estiver disponível
+                    if (typeof loadUserProfilePhoto === 'function') {
+                        loadUserProfilePhoto(this.currentUser);
+                    }
+                    
                     this.showNotification('Foto de perfil atualizada com sucesso!', 'success');
                     
                 } catch (error) {
@@ -889,9 +894,12 @@
                     // Atualizar dados locais
                     this.currentUser.profilePhotoPath = filePath;
                     const { senha, ...userDataToSave } = this.currentUser;
-                    localStorage.setItem('maiconsoft_user', JSON.stringify(userDataToSave));
                     
-                    console.log('✅ Foto de perfil atualizada no banco de dados');
+                    // Atualizar ambos os possíveis locais de storage
+                    localStorage.setItem('maiconsoft_user', JSON.stringify(userDataToSave));
+                    localStorage.setItem('usuarioLogado', JSON.stringify(userDataToSave));
+                    
+                    console.log('✅ Foto de perfil atualizada no banco de dados e localStorage');
                     
                 } catch (error) {
                     console.error('❌ Erro ao atualizar foto no perfil:', error);
@@ -1131,6 +1139,34 @@
         function deactivateAccount() {
             if (confirm('Tem certeza que deseja desativar sua conta? Esta ação pode ser irreversível.')) {
                 alert('Funcionalidade em desenvolvimento');
+            }
+        }
+
+        // Função para atualizar navbar em outras páginas (quando aplicável)
+        function loadUserProfilePhoto(user) {
+            // Esta função é chamada para manter compatibilidade com outras páginas
+            // que podem abrir esta página em modal ou iframe
+            console.log('🔄 Atualizando foto de perfil na navbar (se disponível):', user?.profilePhotoPath);
+            
+            // Se esta página for carregada em contexto que tenha navbar
+            const avatarImage = parent.document?.getElementById('userAvatarImage') || document.getElementById('userAvatarImage');
+            const avatarPlaceholder = parent.document?.getElementById('userAvatarPlaceholder') || document.getElementById('userAvatarPlaceholder');
+            
+            if (avatarImage && avatarPlaceholder && user?.profilePhotoPath) {
+                const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
+                
+                avatarImage.onload = () => {
+                    avatarImage.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                
+                avatarImage.onerror = () => {
+                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    avatarImage.style.display = 'none';
+                    avatarPlaceholder.style.display = 'flex';
+                };
+                
+                avatarImage.src = imageUrl;
             }
         }
 
