@@ -121,27 +121,40 @@
             font-size: 3rem;
         }
 
-        .upload-btn {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #3b82f6;
+        .upload-btn-bottom {
+            padding: 0.4rem 0.7rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            gap: 0.3rem;
+            margin-top: 0.75rem;
             transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+            width: 80px;
+            height: 32px;
+            align-self: center;
         }
 
-        .upload-btn:hover {
-            background: #2563eb;
-            transform: scale(1.1);
+        .upload-btn-bottom:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        .upload-btn-bottom:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .upload-btn-bottom .material-icons {
+            font-size: 0.9rem;
         }
 
         .profile-info {
@@ -397,6 +410,39 @@
                 text-align: center;
             }
         }
+
+        /* Animações para notificações */
+        @keyframes slideInRight {
+            from { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+            to { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+        }
+
+        /* Classe para notificações */
+        .profile-notification {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-notification:hover {
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body>
@@ -453,23 +499,19 @@
                     <div class="avatar-container">
                         <img id="userAvatar" class="avatar-image" style="display: none;" alt="Foto do usuário">
                         <span id="avatarPlaceholder" class="avatar-placeholder material-icons">person</span>
-                        <button class="upload-btn" onclick="document.getElementById('avatarUpload').click()">
-                            <span class="material-icons">camera_alt</span>
-                        </button>
                         <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
                     </div>
+                    
+                    <!-- Botão de upload movido para baixo -->
+                    <button class="upload-btn-bottom" onclick="document.getElementById('avatarUpload').click()">
+                        <span class="material-icons">camera_alt</span>
+                        Foto
+                    </button>
                 </div>
 
                 <div class="profile-info">
                     <div class="profile-name" id="userName">Carregando...</div>
                     <div class="profile-role" id="userRole">--</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="editProfile()">
-                        <span class="material-icons">edit</span>
-                        Editar Perfil
-                    </button>
                 </div>
 
                 <!-- Atividade Recente -->
@@ -788,11 +830,13 @@
                 const file = event.target.files[0];
                 if (!file) return;
 
+                // Validação de tipo de arquivo
                 if (!file.type.startsWith('image/')) {
                     this.showNotification('Por favor, selecione uma imagem válida', 'error');
                     return;
                 }
 
+                // Validação de tamanho
                 if (file.size > 5 * 1024 * 1024) {
                     this.showNotification('Imagem deve ter no máximo 5MB', 'error');
                     return;
@@ -847,9 +891,11 @@
                     const { senha, ...userDataToSave } = this.currentUser;
                     localStorage.setItem('maiconsoft_user', JSON.stringify(userDataToSave));
                     
+                    console.log('✅ Foto de perfil atualizada no banco de dados');
+                    
                 } catch (error) {
-                    console.error('Erro ao atualizar foto no perfil:', error);
-                    throw error;
+                    console.error('❌ Erro ao atualizar foto no perfil:', error);
+                    throw new Error('Não foi possível salvar a foto no banco de dados');
                 }
             }
 
@@ -858,9 +904,25 @@
                 const avatarPlaceholder = document.getElementById('avatarPlaceholder');
                 
                 if (this.currentUser?.profilePhotoPath) {
-                    userAvatar.src = `${APIService.baseURL.replace('/api', '')}/${this.currentUser.profilePhotoPath}`;
-                    userAvatar.style.display = 'block';
-                    avatarPlaceholder.style.display = 'none';
+                    const imageUrl = `${APIService.baseURL.replace('/api', '')}/${this.currentUser.profilePhotoPath}`;
+                    
+                    // Limpar eventos anteriores
+                    userAvatar.onload = null;
+                    userAvatar.onerror = null;
+                    
+                    // Configurar eventos de carregamento
+                    userAvatar.onload = () => {
+                        userAvatar.style.display = 'block';
+                        avatarPlaceholder.style.display = 'none';
+                    };
+                    
+                    userAvatar.onerror = () => {
+                        console.warn('Erro ao carregar foto de perfil:', imageUrl);
+                        userAvatar.style.display = 'none';
+                        avatarPlaceholder.style.display = 'flex';
+                    };
+                    
+                    userAvatar.src = imageUrl;
                 } else {
                     userAvatar.style.display = 'none';
                     avatarPlaceholder.style.display = 'flex';
@@ -979,23 +1041,75 @@
                 document.querySelectorAll('.error-message').forEach(error => error.remove());
             }
 
-            showNotification(message, type) {
+            showNotification(message, type = 'info') {
+                // Remover notificações existentes
+                document.querySelectorAll('.profile-notification').forEach(n => n.remove());
+
                 const notification = document.createElement('div');
+                notification.className = 'profile-notification';
+                
+                const colors = {
+                    success: '#10b981',
+                    error: '#ef4444',
+                    warning: '#f59e0b',
+                    info: '#3b82f6'
+                };
+
+                const icons = {
+                    success: '✓',
+                    error: '✕',
+                    warning: '⚠',
+                    info: 'ℹ'
+                };
+
                 notification.style.cssText = `
                     position: fixed;
                     top: 20px;
                     right: 20px;
-                    padding: 1rem 1.5rem;
-                    background: ${type === 'success' ? '#10b981' : '#ef4444'};
+                    background: ${colors[type] || colors.info};
                     color: white;
+                    padding: 1rem 1.5rem;
                     border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                     z-index: 10000;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
                     animation: slideInRight 0.3s ease-out;
+                    max-width: 400px;
+                    font-family: 'Inter', sans-serif;
                 `;
-                notification.textContent = message;
+
+                notification.innerHTML = `
+                    <span style="font-size: 1.1rem;">${icons[type] || icons.info}</span>
+                    <span>${message}</span>
+                `;
+
                 document.body.appendChild(notification);
 
-                setTimeout(() => notification.remove(), 3000);
+                // Auto-remover após duração baseada no tipo
+                const duration = type === 'info' ? 2000 : 3000;
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideOutRight 0.3s ease-in';
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.remove();
+                            }
+                        }, 300);
+                    }
+                }, duration);
+
+                // Remover ao clicar
+                notification.addEventListener('click', () => {
+                    notification.style.animation = 'slideOutRight 0.3s ease-in';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                });
             }
 
             isValidEmail(email) {
@@ -1008,10 +1122,6 @@
         }
 
         // Global functions
-        function editProfile() {
-            document.getElementById('fullName').focus();
-        }
-
         function resetForm() {
             const manager = new ProfilePageManager();
             manager.populateForm();

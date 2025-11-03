@@ -30,6 +30,10 @@ public record VendaRequestDTO(
         LocalDate dataVenda,
         
         @Size(max = 1000, message = "Observação deve ter no máximo 1000 caracteres")
-        String observacao
+        String observacao,
+        
+        // Caminho do arquivo de comprovante (opcional)
+        @Size(max = 500, message = "Caminho do comprovante deve ter no máximo 500 caracteres")
+        String comprovantePath
 ) {
 }

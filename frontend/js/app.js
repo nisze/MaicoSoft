@@ -132,6 +132,11 @@ class ApiClient {
         });
     }
 
+    async searchClientes(searchTerm, page = 0, size = 10) {
+        const query = searchTerm ? `?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}` : `?page=${page}&size=${size}`;
+        return await this.request(`/clientes${query}`);
+    }
+
     // ============================================
     // VENDAS API METHODS
     // ============================================
@@ -725,3 +730,364 @@ window.goToRelatorios = goToRelatorios;
 window.showAlert = showAlert;
 window.FormValidator = FormValidator;
 window.ROUTES = ROUTES;
+
+// ==================== FUNÇÕES DE COMPROVANTE ====================
+
+/**
+ * Faz upload do comprovante de venda
+ */
+async function uploadComprovante() {
+    try {
+        const vendaId = document.getElementById('edit-venda-id')?.value;
+        const fileInput = document.getElementById('edit-comprovante-venda');
+        
+        if (!vendaId) {
+            showNotification('Erro: ID da venda não encontrado', 'error');
+            return;
+        }
+        
+        if (!fileInput.files || fileInput.files.length === 0) {
+            showNotification('Por favor, selecione um arquivo', 'warning');
+            return;
+        }
+        
+        const file = fileInput.files[0];
+        
+        // Validações do arquivo
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            showNotification('Arquivo muito grande. Máximo 10MB', 'error');
+            return;
+        }
+        
+        const allowedTypes = [
+            'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+        
+        if (!allowedTypes.includes(file.type)) {
+            showNotification('Tipo de arquivo não suportado. Use imagens, PDF ou documentos Word', 'error');
+            return;
+        }
+        
+        // Preparar FormData
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Desabilitar botão durante upload
+        const uploadBtn = document.getElementById('upload-comprovante-btn');
+        const originalText = uploadBtn.textContent;
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<span class="material-icons">hourglass_empty</span> Enviando...';
+        
+        // Fazer upload
+        const response = await fetch(`${API_BASE_URL}/vendas/${vendaId}/comprovante`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            showNotification('Comprovante enviado com sucesso!', 'success');
+            
+            // Atualizar status do comprovante na interface
+            updateComprovanteStatus(result.venda);
+            
+            // Limpar input de arquivo
+            fileInput.value = '';
+            
+            // Recarregar lista de vendas se estiver visível
+            if (typeof loadVendasData === 'function') {
+                loadVendasData();
+            }
+        } else {
+            showNotification(result.erro || result.error || 'Erro ao enviar comprovante', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Erro no upload:', error);
+        showNotification('Erro de conexão ao enviar comprovante', 'error');
+    } finally {
+        // Reabilitar botão
+        const uploadBtn = document.getElementById('upload-comprovante-btn');
+        if (uploadBtn) {
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<span class="material-icons">cloud_upload</span> Enviar Comprovante';
+        }
+    }
+}
+
+/**
+ * Remove comprovante da venda
+ */
+async function removeComprovante() {
+    try {
+        const vendaId = document.getElementById('edit-venda-id')?.value;
+        
+        if (!vendaId) {
+            showNotification('Erro: ID da venda não encontrado', 'error');
+            return;
+        }
+        
+        if (!confirm('Tem certeza que deseja remover o comprovante?')) {
+            return;
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/vendas/${vendaId}/comprovante`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            showNotification('Comprovante removido com sucesso!', 'success');
+            
+            // Atualizar status
+            updateComprovanteStatus(result);
+            
+            // Recarregar lista
+            if (typeof loadVendasData === 'function') {
+                loadVendasData();
+            }
+        } else {
+            const error = await response.json();
+            showNotification(error.erro || 'Erro ao remover comprovante', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Erro ao remover comprovante:', error);
+        showNotification('Erro de conexão', 'error');
+    }
+}
+
+/**
+ * Atualiza o status visual do comprovante
+ */
+function updateComprovanteStatus(venda) {
+    const statusDiv = document.getElementById('comprovante-status');
+    const uploadBtn = document.getElementById('upload-comprovante-btn');
+    const removeBtn = document.getElementById('remove-comprovante-btn');
+    
+    if (!statusDiv) return;
+    
+    if (venda.comprovantePath) {
+        // Tem comprovante
+        statusDiv.style.backgroundColor = '#d1fae5';
+        statusDiv.style.color = '#065f46';
+        statusDiv.innerHTML = `
+            <span class="material-icons">check_circle</span>
+            Comprovante anexado
+            <a href="${API_BASE_URL}/uploads/comprovante/${venda.comprovantePath.split('/').pop()}" 
+               target="_blank" 
+               style="margin-left: 0.5rem; color: #059669; text-decoration: underline;">
+                Visualizar
+            </a>
+        `;
+        
+        if (uploadBtn) uploadBtn.textContent = 'Substituir Comprovante';
+        if (removeBtn) removeBtn.style.display = 'inline-flex';
+    } else {
+        // Sem comprovante
+        statusDiv.style.backgroundColor = '#fef3c7';
+        statusDiv.style.color = '#92400e';
+        statusDiv.innerHTML = `
+            <span class="material-icons">info</span>
+            Nenhum comprovante anexado
+        `;
+        
+        if (uploadBtn) uploadBtn.textContent = 'Enviar Comprovante';
+        if (removeBtn) removeBtn.style.display = 'none';
+    }
+}
+
+/**
+ * Limpa arquivo selecionado
+ */
+function limparArquivoComprovante(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = '';
+    }
+}
+
+/**
+ * Visualiza comprovante
+ */
+function visualizarComprovante(filename) {
+    if (filename) {
+        const url = `${API_BASE_URL}/uploads/comprovante/${filename}`;
+        window.open(url, '_blank');
+    }
+}
+
+// Expor funções de comprovante
+window.uploadComprovante = uploadComprovante;
+window.removeComprovante = removeComprovante;
+window.updateComprovanteStatus = updateComprovanteStatus;
+window.limparArquivoComprovante = limparArquivoComprovante;
+window.visualizarComprovante = visualizarComprovante;
+
+// Funções para upload de comprovante
+async function uploadComprovante(vendaId) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*,application/pdf,.doc,.docx';
+    
+    input.onchange = async function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        try {
+            showLoading();
+            
+            const response = await fetch(`${API_BASE_URL}/vendas/${vendaId}/comprovante`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok && result.message) {
+                showNotification(result.message, 'success');
+                
+                // Recarregar a tabela de vendas
+                if (typeof loadVendasData === 'function') {
+                    loadVendasData();
+                }
+                
+                // Atualizar a linha específica se possível
+                updateVendaRow(vendaId, result.venda);
+                
+            } else {
+                showNotification(result.erro || result.error || 'Erro ao enviar comprovante', 'error');
+            }
+            
+        } catch (error) {
+            console.error('Erro no upload:', error);
+            showNotification('Erro de conexão ao enviar comprovante', 'error');
+        } finally {
+            hideLoading();
+        }
+    };
+    
+    input.click();
+}
+
+function updateVendaRow(vendaId, vendaData) {
+    // Encontrar e atualizar a linha da tabela
+    const row = document.querySelector(`tr[data-venda-id="${vendaId}"]`);
+    if (row && vendaData) {
+        // Atualizar status
+        const statusCell = row.querySelector('.status-badge');
+        if (statusCell) {
+            statusCell.textContent = vendaData.status;
+            statusCell.className = `status-badge status-${vendaData.status.toLowerCase()}`;
+        }
+        
+        // Atualizar botão de comprovante
+        const comprovanteCell = row.querySelector('.comprovante-actions');
+        if (comprovanteCell && vendaData.comprovantePath) {
+            comprovanteCell.innerHTML = `
+                <button onclick="visualizarComprovante('${vendaData.comprovantePath}')" 
+                        class="btn-icon" title="Ver comprovante">
+                    <i class="material-icons">visibility</i>
+                </button>
+                <button onclick="removerComprovante(${vendaId})" 
+                        class="btn-icon btn-danger" title="Remover comprovante">
+                    <i class="material-icons">delete</i>
+                </button>
+            `;
+        }
+    }
+}
+
+async function removerComprovante(vendaId) {
+    if (!confirm('Tem certeza que deseja remover o comprovante desta venda?')) {
+        return;
+    }
+    
+    try {
+        showLoading();
+        
+        const response = await fetch(`${API_BASE_URL}/vendas/${vendaId}/comprovante`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            showNotification('Comprovante removido com sucesso', 'success');
+            
+            // Recarregar a tabela de vendas
+            if (typeof loadVendasData === 'function') {
+                loadVendasData();
+            }
+        } else {
+            const error = await response.json();
+            showNotification(error.erro || 'Erro ao remover comprovante', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Erro ao remover comprovante:', error);
+        showNotification('Erro de conexão', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+function visualizarComprovante(path) {
+    if (!path) {
+        showNotification('Caminho do comprovante não encontrado', 'error');
+        return;
+    }
+    
+    // Construir URL completa do arquivo - path já contém "uploads/comprovantes/"
+    const fileUrl = `${API_BASE_URL.replace('/api', '')}/${path}`;
+    
+    // Abrir em nova aba
+    window.open(fileUrl, '_blank');
+}
+
+// Expor funções globalmente
+window.uploadComprovante = uploadComprovante;
+window.removerComprovante = removerComprovante;
+
+// Criar instância global do APIService
+window.APIService = {
+    clientes: {
+        search: async function(searchTerm, page = 0, size = 10) {
+            const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8090/api';
+            const query = searchTerm ? `?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}` : `?page=${page}&size=${size}`;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/clientes${query}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao buscar clientes:', error);
+                throw error;
+            }
+        }
+    },
+    vendas: {
+        getAll: async function(page = 0, size = 20) {
+            const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8090/api';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/vendas?page=${page}&size=${size}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao buscar vendas:', error);
+                throw error;
+            }
+        }
+    }
+};

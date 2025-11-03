@@ -1,8 +1,7 @@
 package com.faculdae.maiconsoft_api.services.user;
 
 import com.faculdae.maiconsoft_api.dto.user.UserRequestDTO;
-import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
-import com.faculdae.maiconsoft_api.dto.LoginResponseDTO;
+import com.faculdae.maiconsoft_api.dto.user.LoginResponseDTO;
 import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.User;
 import com.faculdae.maiconsoft_api.entities.UserRole;
@@ -42,18 +41,22 @@ public class UserService {
                 .orElse(null);
         
         if (user == null) {
-            return new LoginResponseDTO(null, null, null, null, false, "Código de acesso não encontrado ou usuário inativo");
+            return new LoginResponseDTO(null, null, null, null, null, false, "Código de acesso não encontrado ou usuário inativo");
         }
         
         if (!passwordEncoder.matches(senha, user.getSenha())) {
-            return new LoginResponseDTO(null, null, null, null, false, "Senha incorreta");
+            return new LoginResponseDTO(null, null, null, null, null, false, "Senha incorreta");
         }
+        
+        // Obter o nome da role do usuário
+        String tipoUsuario = user.getUserRole() != null ? user.getUserRole().getRoleName() : "FUNCIONARIO";
         
         return new LoginResponseDTO(
                 user.getIdUser(),
                 user.getNome(),
                 user.getEmail(),
                 user.getCodigoAcesso(),
+                tipoUsuario,
                 true,
                 "Login realizado com sucesso"
         );
@@ -154,18 +157,6 @@ public class UserService {
     @Transactional
     public UserResponseDTO update(Long id, UserRequestDTO userRequest) {
         User existingUser = findById(id);
-        
-        // Log dos dados recebidos para debug
-        System.out.println("=== DEBUG UPDATE USER ===");
-        System.out.println("ID: " + id);
-        System.out.println("Nome: " + userRequest.getNome());
-        System.out.println("Email: " + userRequest.getEmail());
-        System.out.println("CPF: " + userRequest.getCpf());
-        System.out.println("Telefone: " + userRequest.getTelefone());
-        System.out.println("CodigoAcesso: " + userRequest.getCodigoAcesso());
-        System.out.println("RoleName: " + userRequest.getRoleName());
-        System.out.println("Ativo: " + userRequest.getAtivo());
-        System.out.println("========================");
         
         // Validação de email único (exceto para o próprio usuário)
         if (!existingUser.getEmail().equals(userRequest.getEmail()) && 
@@ -291,5 +282,54 @@ public class UserService {
     public boolean existsByCodigoAcesso(String codigoAcesso) {
         String codigoNormalizado = codigoAcessoService.normalizarCodigo(codigoAcesso);
         return userRepository.existsByCodigoAcessoIgnoreCase(codigoNormalizado);
+    }
+
+    /**
+     * Converter User para UserResponseDTO
+     */
+    public UserResponseDTO convertToResponseDTO(User user) {
+        return new UserResponseDTO(
+                user.getIdUser(),
+                user.getNome(),
+                user.getEmail(),
+                user.getCodigoAcesso(),
+                user.getAtivo(),
+                user.getUserRole() != null ? user.getUserRole().getRoleName() : "FUNCIONARIO",
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+                "Dados do usuário"
+        );
+    }
+
+    /**
+     * Buscar usuário por ID retornando DTO
+     */
+    public UserResponseDTO findByIdAsDTO(Long id) {
+        User user = findById(id);
+        return convertToResponseDTO(user);
+    }
+
+    /**
+     * Listar usuários retornando DTOs
+     */
+    public Page<UserResponseDTO> findAllAsDTO(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(this::convertToResponseDTO);
+    }
+
+    /**
+     * Listar usuários ativos retornando DTOs
+     */
+    public Page<UserResponseDTO> findAllActiveAsDTO(Pageable pageable) {
+        Page<User> activeUsers = userRepository.findByAtivoTrue(pageable);
+        return activeUsers.map(this::convertToResponseDTO);
+    }
+
+    /**
+     * Toggle status do usuário retornando DTO
+     */
+    public UserResponseDTO toggleStatusAsDTO(Long id) {
+        User user = toggleStatus(id);
+        return convertToResponseDTO(user);
     }
 }

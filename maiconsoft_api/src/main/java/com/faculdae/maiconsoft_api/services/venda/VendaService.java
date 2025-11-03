@@ -63,6 +63,11 @@ public class VendaService {
         // 3. Processar cupom se informado
         Cupom cupom = null;
         if (requestDTO.cupomCodigo() != null && !requestDTO.cupomCodigo().trim().isEmpty()) {
+            // Verificar se cupom pode ser usado antes de aplicar
+            if (!cupomService.podeUsarCupom(requestDTO.cupomCodigo())) {
+                throw new RuntimeException("Cupom não pode ser usado: inativo, expirado ou limite atingido");
+            }
+            
             cupom = cupomService.findByCodigo(requestDTO.cupomCodigo());
             log.info("Cupom aplicado: {} - {}%", cupom.getCodigo(), cupom.getDescontoPercentual());
         }
@@ -75,16 +80,21 @@ public class VendaService {
         // 5. Gerar número do orçamento
         String numeroOrcamento = gerarNumeroOrcamento();
         
-        // 6. Criar entidade
+        // 6. Criar entidade - Define status baseado na presença do comprovante
+        String statusFinal = determinarStatusPorComprovante(requestDTO.status(), requestDTO.comprovantePath());
+        
         Venda venda = Venda.builder()
                 .numeroOrcamento(numeroOrcamento)
-                .status(requestDTO.status())
+                .status(statusFinal)
                 .valorBruto(valorBruto)
                 .valorDesconto(valorDesconto)
                 .valorTotal(valorTotal)
                 .dataVenda(requestDTO.dataVenda())
                 .datahoraCadastro(LocalDateTime.now())
                 .observacao(requestDTO.observacao())
+                .comprovantePath(requestDTO.comprovantePath())
+                .comprovanteUploadDate(requestDTO.comprovantePath() != null && !requestDTO.comprovantePath().trim().isEmpty() 
+                        ? LocalDateTime.now() : null)
                 .cliente(cliente)
                 .cupom(cupom)
                 .usuarioCadastro(usuarioLogado)
@@ -94,6 +104,17 @@ public class VendaService {
         Venda vendaSalva = vendaRepository.save(venda);
         log.info("Venda criada com sucesso - ID: {}, Orçamento: {}", 
                 vendaSalva.getIdVenda(), vendaSalva.getNumeroOrcamento());
+        
+        // 7.1. Incrementar uso do cupom se foi aplicado
+        if (cupom != null) {
+            try {
+                cupomService.incrementarUsoCupom(cupom.getCodigo());
+                log.info("Uso do cupom {} incrementado com sucesso", cupom.getCodigo());
+            } catch (Exception e) {
+                log.error("Erro ao incrementar uso do cupom {}: {}", cupom.getCodigo(), e.getMessage());
+                // Não falha a venda por causa do cupom
+            }
+        }
         
         // 8. Enviar email de notificação (assíncrono)
         try {
@@ -328,8 +349,18 @@ public class VendaService {
         }
         venda.setCupom(cupom);
         
-        // Atualizar campos
-        venda.setStatus(vendaRequest.status());
+        // Atualizar comprovante se fornecido
+        if (vendaRequest.comprovantePath() != null) {
+            venda.setComprovantePath(vendaRequest.comprovantePath());
+            venda.setComprovanteUploadDate(vendaRequest.comprovantePath() != null && !vendaRequest.comprovantePath().trim().isEmpty() 
+                    ? LocalDateTime.now() : null);
+        }
+        
+        // Determinar status final baseado no comprovante
+        String statusFinal = determinarStatusPorComprovante(vendaRequest.status(), venda.getComprovantePath());
+        venda.setStatus(statusFinal);
+        
+        // Atualizar outros campos
         venda.setValorBruto(vendaRequest.valorBruto());
         venda.setDataVenda(vendaRequest.dataVenda());
         venda.setObservacao(vendaRequest.observacao());
@@ -343,7 +374,7 @@ public class VendaService {
         venda.setValorTotal(vendaRequest.valorBruto().subtract(valorDesconto));
         
         Venda vendaSalva = vendaRepository.save(venda);
-        log.info("Venda atualizada com sucesso - ID: {}", vendaSalva.getIdVenda());
+        log.info("Venda atualizada com sucesso - ID: {} - Status final: {}", vendaSalva.getIdVenda(), vendaSalva.getStatus());
         
         return vendaMapper.apply(vendaSalva);
     }
@@ -361,5 +392,60 @@ public class VendaService {
         
         vendaRepository.deleteById(id);
         log.info("Venda excluída com sucesso - ID: {}", id);
+    }
+    
+    /**
+     * Determina o status da venda baseado na presença do comprovante
+     * @param statusOriginal Status original informado
+     * @param comprovantePath Caminho do comprovante (pode ser null)
+     * @return Status final da venda
+     */
+    private String determinarStatusPorComprovante(String statusOriginal, String comprovantePath) {
+        // Se não há comprovante, a venda fica como PENDENTE
+        if (comprovantePath == null || comprovantePath.trim().isEmpty()) {
+            log.info("Venda sem comprovante - definindo status como PENDENTE");
+            return "PENDENTE";
+        }
+        
+        // Se há comprovante e o status original era PENDENTE, muda para CONFIRMADA
+        if ("PENDENTE".equals(statusOriginal)) {
+            log.info("Venda com comprovante - alterando status de PENDENTE para CONFIRMADA");
+            return "CONFIRMADA";
+        }
+        
+        // Para outros status (CANCELADA, FINALIZADA), mantém o original
+        log.info("Mantendo status original: {} (comprovante presente)", statusOriginal);
+        return statusOriginal;
+    }
+    
+    /**
+     * Atualiza o comprovante de uma venda existente
+     * @param vendaId ID da venda
+     * @param comprovantePath Caminho do novo comprovante
+     * @return DTO da venda atualizada
+     */
+    @Transactional
+    public VendaResponseDTO atualizarComprovante(Long vendaId, String comprovantePath) {
+        log.info("Atualizando comprovante da venda ID: {} - Caminho: {}", vendaId, comprovantePath);
+        
+        Venda venda = vendaRepository.findById(vendaId)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada com ID: " + vendaId));
+        
+        // Atualizar campos do comprovante
+        venda.setComprovantePath(comprovantePath);
+        venda.setComprovanteUploadDate(comprovantePath != null && !comprovantePath.trim().isEmpty() 
+                ? LocalDateTime.now() : null);
+        
+        // Atualizar status se necessário
+        String novoStatus = determinarStatusPorComprovante(venda.getStatus(), comprovantePath);
+        if (!novoStatus.equals(venda.getStatus())) {
+            log.info("Alterando status da venda de {} para {}", venda.getStatus(), novoStatus);
+            venda.setStatus(novoStatus);
+        }
+        
+        Venda vendaSalva = vendaRepository.save(venda);
+        log.info("Comprovante da venda atualizado com sucesso - ID: {}", vendaSalva.getIdVenda());
+        
+        return vendaMapper.apply(vendaSalva);
     }
 }

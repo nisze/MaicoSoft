@@ -62,7 +62,11 @@
                 <!-- Menu do Usuário -->
                 <div style="position: relative; display: inline-block;">
                     <button id="userMenuBtn" onclick="toggleUserMenu()" style="background: #333333; color: #ffffff; border: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#444444'" onmouseout="this.style.background='#333333'">
-                        <span class="material-icons" style="font-size: 1.1rem;">account_circle</span>
+                        <!-- Avatar circular -->
+                        <div style="position: relative; width: 28px; height: 28px; border-radius: 50%; overflow: hidden; border: 2px solid #ffffff; background: #4b5563; display: flex; align-items: center; justify-content: center;">
+                            <img id="userAvatarImage" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <div id="userAvatarPlaceholder" style="color: #ffffff; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; justify-content: center;">U</div>
+                        </div>
                         <span id="userName">Usuário</span>
                         <span class="material-icons" style="font-size: 1rem;">arrow_drop_down</span>
                     </button>
@@ -1364,11 +1368,11 @@
         });
         
         // Carregar dados do usuário
-        function loadUserDataNav() {
+        async function loadUserDataNav() {
             try {
-                const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
-                if (userData) {
-                    const user = JSON.parse(userData);
+                // Buscar dados atualizados do backend
+                const user = await updateUserDataFromBackend();
+                if (user) {
                     const userName = user.nome || user.name || 'Usuário';
                     
                     const userNameEl = document.getElementById('userName');
@@ -1378,10 +1382,45 @@
                     // Mostrar apenas o primeiro nome no botão
                     if (userNameEl) userNameEl.textContent = userName.split(' ')[0]; // Primeiro nome
                     if (userNameDisplayEl) userNameDisplayEl.textContent = userName;
-                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.roleName || 'FUNCIONARIO');
+                    if (userRoleDisplayEl) userRoleDisplayEl.textContent = getRoleDisplayName(user.tipoUsuario || user.roleName || 'FUNCIONARIO');
+                    
+                    // Carregar foto de perfil na navbar
+                    loadUserProfilePhoto(user);
                 }
             } catch (error) {
                 console.error('Erro ao carregar dados do usuário:', error);
+            }
+        }
+        
+        // Função para carregar foto de perfil na navbar
+        function loadUserProfilePhoto(user) {
+            const avatarImage = document.getElementById('userAvatarImage');
+            const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
+            
+            if (user?.profilePhotoPath) {
+                const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
+                
+                // Configurar eventos de carregamento
+                avatarImage.onload = () => {
+                    avatarImage.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                
+                avatarImage.onerror = () => {
+                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    avatarImage.style.display = 'none';
+                    avatarPlaceholder.style.display = 'flex';
+                };
+                
+                avatarImage.src = imageUrl;
+            } else {
+                // Mostrar placeholder com inicial do nome
+                avatarImage.style.display = 'none';
+                avatarPlaceholder.style.display = 'flex';
+                
+                const firstLetter = (user?.nome || user?.name || 'U').charAt(0).toUpperCase();
+                avatarPlaceholder.textContent = firstLetter;
+                avatarPlaceholder.style.fontSize = '0.8rem';
             }
         }
         
@@ -1478,7 +1517,7 @@
             console.log('📄 Página de usuários carregada');
             
             // Carregar dados do usuário para navbar
-            loadUserDataNav();
+            await loadUserDataNav();
             
             // Verificar permissões antes de inicializar
             if (!initPermissions()) {

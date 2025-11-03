@@ -2,6 +2,38 @@
 
 > Sistema completo de gestão empresarial focado em construção civil, desenvolvido com Spring Boot e JavaScript moderno.
 
+## ⚡ **EXECUÇÃO RÁPIDA (NOVAS MÁQUINAS)**
+
+### 🚀 **1 Comando Para Rodar**
+```bash
+# Windows
+git clone https://github.com/nisze/MaicoSoft.git
+cd MaicoSoft/maiconsoft_api
+run-with-supabase.bat
+
+# Linux/Mac  
+git clone https://github.com/nisze/MaicoSoft.git
+cd MaicoSoft/maiconsoft_api
+chmod +x run-with-supabase.sh && ./run-with-supabase.sh
+```
+
+### 🔧 **Problemas? Use o Diagnóstico**
+```bash
+# Windows
+cd maiconsoft_api
+check-system.bat
+
+# Sem internet? Use modo offline
+run-offline.bat
+```
+
+### 📱 **URLs Importantes**
+- **API:** http://localhost:8090
+- **Swagger:** http://localhost:8090/swagger-ui.html
+- **Setup Completo:** [SETUP-RAPIDO.md](maiconsoft_api/SETUP-RAPIDO.md)
+
+---
+
 ## 📋 Sobre o Projeto
 
 O **Maiconsoft** é um sistema de gestão empresarial especializado para empresas de construção civil, oferecendo funcionalidades completas para:

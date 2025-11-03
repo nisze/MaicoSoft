@@ -60,7 +60,11 @@
                 <!-- Menu do Usuário -->
                 <div style="position: relative; display: inline-block;">
                     <button id="userMenuBtn" onclick="toggleUserMenu()" style="background: #333333; color: #ffffff; border: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#444444'" onmouseout="this.style.background='#333333'">
-                        <span class="material-icons" style="font-size: 1.1rem;">account_circle</span>
+                        <!-- Avatar do usuário -->
+                        <div id="userAvatarNav" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #ffffff;">
+                            <img id="userAvatarImage" style="width: 100%; height: 100%; object-fit: cover; display: none;" alt="Foto do usuário">
+                            <span id="userAvatarPlaceholder" class="material-icons" style="font-size: 1rem; color: white;">person</span>
+                        </div>
                         <span id="userName">Usuário</span>
                         <span class="material-icons" style="font-size: 1rem;">arrow_drop_down</span>
                     </button>
@@ -482,23 +486,92 @@
         });
         
         // Carregar dados do usuário logado
-        function loadUserData() {
+        async function loadUserData() {
             const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     
-                    // Atualizar nome no menu
+                    // Tentar buscar dados atualizados do backend
+                    if (user.id || user.idUser) {
+                        try {
+                            console.log('🔄 Buscando dados atualizados do usuário...');
+                            const response = await APIService.users.getById(user.id || user.idUser);
+                            const updatedUser = response.data || response;
+                            
+                            // Atualizar localStorage com dados atualizados
+                            const mergedUser = {
+                                ...user,
+                                tipoUsuario: updatedUser.roleName || user.tipoUsuario,
+                                roleName: updatedUser.roleName || user.roleName
+                            };
+                            
+                            localStorage.setItem('maiconsoft_user', JSON.stringify(mergedUser));
+                            console.log('✅ Dados do usuário atualizados:', mergedUser);
+                            
+                            // Usar dados atualizados
+                            const userName = mergedUser.nome || mergedUser.name || 'Usuário';
+                            const userRole = mergedUser.tipoUsuario || mergedUser.roleName || mergedUser.role || 'FUNCIONARIO';
+                            
+                            document.getElementById('userName').textContent = userName.split(' ')[0]; // Primeiro nome
+                            document.getElementById('userNameDisplay').textContent = userName;
+                            document.getElementById('userRoleDisplay').textContent = getRoleDisplayName(userRole);
+                            
+                            // Carregar foto de perfil na navbar
+                            loadUserProfilePhoto(mergedUser);
+                            
+                            return;
+                        } catch (apiError) {
+                            console.warn('⚠️ Erro ao buscar dados atualizados, usando dados locais:', apiError);
+                        }
+                    }
+                    
+                    // Fallback para dados locais
                     const userName = user.nome || user.name || 'Usuário';
-                    const userRole = user.tipoUsuario || user.role || 'Funcionário';
+                    const userRole = user.tipoUsuario || user.roleName || user.role || 'FUNCIONARIO';
                     
                     document.getElementById('userName').textContent = userName.split(' ')[0]; // Primeiro nome
                     document.getElementById('userNameDisplay').textContent = userName;
                     document.getElementById('userRoleDisplay').textContent = getRoleDisplayName(userRole);
                     
+                    // Carregar foto de perfil na navbar
+                    loadUserProfilePhoto(user);
+                    
                 } catch (error) {
                     console.error('Erro ao carregar dados do usuário:', error);
                 }
+            }
+        }
+        
+        // Função para carregar foto de perfil na navbar
+        function loadUserProfilePhoto(user) {
+            const avatarImage = document.getElementById('userAvatarImage');
+            const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
+            
+            if (user?.profilePhotoPath) {
+                const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
+                
+                // Configurar eventos de carregamento
+                avatarImage.onload = () => {
+                    avatarImage.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                
+                avatarImage.onerror = () => {
+                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    avatarImage.style.display = 'none';
+                    avatarPlaceholder.style.display = 'flex';
+                };
+                
+                avatarImage.src = imageUrl;
+            } else {
+                // Mostrar placeholder com inicial do nome
+                avatarImage.style.display = 'none';
+                avatarPlaceholder.style.display = 'flex';
+                
+                const firstLetter = (user?.nome || user?.name || 'U').charAt(0).toUpperCase();
+                avatarPlaceholder.textContent = firstLetter;
+                avatarPlaceholder.style.fontSize = '1rem';
             }
         }
         
@@ -516,8 +589,8 @@
         }
         
         // Inicializar dados do usuário quando a página carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserData();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadUserData();
         });
     </script>
 </body>

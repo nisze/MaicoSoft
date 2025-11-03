@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -37,6 +38,7 @@ public class User {
     @Column(name = "CODIGO_ACESSO", unique = true, length = 6)
     private String codigoAcesso;
 
+    @JsonIgnore
     @Column(name = "SENHA", length = 255)
     private String senha;
 

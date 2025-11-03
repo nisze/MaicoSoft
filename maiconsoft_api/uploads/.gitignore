@@ -1,0 +1,6 @@
+# Ignorar todos os arquivos de upload
+*
+!.gitignore
+!profiles/
+profiles/*
+!profiles/.gitkeep
