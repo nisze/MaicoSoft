@@ -681,17 +681,27 @@
             const avatarImage = document.getElementById('userAvatarImage');
             const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
             
+            console.log('🔍 Debug foto de perfil:', {
+                user: user,
+                userCode: user?.codigo || user?.id,
+                profilePhotoPath: user?.profilePhotoPath,
+                baseURL: APIService?.baseURL,
+                fullImageURL: user?.profilePhotoPath ? `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}` : 'N/A'
+            });
+            
             if (user?.profilePhotoPath) {
                 const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
+                console.log('📸 Tentando carregar imagem:', imageUrl);
                 
                 // Configurar eventos de carregamento
                 avatarImage.onload = () => {
+                    console.log('✅ Foto de perfil carregada com sucesso');
                     avatarImage.style.display = 'block';
                     avatarPlaceholder.style.display = 'none';
                 };
                 
                 avatarImage.onerror = () => {
-                    console.warn('Erro ao carregar foto de perfil na navbar:', imageUrl);
+                    console.error('❌ Erro ao carregar foto de perfil:', imageUrl);
                     avatarImage.style.display = 'none';
                     avatarPlaceholder.style.display = 'flex';
                 };

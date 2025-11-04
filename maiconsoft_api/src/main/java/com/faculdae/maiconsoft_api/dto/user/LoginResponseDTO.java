@@ -20,6 +20,9 @@ public record LoginResponseDTO(
     @Schema(description = "Tipo de usuário", example = "FUNCIONARIO")
     String tipoUsuario,
     
+    @Schema(description = "Caminho da foto de perfil", example = "uploads/profiles/user_1_abc123.jpg")
+    String profilePhotoPath,
+    
     @Schema(description = "Status de sucesso do login", example = "true")
     Boolean success,
     

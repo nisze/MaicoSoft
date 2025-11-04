@@ -2,7 +2,7 @@ package com.faculdae.maiconsoft_api.services.user;
 
 import com.faculdae.maiconsoft_api.dto.user.UserRequestDTO;
 import com.faculdae.maiconsoft_api.dto.user.LoginResponseDTO;
-import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
+import com.faculdae.maiconsoft_api.dto.user.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.User;
 import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.repositories.UserRepository;
@@ -41,11 +41,11 @@ public class UserService {
                 .orElse(null);
         
         if (user == null) {
-            return new LoginResponseDTO(null, null, null, null, null, false, "Código de acesso não encontrado ou usuário inativo");
+            return new LoginResponseDTO(null, null, null, null, null, null, false, "Código de acesso não encontrado ou usuário inativo");
         }
         
         if (!passwordEncoder.matches(senha, user.getSenha())) {
-            return new LoginResponseDTO(null, null, null, null, null, false, "Senha incorreta");
+            return new LoginResponseDTO(null, null, null, null, null, null, false, "Senha incorreta");
         }
         
         // Obter o nome da role do usuário
@@ -57,6 +57,7 @@ public class UserService {
                 user.getEmail(),
                 user.getCodigoAcesso(),
                 tipoUsuario,
+                user.getProfilePhotoPath(),
                 true,
                 "Login realizado com sucesso"
         );
@@ -140,14 +141,14 @@ public class UserService {
 
         return new UserResponseDTO(
                 savedUser.getIdUser(),
+                savedUser.getCodigoAcesso(),
                 savedUser.getNome(),
                 savedUser.getEmail(),
-                savedUser.getCodigoAcesso(),
-                savedUser.getAtivo(),
+                savedUser.getCpf(),
+                savedUser.getTelefone(),
                 savedUser.getUserRole() != null ? savedUser.getUserRole().getRoleName() : "FUNCIONARIO",
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt(),
-                mensagem
+                savedUser.getAtivo(),
+                savedUser.getProfilePhotoPath()
         );
     }
 
@@ -224,14 +225,14 @@ public class UserService {
         
         return new UserResponseDTO(
                 savedUser.getIdUser(),
+                savedUser.getCodigoAcesso(),
                 savedUser.getNome(),
                 savedUser.getEmail(),
-                savedUser.getCodigoAcesso(),
-                savedUser.getAtivo(),
+                savedUser.getCpf(),
+                savedUser.getTelefone(),
                 savedUser.getUserRole() != null ? savedUser.getUserRole().getRoleName() : "FUNCIONARIO",
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt(),
-                "Usuário atualizado com sucesso!"
+                savedUser.getAtivo(),
+                savedUser.getProfilePhotoPath()
         );
     }
 
@@ -290,14 +291,14 @@ public class UserService {
     public UserResponseDTO convertToResponseDTO(User user) {
         return new UserResponseDTO(
                 user.getIdUser(),
+                user.getCodigoAcesso(),
                 user.getNome(),
                 user.getEmail(),
-                user.getCodigoAcesso(),
-                user.getAtivo(),
+                user.getCpf(),
+                user.getTelefone(),
                 user.getUserRole() != null ? user.getUserRole().getRoleName() : "FUNCIONARIO",
-                user.getCreatedAt(),
-                user.getUpdatedAt(),
-                "Dados do usuário"
+                user.getAtivo(),
+                user.getProfilePhotoPath()
         );
     }
 
