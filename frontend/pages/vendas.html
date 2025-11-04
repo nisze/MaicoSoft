@@ -2389,7 +2389,7 @@
             if (usuario.profilePhotoPath) {
                 const avatarImage = document.getElementById('userAvatarImage');
                 const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
-                const photoUrl = `${API_BASE_URL.replace('/api', '')}/uploads/${usuario.profilePhotoPath}`;
+                const photoUrl = `${API_BASE_URL.replace('/api', '')}/${usuario.profilePhotoPath}`;
                 
                 avatarImage.src = photoUrl;
                 avatarImage.style.display = 'block';
