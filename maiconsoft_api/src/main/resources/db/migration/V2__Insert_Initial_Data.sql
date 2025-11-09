@@ -17,10 +17,13 @@ ON CONFLICT (id_role) DO NOTHING;
 -- ===============================
 -- 2. INSERIR USUÁRIO ADMINISTRADOR PADRÃO
 -- ===============================
--- Usuário: admin@maiconsoft.com (sem autenticação)
-INSERT INTO users (id_user, codigo_acesso, nome, email, cpf, telefone, id_role, senha, created_at, updated_at) VALUES 
-(1, 'ADM001', 'Administrador Sistema', 'admin@maiconsoft.com', '12345678901', '(11) 99999-9999', 1, '$2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-ON CONFLICT (id_user) DO NOTHING;
+-- Usuário: admin@maiconsoft.com - Senha: 123456
+-- Hash BCrypt da senha "123456": $2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u
+INSERT INTO users (id_user, codigo_acesso, nome, email, cpf, telefone, id_role, senha, ativo, created_at, updated_at) VALUES 
+(1, 'ADM001', 'Administrador Sistema', 'admin@maiconsoft.com', '12345678901', '(11) 99999-9999', 1, '$2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT (id_user) DO UPDATE SET 
+    senha = '$2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u',
+    ativo = true;
 
 -- ===============================
 -- 3. CONFIGURAR SEQUENCES (POSTGRESQL)
