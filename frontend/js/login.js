@@ -187,8 +187,8 @@ class LoginManager {
                 // Redirecionar para dashboard suavemente
                 console.log('🔄 Redirecionando para dashboard...');
                 
-                // URL do dashboard
-                const dashboardUrl = 'http://127.0.0.1:3001/pages/dashboard.html';
+                // URL do dashboard (relativa para funcionar em qualquer ambiente)
+                const dashboardUrl = '/pages/dashboard.html';
                 console.log('🌐 URL destino:', dashboardUrl);
                 
                 // Redirecionamento direto e suave
