@@ -48,8 +48,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> create(
             @Valid @RequestBody ClienteRequestDTO clienteRequest) {
-        
-        // Usando usuário admin padrão
+
         User usuarioCadastro = userRepository.findByEmail("admin@maiconsoft.com")
                 .orElseThrow(() -> new RuntimeException("Usuário admin não encontrado"));
         
@@ -115,11 +114,9 @@ public class ClienteController {
             @Parameter(description = "Campo para ordenação") @RequestParam(defaultValue = "datahoraCadastro") String sortBy,
             @Parameter(description = "Direção da ordenação (ASC/DESC)") @RequestParam(defaultValue = "DESC") String sortDir) {
 
-        // Configuração da paginação e ordenação
         Sort.Direction direction = sortDir.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
-        // Construção da Specification com filtros
         Specification<com.faculdae.maiconsoft_api.entities.Cliente> spec = 
             ClienteSpecification.build(codigo, razaoSocial, nomeFantasia, tipo, cpfCnpj, 
                                      cidade, estado, email, dataInicialCadastro, dataFinalCadastro);
@@ -167,7 +164,6 @@ public class ClienteController {
             @Parameter(description = "ID do cliente") @PathVariable Long id,
             @Valid @RequestBody ClienteRequestDTO clienteRequest) {
 
-        // Usando usuário admin padrão
         User usuarioAtualizacao = userRepository.findByEmail("admin@maiconsoft.com")
                 .orElseThrow(() -> new RuntimeException("Usuário admin não encontrado"));
         
