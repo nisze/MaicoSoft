@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "Login do usuário", description = "Autentica usuário com código de acesso e senha")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
-        LoginResponseDTO response = userService.login(loginRequest.getCodigoAcesso(), loginRequest.getSenha());
+        LoginResponseDTO response = userService.login(loginRequest.codigoAcesso(), loginRequest.senha());
         return ResponseEntity.ok(response);
     }
 
