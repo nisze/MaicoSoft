@@ -17,7 +17,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS ativo BOOLEAN DEFAULT TRUE;
 -- Atualizar usuário admin com código padrão
 UPDATE users 
 SET codigo_acesso = 'ADM001', 
-    senha = '$2a$10$Xl0yhvzLIaJCDdKBS0Lld.bnbubE27U0UMcgnvn8hSu.KJ8rA3.hC', -- Senha: 123456
+    senha = '$2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u', -- Senha: 123456
     ativo = true
 WHERE email = 'admin@maiconsoft.com' AND codigo_acesso IS NULL;
 
