@@ -1,67 +1,37 @@
-# ===============================
+﻿# ===============================
 # MAICONSOFT API - DOCKERFILE
 # ===============================
-FROM openjdk:21-jdk-slim as build
 
-# Instalar Maven
-RUN apt-get update && apt-get install -y maven
+FROM maven:3.9-eclipse-temurin-17-alpine AS build
 
-# Definir diretório de trabalho
 WORKDIR /app
 
-# Copiar arquivos do Maven primeiro (para cache de dependências)
+# Copiar pom.xml e baixar dependências (cache layer)
 COPY pom.xml .
-COPY mvnw .
-COPY mvnw.cmd .
-COPY .mvn .mvn
-
-# Baixar dependências (será cacheado se pom.xml não mudar)
 RUN mvn dependency:go-offline -B
 
-# Copiar código fonte
+# Copiar código fonte e compilar
 COPY src ./src
-
-# Construir aplicação
 RUN mvn clean package -DskipTests
 
 # ===============================
-# RUNTIME STAGE
+# RUNTIME IMAGE
 # ===============================
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
-# Instalar dependências necessárias
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Criar usuário não-root para segurança
-RUN useradd -r -s /bin/false maiconsoft
-
-# Definir diretório de trabalho
 WORKDIR /app
 
-# Criar diretórios necessários
-RUN mkdir -p uploads/profiles logs && \
-    chown -R maiconsoft:maiconsoft /app
+# Instalar wget para healthcheck
+RUN apk add --no-cache wget
 
-# Copiar JAR da aplicação
+# Copiar JAR compilado
 COPY --from=build /app/target/*.jar app.jar
 
-# Configurar permissões
-RUN chown maiconsoft:maiconsoft app.jar
-
-# Mudar para usuário não-root
-USER maiconsoft
-
-# Configurar JVM para container
-ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+# Criar diretórios necessários
+RUN mkdir -p /app/uploads/profiles /app/logs
 
 # Expor porta
 EXPOSE 8090
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8090/api/health || exit 1
-
-# Comando de inicialização
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Executar aplicação
+ENTRYPOINT ["java", "-jar", "app.jar"]

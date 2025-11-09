@@ -1,111 +1,147 @@
-# 🏗️ Integração Frontend + Backend - Maiconsoft
+﻿#  Integrao Frontend + Backend - Maiconsoft
 
-## 📋 **Status Atual**
-✅ Frontend completo com tema construção civil  
-✅ Sistema de navegação SPA implementado  
-✅ Sistema de simulação para desenvolvimento  
-⚠️ **Precisa integrar com API Spring Boot**  
+##  **Status Atual**
+ Frontend completo com tema construo civil  
+ Sistema de navegao SPA implementado  
+ Sistema de simulao para desenvolvimento  
+ **Precisa integrar com API Spring Boot**  
 
-## 🚀 **Como Testar Agora (Modo Simulação)**
+##  **Como Testar Agora**
 
-### 1. **Credenciais de Teste:**
-- **Admin**: `admin` / `123`
-- **Diretor**: `diretor` / `123` 
-- **Funcionário**: `funcionario` / `123`
-
-### 2. **Abrir o Sistema:**
+### 1. **Iniciar com Docker (Recomendado):**
 ```bash
-start index.html
+cd scripts
+start.bat
+```
+Acesse: `http://localhost:3000`
+
+### 2. **Credenciais de Teste:**
+- **Admin**: `ADM001` / `123456`
+- **Vendedor**: `W36K0D` / `123456`
+
+### 3. **Navegao Funcional:**
+- Login funciona com credenciais acima
+- Navegao entre pginas baseada no perfil
+- Controle de acesso por tipo de usurio
+
+##  **Arquitetura de Integrao:**
+
+### **Docker Stack (Recomendado):**
+```yaml
+Services:
+  - Frontend: Nginx na porta 3000
+  - Backend: Spring Boot na porta 8090
+  - Database: PostgreSQL na porta 5432
+  - Network: maiconsoft-network (bridge)
 ```
 
-### 3. **Navegação Funcional:**
-- Login funciona com credenciais acima
-- Navegação entre páginas baseada no perfil
-- Controle de acesso por tipo de usuário
-
-## 🔧 **Para Integrar com seu Backend Spring Boot:**
-
-### 1. **Inicie o Backend:**
+### **Desenvolvimento Local:**
 ```bash
+# Iniciar Backend
 cd maiconsoft_api
 mvn spring-boot:run
+# Backend estar em localhost:8090
+
+# Servir Frontend (outra porta)
+cd frontend
+python -m http.server 8000
+# Frontend em localhost:8000, APIs em localhost:8090
 ```
 
-### 2. **Endpoints Necessários na API:**
-```java
-// AuthController.java
-@PostMapping("/auth/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest request)
+### **Endpoints Implementados:**
 
-@GetMapping("/auth/test") // Teste de conectividade
-public ResponseEntity<?> test()
+| Endpoint | Mtodo | Descrio |
+|----------|--------|-----------|
+| `/api/auth/login` | POST | Autenticao de usurio |
+| `/api/usuarios` | GET/POST/PUT/DELETE | Gesto de usurios |
+| `/api/clientes` | GET/POST/PUT/DELETE | Gesto de clientes |
+| `/api/vendas` | GET/POST/PUT/DELETE | Gesto de vendas |
+| `/api/cupons` | GET/POST/PUT/DELETE | Gesto de cupons |
+| `/api/relatorios/**` | GET | Relatrios diversos |
 
-// ClienteController.java - já existe
-// VendaController.java - já existe 
-// UserController.java - já existe
-```
+**Base URL:** `http://localhost:8090/api` (desenvolvimento) ou `/api` (Docker/produo)
 
 ### 3. **Formato de Resposta do Login:**
 ```json
 {
-    "token": "jwt-token-here",
-    "perfil": "admin|diretor|funcionario", 
-    "nome": "Nome do Usuário",
+    "token": "token-here",
+    "perfil": "admin", 
+    "nome": "Nome do Usurio",
     "email": "email@exemplo.com"
 }
 ```
 
-### 4. **CORS Configuration:**
-```java
-@Configuration
-public class CorsConfig {
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
-        return source;
-    }
-}
+### **CORS Configuration:**
+ J configurado no backend (`application.properties`):
+```properties
+# CORS configuration
+cors.allowed-origins=http://localhost:3000,http://localhost,http://127.0.0.1:5500,http://localhost:5500
+cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+cors.allowed-headers=*
+cors.allow-credentials=true
 ```
 
-## 🎯 **Funcionalidades Prontas**
+No Docker, o Nginx proxy encaminha requisies para o backend, eliminando problemas de CORS.
 
-### ✅ **Sistema de Login:**
-- Validação de credenciais
+##  **Funcionalidades Prontas**
+
+###  **Sistema de Login:**
+- Validao de credenciais
 - Redirecionamento baseado em perfil
-- Armazenamento de sessão
+- Armazenamento de sesso
 
-### ✅ **Dashboard (Admin/Diretor):**
-- KPIs e métricas
-- Ações rápidas
+###  **Dashboard (Admin/Diretor):**
+- KPIs e mtricas
+- Aes rpidas
 - Atividades recentes
 
-### ✅ **Gestão de Clientes:**
-- Formulário completo
-- Validação de campos
+###  **Gesto de Clientes:**
+- Formulrio completo
+- Validao de campos
 - Interface responsiva
 
-### ✅ **Páginas Adicionais:**
+###  **Pginas Adicionais:**
 - Vendas - Controle de vendas
-- Usuários - Administração (Diretor)
-- Relatórios - Análises e reports
+- Usurios - Administrao (Diretor)
+- Relatrios - Anlises e reports
 
-## 🔄 **Próximos Passos**
+##  **Prximos Passos**
 
-1. **Testar com Simulação** (funciona agora)
-2. **Iniciar Backend Spring Boot**
-3. **Ajustar endpoints se necessário**
-4. **Desabilitar simulação em produção**
+1. **Iniciar Stack Completo:**
+   ```bash
+   cd scripts
+   start.bat
+   ```
 
-## 📞 **Links Diretos para Teste:**
-- [Login](file:///C:/Users/denise.a.de.oliveira/Documents/faculdade/front-back/maiconsoft_api/frontend/index.html)
-- [Dashboard](file:///C:/Users/denise.a.de.oliveira/Documents/faculdade/front-back/maiconsoft_api/frontend/index.html#dashboard)
-- [Clientes](file:///C:/Users/denise.a.de.oliveira/Documents/faculdade/front-back/maiconsoft_api/frontend/index.html#cliente)
+2. **Verificar Logs:**
+   ```bash
+   cd scripts
+   logs.bat
+   ```
 
-**Sistema está pronto para usar! 🚀**
+3. **Acessar Sistema:**
+   - Frontend: `http://localhost:3000`
+   - Backend API: `http://localhost:8090/api`
+   - Banco de Dados: `localhost:5432` (postgres/postgres123)
+
+4. **Testar Integrao:**
+   - Login com credenciais
+   - CRUD de clientes
+   - Navegao entre pginas
+   - Upload de fotos de perfil
+
+##  **Monitoramento:**
+
+```bash
+# Ver status dos containers
+cd scripts
+status.bat
+
+# Parar sistema
+stop.bat
+
+# Reconstruir containers
+rebuild.bat
+```
+
+**Sistema est pronto para usar! **

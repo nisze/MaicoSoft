@@ -122,30 +122,26 @@
         }
 
         .upload-btn-bottom {
-            padding: 0.4rem 0.7rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            padding: 0.5rem;
+            background: transparent;
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.3rem;
             margin-top: 0.75rem;
             transition: all 0.3s;
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
-            width: 80px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             align-self: center;
         }
 
         .upload-btn-bottom:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+            background: #f59e0b;
+            color: white;
+            transform: scale(1.1);
         }
 
         .upload-btn-bottom:active {
@@ -169,12 +165,12 @@
         }
 
         .profile-role {
-            padding: 0.5rem 1rem;
-            background: #dbeafe;
-            color: #1d4ed8;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            color: #f59e0b;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         .form-section {
@@ -186,11 +182,12 @@
             font-weight: 600;
             color: #1f2937;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .section-title .material-icons {
+            display: none;
         }
 
         .form-grid {
@@ -269,13 +266,17 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
+            background: transparent;
+            color: #6b7280;
+            border: 2px solid #d1d5db;
         }
 
         .btn-primary:hover {
+            background: #f59e0b;
+            color: white;
+            border-color: #f59e0b;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
         .btn-secondary {
@@ -300,7 +301,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
         }
@@ -308,21 +309,13 @@
         .stat-card {
             background: white;
             padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: white;
+            display: none;
         }
 
         .stat-value {
@@ -350,15 +343,7 @@
         }
 
         .timeline-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: white;
-            flex-shrink: 0;
+            display: none;
         }
 
         .timeline-content {
@@ -443,49 +428,135 @@
         .profile-notification:hover {
             transform: scale(1.02);
         }
+
+        /* Modal de Foto */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .photo-modal-close:hover {
+            color: #ef4444;
+            transform: scale(1.1);
+        }
+
+        .photo-modal-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 4px solid #f3f4f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-modal-placeholder {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            border: 4px solid #f3f4f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-modal-placeholder .material-icons {
+            font-size: 8rem;
+            color: white;
+        }
+
+        .photo-modal-button {
+            background: transparent;
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .photo-modal-button:hover {
+            background: #f59e0b;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
-        <div class="header">
-            <h1>
-                <span class="material-icons">account_circle</span>
-                Meu Perfil
-            </h1>
-            <a href="dashboard.html" class="btn-back">
-                <span class="material-icons">arrow_back</span>
-                Voltar ao Dashboard
-            </a>
+        <div style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/meuperfil.png') center/cover; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 2rem; border-radius: 8px; position: relative;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
+                <!-- Título -->
+                <div style="text-align: center;">
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #ffffff;">
+                        Meu Perfil
+                    </h1>
+                    <p style="margin: 0; color: #ffffff; font-size: 0.95rem;">Gerencie suas informações pessoais e configurações</p>
+                </div>
+                
+                <!-- Botão Voltar -->
+                <div style="display: flex; gap: 1rem;">
+                    <a href="dashboard.html" style="background: #ffffff; border: 2px solid #000000; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px; color: #000000; text-decoration: none;" onmouseover="this.style.background='#f59e0b'; this.style.borderColor='#000000'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#000000'">
+                        <span class="material-icons" style="font-size: 1rem;">arrow_back</span>
+                        Voltar ao Dashboard
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Estatísticas do Usuário -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon" style="background: #10b981;">
-                    <span class="material-icons">login</span>
-                </div>
-                <div class="stat-value" id="loginCount">0</div>
-                <div class="stat-label">Total de Logins</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #3b82f6;">
-                    <span class="material-icons">schedule</span>
-                </div>
                 <div class="stat-value" id="lastLogin">--</div>
                 <div class="stat-label">Último Login</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #f59e0b;">
-                    <span class="material-icons">business_center</span>
-                </div>
                 <div class="stat-value" id="userSince">--</div>
                 <div class="stat-label">Usuário Desde</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #8b5cf6;">
-                    <span class="material-icons">verified_user</span>
-                </div>
                 <div class="stat-value" id="userStatus">Ativo</div>
                 <div class="stat-label">Status da Conta</div>
             </div>
@@ -496,7 +567,7 @@
             <!-- Cartão de Perfil -->
             <div class="profile-card">
                 <div class="profile-avatar">
-                    <div class="avatar-container">
+                    <div class="avatar-container" onclick="openPhotoModal()" style="cursor: pointer;">
                         <img id="userAvatar" class="avatar-image" style="display: none;" alt="Foto do usuário">
                         <span id="avatarPlaceholder" class="avatar-placeholder material-icons">person</span>
                         <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
@@ -504,8 +575,7 @@
                     
                     <!-- Botão de upload movido para baixo -->
                     <button class="upload-btn-bottom" onclick="document.getElementById('avatarUpload').click()">
-                        <span class="material-icons">camera_alt</span>
-                        Foto
+                        <span class="material-icons" style="font-size: 1.5rem;">camera_alt</span>
                     </button>
                 </div>
 
@@ -612,6 +682,46 @@
     <script src="../js/config.js"></script>
     <script src="../js/user-profile.js"></script>
     <script>
+        // Funções do Modal de Foto
+        function openPhotoModal() {
+            const modal = document.getElementById('photoModal');
+            const modalPhotoContainer = document.getElementById('modalPhotoContainer');
+            const userAvatar = document.getElementById('userAvatar');
+            const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+            
+            // Limpa o container
+            modalPhotoContainer.innerHTML = '';
+            
+            // Verifica se tem foto ou usa placeholder
+            if (userAvatar.style.display !== 'none' && userAvatar.src) {
+                const img = document.createElement('img');
+                img.src = userAvatar.src;
+                img.className = 'photo-modal-image';
+                img.alt = 'Foto de perfil';
+                modalPhotoContainer.appendChild(img);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'photo-modal-placeholder';
+                placeholder.innerHTML = '<span class="material-icons">person</span>';
+                modalPhotoContainer.appendChild(placeholder);
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closePhotoModal() {
+            const modal = document.getElementById('photoModal');
+            modal.style.display = 'none';
+        }
+        
+        // Fecha modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('photoModal');
+            if (event.target === modal) {
+                closePhotoModal();
+            }
+        }
+
         // Profile Page Manager
         class ProfilePageManager {
             constructor() {
@@ -950,18 +1060,40 @@
 
             loadActivityTimeline() {
                 const timeline = document.getElementById('activityTimeline');
-                const activities = [
-                    { title: 'Login realizado', description: 'Acesso ao sistema', time: '2 horas atrás', icon: 'login', color: '#10b981' },
-                    { title: 'Perfil atualizado', description: 'Dados pessoais modificados', time: '1 dia atrás', icon: 'edit', color: '#3b82f6' },
-                    { title: 'Cliente cadastrado', description: 'Novo cliente adicionado', time: '2 dias atrás', icon: 'person_add', color: '#f59e0b' },
-                    { title: 'Relatório gerado', description: 'Relatório de vendas', time: '3 dias atrás', icon: 'assessment', color: '#8b5cf6' }
-                ];
+                const userData = JSON.parse(localStorage.getItem('user'));
+                
+                if (!userData) {
+                    timeline.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 1rem;">Nenhuma atividade disponível</p>';
+                    return;
+                }
+                
+                const activities = [];
+                
+                // Adiciona informação de último login se disponível
+                if (userData.lastLogin) {
+                    activities.push({
+                        title: 'Último acesso',
+                        description: new Date(userData.lastLogin).toLocaleString('pt-BR'),
+                        time: this.getTimeAgo(new Date(userData.lastLogin))
+                    });
+                }
+                
+                // Adiciona informação de criação da conta
+                if (userData.createdAt) {
+                    activities.push({
+                        title: 'Conta criada',
+                        description: new Date(userData.createdAt).toLocaleString('pt-BR'),
+                        time: this.getTimeAgo(new Date(userData.createdAt))
+                    });
+                }
+                
+                if (activities.length === 0) {
+                    timeline.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 1rem;">Nenhuma atividade disponível</p>';
+                    return;
+                }
 
                 timeline.innerHTML = activities.map(activity => `
                     <div class="timeline-item">
-                        <div class="timeline-icon" style="background: ${activity.color};">
-                            <span class="material-icons">${activity.icon}</span>
-                        </div>
                         <div class="timeline-content">
                             <div class="timeline-title">${activity.title}</div>
                             <div class="timeline-description">${activity.description}</div>
@@ -1138,7 +1270,8 @@
 
         function deactivateAccount() {
             if (confirm('Tem certeza que deseja desativar sua conta? Esta ação pode ser irreversível.')) {
-                alert('Funcionalidade em desenvolvimento');
+                // alert('Funcionalidade em desenvolvimento');
+                showAlert('Funcionalidade em desenvolvimento', 'info');
             }
         }
 
@@ -1175,5 +1308,22 @@
             new ProfilePageManager();
         });
     </script>
+
+    <!-- Modal de Foto -->
+    <div id="photoModal" class="photo-modal">
+        <div class="photo-modal-content">
+            <button class="photo-modal-close" onclick="closePhotoModal()">
+                <span class="material-icons">close</span>
+            </button>
+            <h2 style="margin: 0 0 1.5rem 0; color: #1f2937; font-size: 1.5rem;">Foto de Perfil</h2>
+            <div id="modalPhotoContainer">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+            <button class="photo-modal-button" onclick="document.getElementById('avatarUpload').click(); closePhotoModal();">
+                <span class="material-icons">camera_alt</span>
+                Alterar Foto
+            </button>
+        </div>
+    </div>
 </body>
 </html>

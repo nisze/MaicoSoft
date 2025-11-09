@@ -52,4 +52,16 @@ public class EmailServiceStub implements IEmailService {
         log.info("EMAIL STUB: Para: {}, Assunto: {}, Corpo: {}", 
                 para, assunto, corpo.substring(0, Math.min(corpo.length(), 100)));
     }
+
+    /**
+     * Simula envio de token para reset de senha
+     */
+    @Override
+    public void enviarTokenResetSenha(String emailUsuario, String nomeUsuario, String token) {
+        log.info("EMAIL STUB: Token de reset seria enviado para:");
+        log.info("  ├─ Destinatário: {} ({})", nomeUsuario, emailUsuario);
+        log.info("  ├─ Token: {}", token);
+        log.info("  ├─ Validade: 15 minutos");
+        log.info("  └─ Assunto: Reset de Senha - Maiconsoft");
+    }
 }

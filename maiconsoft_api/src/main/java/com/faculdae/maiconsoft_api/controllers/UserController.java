@@ -3,7 +3,7 @@ package com.faculdae.maiconsoft_api.controllers;
 import com.faculdae.maiconsoft_api.dto.user.UserRequestDTO;
 import com.faculdae.maiconsoft_api.dto.LoginRequestDTO;
 import com.faculdae.maiconsoft_api.dto.user.LoginResponseDTO;
-import com.faculdae.maiconsoft_api.dto.UserResponseDTO;
+import com.faculdae.maiconsoft_api.dto.user.UserResponseDTO;
 import com.faculdae.maiconsoft_api.entities.UserRole;
 import com.faculdae.maiconsoft_api.services.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class UserController {
     @Operation(summary = "Criar novo usuário", description = "Cria um novo usuário/funcionário. Código de acesso é gerado automaticamente se não fornecido.")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequest) {
         UserResponseDTO newUser = userService.save(userRequest);
-        return ResponseEntity.created(URI.create("/api/users/" + newUser.getId())).body(newUser);
+        return ResponseEntity.created(URI.create("/api/users/" + newUser.getIdUser())).body(newUser);
     }
 
     @GetMapping

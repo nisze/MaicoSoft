@@ -103,27 +103,29 @@
     <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
         
         <!-- Header da Página -->
-        <div style="background: white; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="material-icons" style="font-size: 1.75rem; color: #3b82f6;">admin_panel_settings</span>
+        <div style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/usuarios.png') center/cover; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 2rem; border-radius: 8px; position: relative;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
+                <!-- Título -->
+                <div style="text-align: center;">
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #ffffff;">
                         Gestão de Usuários
                     </h1>
-                    <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Administração completa de usuários, perfis e permissões do sistema</p>
+                    <p style="margin: 0; color: #ffffff; font-size: 0.95rem;">Administração completa de usuários, perfis e permissões do sistema</p>
                 </div>
+                
+                <!-- Botões abaixo do título -->
                 <div style="display: flex; gap: 1rem;">
-                    <button onclick="switchUsuariosTab('resumo')" id="tab-resumo-btn" style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                    <button onclick="switchUsuariosTab('resumo')" id="tab-resumo-btn" style="background: #f59e0b; color: #000000; border: 2px solid #000000; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
                         <span class="material-icons" style="font-size: 1rem;">dashboard</span>
                         Resumo
                     </button>
                     <button onclick="switchUsuariosTab('criar')" id="tab-criar-btn" 
                            data-permission="usuarios:create"
-                           style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                           style="background: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
                         <span class="material-icons" style="font-size: 1rem;">person_add</span>
                         Criar Usuário
                     </button>
-                    <button onclick="switchUsuariosTab('lista')" id="tab-lista-btn" style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                    <button onclick="switchUsuariosTab('lista')" id="tab-lista-btn" style="background: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
                         <span class="material-icons" style="font-size: 1rem;">people</span>
                         Todos Usuários
                     </button>
@@ -135,50 +137,50 @@
         <div id="tab-resumo" class="usuarios-tab-content" style="display: block;">
             <!-- Métricas Principais -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Total de Usuários</p>
                             <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="total-usuarios">0</h3>
                         </div>
-                        <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                            <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">group</span>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">group</span>
                         </div>
                     </div>
                 </div>
 
-                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Usuários Ativos</p>
                             <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="usuarios-ativos">0</h3>
                         </div>
-                        <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                            <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">check_circle</span>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">check_circle</span>
                         </div>
                     </div>
                 </div>
 
-                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Administradores</p>
                             <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: #1f2937;" id="admins-count">0</h3>
                         </div>
-                        <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                            <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">admin_panel_settings</span>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">admin_panel_settings</span>
                         </div>
                     </div>
                 </div>
 
-                <div style="background: white; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                <div style="background: white; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div>
                             <p style="margin: 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;">Último Login</p>
                             <h3 style="margin: 0.5rem 0 0 0; font-size: 1rem; font-weight: 600; color: #1f2937;" id="ultimo-login">--</h3>
                         </div>
-                        <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                            <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">schedule</span>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">schedule</span>
                         </div>
                     </div>
                 </div>
@@ -230,10 +232,10 @@
 
         <!-- TAB: CRIAR USUÁRIO -->
         <div id="tab-criar" class="usuarios-tab-content" style="display: none;">
-            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                 <form id="novo-usuario-form" style="padding: 0;">
                     <!-- Dados do Usuário -->
-                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
                         <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
                             <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">person_add</span>
                             Informações do Usuário
@@ -242,7 +244,7 @@
                         <div style="margin-bottom: 1rem;">
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Nome Completo *</label>
-                                <input type="text" id="user-nome" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Nome completo do usuário">
+                                <input type="text" id="user-nome" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="Nome completo do usuário">
                             </div>
                         </div>
                         
@@ -255,33 +257,43 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Email *</label>
-                                <input type="email" id="user-email" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="usuario@maiconsoft.com">
+                                <input type="email" id="user-email" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="usuario@maiconsoft.com">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">CPF *</label>
-                                <input type="text" id="user-cpf" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="000.000.000-00">
+                                <input type="text" id="user-cpf" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="000.000.000-00">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Telefone</label>
-                                <input type="text" id="user-telefone" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="(11) 99999-9999">
+                                <input type="text" id="user-telefone" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="(11) 99999-9999">
                             </div>
                         </div>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Tipo de Usuário *</label>
-                                <select id="user-perfil" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white;">
+                                <select id="user-perfil" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;">
                                     <option value="">Selecione o tipo</option>
                                     <!-- Options serão carregadas dinamicamente via JavaScript -->
                                 </select>
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Senha Temporária *</label>
-                                <input type="password" id="user-senha" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Senha inicial">
+                                <div style="position: relative;">
+                                    <input type="password" id="user-senha" required style="width: 100%; padding: 0.6rem 2.5rem 0.6rem 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="Senha inicial">
+                                    <button type="button" onclick="togglePasswordVisibility('user-senha')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #6b7280; padding: 0.25rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#6b7280'">
+                                        <span class="material-icons" id="user-senha-icon" style="font-size: 1.2rem;">visibility_off</span>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Confirmar Senha *</label>
-                                <input type="password" id="user-senha-confirm" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Confirme a senha">
+                                <div style="position: relative;">
+                                    <input type="password" id="user-senha-confirm" required style="width: 100%; padding: 0.6rem 2.5rem 0.6rem 0.6rem; border: 1px solid #d1d5db; font-size: 0.9rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;" placeholder="Confirme a senha">
+                                    <button type="button" onclick="togglePasswordVisibility('user-senha-confirm')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #6b7280; padding: 0.25rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#6b7280'">
+                                        <span class="material-icons" id="user-senha-confirm-icon" style="font-size: 1.2rem;">visibility_off</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -290,17 +302,26 @@
 
                     <!-- Botões de Ação -->
                     <div style="padding: 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-                        <button type="button" onclick="limparFormularioUsuario()" style="background: #ef4444; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                        <button type="button" onclick="limparFormularioUsuario()" 
+                                style="background: transparent; color: #6b7280; border: 2px solid #d1d5db; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; border-radius: 4px; transition: all 0.2s;"
+                                onmouseover="this.style.background='#ef4444'; this.style.color='white'; this.style.borderColor='#ef4444'"
+                                onmouseout="this.style.background='transparent'; this.style.color='#6b7280'; this.style.borderColor='#d1d5db'">
                             <span class="material-icons" style="font-size: 1rem;">clear</span>
                             Limpar
                         </button>
                         
                         <div style="display: flex; gap: 0.75rem;">
-                            <button type="button" onclick="gerarSenhaAleatoria()" style="background: #f59e0b; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                            <button type="button" onclick="gerarSenhaAleatoria()" 
+                                    style="background: transparent; color: #6b7280; border: 2px solid #d1d5db; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; border-radius: 4px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#f59e0b'; this.style.color='white'; this.style.borderColor='#f59e0b'"
+                                    onmouseout="this.style.background='transparent'; this.style.color='#6b7280'; this.style.borderColor='#d1d5db'">
                                 <span class="material-icons" style="font-size: 1rem;">shuffle</span>
                                 Gerar Senha
                             </button>
-                            <button type="submit" style="background: #10b981; color: white; border: none; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <button type="submit" 
+                                    style="background: transparent; color: #6b7280; border: 2px solid #d1d5db; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 4px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#10b981'; this.style.color='white'; this.style.borderColor='#10b981'"
+                                    onmouseout="this.style.background='transparent'; this.style.color='#6b7280'; this.style.borderColor='#d1d5db'">
                                 <span class="material-icons" style="font-size: 1rem;">person_add</span>
                                 Criar Usuário
                             </button>
@@ -312,7 +333,7 @@
 
         <!-- TAB: LISTA DE USUÁRIOS -->
         <div id="tab-lista" class="usuarios-tab-content" style="display: none;">
-            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
                 <!-- Filtros e Busca -->
                 <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
@@ -553,7 +574,8 @@
             const userRole = user?.roleName?.toLowerCase();
             
             if (userRole !== 'admin' && userRole !== 'diretor') {
-                alert('Acesso negado! Apenas administradores e diretores podem acessar esta página.');
+                // alert('Acesso negado! Apenas administradores e diretores podem acessar esta página.');
+                showAlert('Acesso negado! Apenas administradores e diretores podem acessar esta página.', 'error');
                 window.location.href = 'dashboard.html';
                 return false;
             }
@@ -566,18 +588,22 @@
             const tabs = document.querySelectorAll('.usuarios-tab-content');
             tabs.forEach(tab => tab.style.display = 'none');
             
-            // Resetar todos os botões
+            // Resetar todos os botões para estado não selecionado (transparente com borda branca)
             document.getElementById('tab-resumo-btn').style.background = 'transparent';
-            document.getElementById('tab-resumo-btn').style.color = '#6b7280';
+            document.getElementById('tab-resumo-btn').style.color = '#ffffff';
+            document.getElementById('tab-resumo-btn').style.border = '2px solid #ffffff';
             document.getElementById('tab-criar-btn').style.background = 'transparent';
-            document.getElementById('tab-criar-btn').style.color = '#6b7280';
+            document.getElementById('tab-criar-btn').style.color = '#ffffff';
+            document.getElementById('tab-criar-btn').style.border = '2px solid #ffffff';
             document.getElementById('tab-lista-btn').style.background = 'transparent';
-            document.getElementById('tab-lista-btn').style.color = '#6b7280';
+            document.getElementById('tab-lista-btn').style.color = '#ffffff';
+            document.getElementById('tab-lista-btn').style.border = '2px solid #ffffff';
             
-            // Ativar tab selecionada
+            // Ativar tab selecionada (âmbar com borda preta)
             document.getElementById(`tab-${tabName}`).style.display = 'block';
-            document.getElementById(`tab-${tabName}-btn`).style.background = '#3b82f6';
-            document.getElementById(`tab-${tabName}-btn`).style.color = 'white';
+            document.getElementById(`tab-${tabName}-btn`).style.background = '#f59e0b';
+            document.getElementById(`tab-${tabName}-btn`).style.color = '#000000';
+            document.getElementById(`tab-${tabName}-btn`).style.border = '2px solid #000000';
             
             // Carregar dados específicos da tab
             if (tabName === 'resumo') {
@@ -599,7 +625,7 @@
                 // Calcular métricas
                 const total = usuarios.length;
                 const ativos = usuarios.filter(u => u.ativo === true).length;
-                const admins = usuarios.filter(u => u.role === 'ADMIN').length;
+                const admins = usuarios.filter(u => u.roleName === 'ADMIN' || u.userRole?.roleName === 'ADMIN').length;
                 
                 // Atualizar interface
                 document.getElementById('total-usuarios').textContent = total;
@@ -725,22 +751,28 @@
                     <td style="padding: 1rem; font-size: 0.9rem; color: #6b7280;">${userEmail}</td>
                     <td style="padding: 1rem; font-size: 0.8rem; color: #6b7280;">${userCode}</td>
                     <td style="padding: 1rem;">
-                        <span style="background: ${roleColor.bg}; color: ${roleColor.text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
+                        <span style="background: transparent; color: ${roleColor.text}; border: 2px solid ${roleColor.border}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
                             ${userRole}
                         </span>
                     </td>
                     <td style="padding: 1rem;">
-                        <span style="background: ${statusColor.bg}; color: ${statusColor.text}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
+                        <span style="background: transparent; color: ${statusColor.text}; border: 2px solid ${statusColor.border}; padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 4px;">
                             ${userStatus}
                         </span>
                     </td>
                     <td style="padding: 1rem;">
                         <div style="display: flex; gap: 0.5rem;">
-                            <button onclick="editUser(${userId})" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px;">
+                            <button onclick="editUser(${userId})" 
+                                    style="background: transparent; color: #6b7280; border: 2px solid #d1d5db; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#f3f4f6'; this.style.borderColor='#9ca3af'"
+                                    onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d5db'">
                                 <span class="material-icons" style="font-size: 0.9rem;">edit</span>
                                 Editar
                             </button>
-                            <button onclick="deleteUser(${userId})" style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px;">
+                            <button onclick='deleteUser(${userId}, ${JSON.stringify({nome: userName, email: userEmail, codigoAcesso: userCode, ativo: user.ativo})})' 
+                                    style="background: transparent; color: #6b7280; border: 2px solid #d1d5db; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; border-radius: 4px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#f3f4f6'; this.style.borderColor='#9ca3af'"
+                                    onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d5db'">
                                 <span class="material-icons" style="font-size: 0.9rem;">delete</span>
                                 Excluir
                             </button>
@@ -797,7 +829,8 @@
             const senhaConfirm = document.getElementById('user-senha-confirm').value;
             
             if (senha !== senhaConfirm) {
-                alert('As senhas não coincidem!');
+                // alert('As senhas não coincidem!');
+                showAlert('As senhas não coincidem!', 'error');
                 return;
             }
             
@@ -838,7 +871,8 @@
                 
             } catch (error) {
                 console.error('Erro ao criar usuário:', error);
-                alert(`Erro ao criar usuário: ${error.message}`);
+                // alert(`Erro ao criar usuário: ${error.message}`);
+                showAlert(`Erro ao criar usuário: ${error.message}`, 'error');
             }
         }
 
@@ -895,7 +929,8 @@
         // Função para copiar código para área de transferência
         function copiarCodigo(codigo) {
             navigator.clipboard.writeText(codigo).then(() => {
-                alert('Código copiado para a área de transferência!');
+                // alert('Código copiado para a área de transferência!');
+                // showAlert('Código copiado para a área de transferência!', 'success');
             }).catch(() => {
                 // Fallback para navegadores mais antigos
                 const textarea = document.createElement('textarea');
@@ -904,7 +939,8 @@
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                alert('Código copiado para a área de transferência!');
+                // alert('Código copiado para a área de transferência!');
+                // showAlert('Código copiado para a área de transferência!', 'success');
             });
         }
 
@@ -932,30 +968,44 @@
             document.getElementById('user-senha-confirm').value = senha;
         }
 
+        // Alternar visibilidade da senha
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
         // Funções auxiliares
         function getRoleColor(role) {
             switch(role?.toUpperCase()) {
                 case 'ADMIN': 
-                    return { bg: '#ede9fe', text: '#7c3aed' };
+                    return { border: '#7c3aed', text: '#7c3aed' };
                 case 'DIRETOR': 
-                    return { bg: '#fef3c7', text: '#d97706' };
+                    return { border: '#d97706', text: '#d97706' };
                 case 'FUNCIONARIO': 
-                    return { bg: '#dbeafe', text: '#1d4ed8' };
+                    return { border: '#1d4ed8', text: '#1d4ed8' };
                 case 'VENDEDOR': 
-                    return { bg: '#d1fae5', text: '#059669' };
+                    return { border: '#059669', text: '#059669' };
                 default: 
-                    return { bg: '#f3f4f6', text: '#6b7280' };
+                    return { border: '#6b7280', text: '#6b7280' };
             }
         }
 
         function getStatusColor(status) {
             switch(status?.toUpperCase()) {
                 case 'ATIVO': 
-                    return { bg: '#d1fae5', text: '#059669' };
+                    return { border: '#059669', text: '#059669' };
                 case 'INATIVO': 
-                    return { bg: '#fee2e2', text: '#dc2626' };
+                    return { border: '#dc2626', text: '#dc2626' };
                 default: 
-                    return { bg: '#d1fae5', text: '#059669' };
+                    return { border: '#059669', text: '#059669' };
             }
         }
 
@@ -1046,21 +1096,21 @@
             }
         }
 
-        async function deleteUser(id) {
-            console.log('🗑️ Preparando exclusão do usuário:', id);
+        function deleteUser(id, userData) {
+            console.log('🗑️ Preparando exclusão do usuário:', id, userData);
             
             try {
-                // Buscar dados do usuário para exibir na confirmação
-                const user = await APIService.users.getById(id);
-                console.log('📋 Dados do usuário para exclusão:', user);
-                
                 // Preencher informações no modal de confirmação
                 const userInfo = document.getElementById('deleteUserInfo');
+                if (!userInfo) {
+                    throw new Error('Elemento deleteUserInfo não encontrado');
+                }
+                
                 userInfo.innerHTML = `
-                    <strong>Nome:</strong> ${user.nome}<br>
-                    <strong>E-mail:</strong> ${user.email}<br>
-                    <strong>Código:</strong> ${user.codigoAcesso}<br>
-                    <strong>Status:</strong> ${user.ativo ? 'Ativo' : 'Inativo'}
+                    <strong>Nome:</strong> ${userData.nome || 'N/A'}<br>
+                    <strong>E-mail:</strong> ${userData.email || 'N/A'}<br>
+                    <strong>Código:</strong> ${userData.codigoAcesso || 'N/A'}<br>
+                    <strong>Status:</strong> ${userData.ativo ? 'Ativo' : 'Inativo'}
                 `;
                 
                 // Configurar botão de confirmação
@@ -1074,8 +1124,8 @@
                 modal.style.display = 'flex';
                 
             } catch (error) {
-                console.error('❌ Erro ao buscar usuário para exclusão:', error);
-                showAlert('Erro ao carregar dados do usuário: ' + error.message, 'error');
+                console.error('❌ Erro ao preparar exclusão:', error);
+                showAlert('Erro ao preparar exclusão: ' + error.message, 'error');
             }
         }
 
@@ -1134,7 +1184,7 @@
                 const result = await APIService.users.update(userId, userData);
                 console.log('✅ Usuário atualizado com sucesso:', result);
                 
-                showAlert('Usuário atualizado com sucesso!', 'success');
+                // showAlert('Usuário atualizado com sucesso!', 'success');
                 closeEditUserModal();
                 
                 // Recarregar lista de usuários
@@ -1154,7 +1204,7 @@
                 await APIService.users.delete(userId);
                 console.log('✅ Usuário excluído com sucesso');
                 
-                showAlert('Usuário excluído com sucesso!', 'success');
+                // showAlert('Usuário excluído com sucesso!', 'success');
                 closeDeleteUserModal();
                 
                 // Recarregar lista de usuários
@@ -1320,7 +1370,8 @@
             const targetUser = usuarios.find(u => u.id === userId);
             
             if (targetUser && targetUser.roleName === 'ADMIN' && currentUser.roleName !== 'ADMIN') {
-                alert('❌ Apenas administradores podem excluir outros administradores!');
+                // alert('❌ Apenas administradores podem excluir outros administradores!');
+                showAlert('Apenas administradores podem excluir outros administradores!', 'error');
                 return false;
             }
             
@@ -1538,6 +1589,26 @@
             
             // Configurar sistema de permissões
             setupPagePermissions();
+            
+            // Adicionar efeitos hover nos botões de tab
+            const tabButtons = ['tab-resumo-btn', 'tab-criar-btn', 'tab-lista-btn'];
+            tabButtons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.addEventListener('mouseenter', function() {
+                        // Se não estiver selecionado (transparente), hover branco suave
+                        if (this.style.background === 'transparent') {
+                            this.style.background = 'rgba(255, 255, 255, 0.1)';
+                        }
+                    });
+                    btn.addEventListener('mouseleave', function() {
+                        // Se não estiver selecionado, voltar para transparente
+                        if (this.style.background === 'rgba(255, 255, 255, 0.1)') {
+                            this.style.background = 'transparent';
+                        }
+                    });
+                }
+            });
             
             // Verificar se o formulário de usuários deve estar disponível
             const criarUsuarioTab = document.getElementById('tab-criar-btn');

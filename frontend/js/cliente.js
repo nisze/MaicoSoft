@@ -388,7 +388,7 @@ class ClienteManager {
             console.log('✅ AJAX GET Success:', data);
 
             this.renderClientes(data);
-            ajax.notify('Clientes carregados com sucesso!', 'success', 2000);
+            // ajax.notify('Clientes carregados com sucesso!', 'success', 2000);
             
         } catch (error) {
             console.error('Erro ao carregar clientes:', error);
@@ -1125,7 +1125,7 @@ class ClienteManager {
             this.renderClientsTable(clients);
             this.renderPagination(1, clients.length);
             
-            this.showNotification(`${clients.length} clientes carregados com sucesso`, 'success');
+            // this.showNotification(`${clients.length} clientes carregados com sucesso`, 'success');
             
         } catch (error) {
             console.error('❌ Erro ao carregar clientes:', error);

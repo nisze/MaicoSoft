@@ -415,14 +415,20 @@ const APIService = {
 
         try {
             const response = await fetch(url, config);
-            const data = await response.json();
+            
+            // Para respostas 204 (No Content), não há corpo para fazer parse
+            let data = null;
+            if (response.status !== 204 && response.headers.get('content-type')?.includes('application/json')) {
+                const text = await response.text();
+                data = text ? JSON.parse(text) : null;
+            }
 
             if (CONFIG.DEBUG) {
                 console.log('API Response:', { status: response.status, data });
             }
 
             if (!response.ok) {
-                throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
+                throw new Error(data?.message || `HTTP ${response.status}: ${response.statusText}`);
             }
 
             return data;

@@ -1,111 +1,123 @@
-# 🏗️ Maiconsoft Frontend - Sistema Navegável
+﻿#  Maiconsoft Frontend - Sistema Navegvel
 
-Frontend em HTML, CSS e JavaScript vanilla para o sistema Maiconsoft, com tema de construção civil.
+Frontend em HTML, CSS e JavaScript vanilla para o sistema Maiconsoft, com tema de construo civil.
 
-## 🚀 **DEMONSTRAÇÃO PRONTA - TESTE AGORA!**
+##  **DEMONSTRAO PRONTA - TESTE AGORA!**
 
-### **⚡ Como Testar (3 opções):**
+### ** Como Testar (3 opes):**
 
-1. **📁 Arquivo Direto:** Abra `index.html` no navegador
-2. **🌐 Live Server:** Use a extensão Live Server do VS Code
-3. **💻 Servidor Local:** Execute `python -m http.server 3000`
+1. ** Docker (Recomendado):** Execute `cd scripts && start.bat` (sistema completo na porta 3000)
+2. ** Live Server:** Use a extenso Live Server do VS Code
+3. ** Servidor Local:** Execute `python -m http.server 8000` (ou outra porta livre)
 
-### **🔑 Credenciais de Teste:**
+### ** Credenciais de Teste:**
 
-| **Usuário** | **Login** | **Senha** | **Acesso** |
+| **Usurio** | **Login** | **Senha** | **Acesso** |
 |-------------|-----------|-----------|------------|
-| **Admin** | `admin` | `123` | Dashboard + Clientes + Vendas + Relatórios |
-| **Diretor** | `diretor` | `123` | **TODAS** as páginas |
-| **Funcionário** | `funcionario` | `123` | Apenas Clientes |
+| **Admin** | `admin` | `123` | Dashboard + Clientes + Vendas + Relatrios |
+| **Diretor** | `diretor` | `123` | **TODAS** as pginas |
+| **Funcionrio** | `funcionario` | `123` | Apenas Clientes |
 
-### **🎯 Roteiro de Demonstração:**
+### ** Roteiro de Demonstrao:**
 
-#### **1️⃣ Login (`index.html`):**
-- ✅ Interface profissional com tema construção civil
-- ✅ Validação de credenciais
-- ✅ Redirecionamento automático por perfil
+#### **1 Login (`index.html`):**
+-  Interface profissional com tema construo civil
+-  Validao de credenciais
+-  Redirecionamento automtico por perfil
 
-#### **2️⃣ Dashboard (`pages/dashboard.html`):**
-- ✅ KPIs e métricas executivas
-- ✅ Ações rápidas navegáveis
-- ✅ Atividades recentes
-- ✅ Menu de navegação completo
+#### **2 Dashboard (`pages/dashboard.html`):**
+-  KPIs e mtricas executivas
+-  Aes rpidas navegveis
+-  Atividades recentes
+-  Menu de navegao completo
 
-#### **3️⃣ Clientes (`pages/clientes.html`):**
-- ✅ Formulário de cadastro com validação
-- ✅ Busca e listagem
-- ✅ Interface responsiva
+#### **3 Clientes (`pages/clientes.html`):**
+-  Formulrio de cadastro com validao
+-  Busca e listagem
+-  Interface responsiva
 
-#### **4️⃣ Vendas (`pages/vendas.html`):**
-- ✅ Gestão de vendas e orçamentos
-- ✅ Formulários profissionais
-- ✅ Tabelas organizadas
+#### **4 Vendas (`pages/vendas.html`):**
+-  Gesto de vendas e oramentos
+-  Formulrios profissionais
+-  Tabelas organizadas
 
-#### **5️⃣ Usuários (`pages/usuarios.html`):**
-- ✅ Administração de usuários (Diretor only)
-- ✅ Controle de permissões
-- ✅ Status de usuários
+#### **5 Usurios (`pages/usuarios.html`):**
+-  Administrao de usurios (Diretor only)
+-  Controle de permisses
+-  Status de usurios
 
-#### **6️⃣ Relatórios (`pages/relatorios.html`):**
-- ✅ Filtros por período
-- ✅ Gráficos e analytics
-- ✅ Exportação de dados
+#### **6 Relatrios (`pages/relatorios.html`):**
+-  Filtros por perodo
+-  Grficos e analytics
+-  Exportao de dados
 
-### **🔧 Integração Backend:**
-- **✅ API Base:** `localhost:8080/api` 
-- **✅ Endpoints:** auth, clientes, vendas, usuarios
-- **✅ Fallback:** Modo offline para desenvolvimento
+### ** Integrao Backend:**
+- ** API Base:** `localhost:8090/api` (Docker: `http://backend:8090/api`)
+- ** Endpoints:** auth, clientes, vendas, usuarios
+- ** Fallback:** Modo offline para desenvolvimento
 
 ---
 
-## 🎉 **SISTEMA PRONTO PARA DEMONSTRAÇÃO!**
+##  **SISTEMA PRONTO PARA DEMONSTRAO!**
 
-### **🚀 Iniciar Demonstração:**
+### ** Iniciar Demonstrao:**
 
 1. **Abrir arquivo:** Clique duas vezes em `index.html`
-2. **Login rápido:** Use os botões coloridos na tela de login
-3. **Navegação:** Use o menu superior para navegar entre páginas
-4. **Teste funcionalidades:** Preencha formulários, clique em botões
+2. **Login rpido:** Use os botes coloridos na tela de login
+3. **Navegao:** Use o menu superior para navegar entre pginas
+4. **Teste funcionalidades:** Preencha formulrios, clique em botes
 
-### **✨ Destaques da Demonstração:**
+### ** Destaques da Demonstrao:**
 
-- ✅ **Interface Profissional:** Tema construção civil
-- ✅ **Navegação Fluida:** Páginas separadas com menu
-- ✅ **Controle de Acesso:** Diferentes perfis e permissões
-- ✅ **Formulários Funcionais:** Validação e feedback
-- ✅ **Design Responsivo:** Funciona em desktop e mobile
-- ✅ **Integração Pronta:** Backend Spring Boot localhost:8080
+-  **Interface Profissional:** Tema construo civil
+-  **Navegao Fluida:** Pginas separadas com menu
+-  **Controle de Acesso:** Diferentes perfis e permisses
+-  **Formulrios Funcionais:** Validao e feedback
+-  **Design Responsivo:** Funciona em desktop e mobile
+-  **Integrao Pronta:** Backend Spring Boot localhost:8090
+-  **Docker Ready:** Stack completo com um comando (Frontend: 3000, Backend: 8090, DB: 5432)
 
-### **📱 Compatibilidade:**
-- ✅ Chrome, Firefox, Safari, Edge
-- ✅ Desktop e Mobile
-- ✅ Com ou sem servidor local
+### ** Compatibilidade:**
+-  Chrome, Firefox, Safari, Edge
+-  Desktop e Mobile
+-  Com ou sem servidor local
 
-**🎯 PRONTO PARA APRESENTAR AO CLIENTE!**
+** PRONTO PARA APRESENTAR AO CLIENTE!**
 
-## 📁 Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 frontend/
-├── index.html              # Página principal com todas as telas
-├── css/
-│   ├── style.css          # Estilos principais e framework
-│   ├── login.css          # Estilos específicos do login
-│   ├── dashboard.css      # Estilos do dashboard administrativo
-│   ├── cliente.css        # Estilos da gestão de clientes
-│   └── notifications.css  # Sistema de notificações
-├── js/
-│   ├── app.js            # Aplicação principal e roteamento
-│   ├── login.js          # Módulo de autenticação
-│   ├── dashboard.js      # Módulo do dashboard
-│   └── cliente.js        # Módulo de gestão de clientes
-└── README.md             # Esta documentação
+ Dockerfile              # Container Nginx para frontend
+ nginx.conf             # Configurao Nginx com proxy para backend
+ pages/                 # Pginas HTML separadas
+    base.html         # Template base
+    login.html        # Pgina de login
+    dashboard.html    # Dashboard administrativo
+    clientes.html     # Gesto de clientes
+    vendas.html       # Gesto de vendas
+    usuarios.html     # Gesto de usurios
+    relatorios.html   # Relatrios
+ css/
+    style.css         # Estilos principais
+    login.css         # Estilos do login
+    dashboard.css     # Estilos do dashboard
+    cliente.css       # Estilos da gesto de clientes
+    navigation.css    # Estilos de navegao
+ js/
+    app.js           # Aplicao principal
+    config.js        # Configurao API
+    login.js         # Mdulo de autenticao
+    dashboard.js     # Mdulo do dashboard
+    cliente.js       # Mdulo de gesto de clientes
+ images/              # Imagens do sistema
+ assets/              # Recursos adicionais
 ```
 
-## 🎨 Design System
+##  Design System
 
 ### Cores Principais
-- **Primary**: `#FF6B35` (Laranja construção)
+- **Primary**: `#FF6B35` (Laranja construo)
 - **Secondary**: `#004E89` (Azul estrutural)
 - **Accent**: `#F77F00` (Laranja vibrante)
 - **Success**: `#22C55E` (Verde)
@@ -116,29 +128,31 @@ frontend/
 - **Fonte**: Inter (Google Fonts)
 - **Pesos**: 300, 400, 500, 600, 700
 
-### Ícones
+### cones
 - **Material Icons** do Google
 
-## 🚀 Como Usar
+##  Como Usar
 
-### 1. Configuração Inicial
+### 1. Configurao Inicial
 
 1. Coloque todos os arquivos na pasta `frontend/` do seu projeto
-2. Certifique-se de que sua API Spring Boot está rodando
+2. Certifique-se de que sua API Spring Boot est rodando
 3. Abra o arquivo `index.html` em um navegador ou configure um servidor local
 
-### 2. Configuração da API
+### 2. Configurao da API
 
-No arquivo `js/app.js`, configure a URL da sua API:
+No arquivo `js/config.js`, configure a URL da sua API:
 
 ```javascript
-// Linha ~15
-this.baseURL = 'http://localhost:8080/api'; // Ajuste conforme necessário
+const API_CONFIG = {
+    BASE_URL: 'http://localhost:8090/api', // Desenvolvimento local
+    // No Docker, nginx proxy encaminha /api para backend:8090
+};
 ```
 
-### 3. Estrutura de Usuários
+### 3. Estrutura de Usurios
 
-O sistema espera usuários com os seguintes perfis:
+O sistema espera usurios com os seguintes perfis:
 - **admin**: Acesso completo ao dashboard
 - **diretor**: Acesso completo ao dashboard
 - **funcionario**: Acesso apenas ao cadastro de clientes
@@ -147,106 +161,106 @@ O sistema espera usuários com os seguintes perfis:
 
 O frontend espera os seguintes endpoints da API:
 
-#### Autenticação
-- `POST /auth/login` - Login do usuário
-- `POST /auth/logout` - Logout do usuário
+#### Autenticao
+- `POST /auth/login` - Login do usurio
+- `POST /auth/logout` - Logout do usurio
 
 #### Clientes
-- `GET /clientes` - Lista clientes (com paginação)
+- `GET /clientes` - Lista clientes (com paginao)
 - `POST /clientes` - Cria novo cliente
 - `GET /clientes/{id}` - Busca cliente por ID
 - `PUT /clientes/{id}` - Atualiza cliente
 - `DELETE /clientes/{id}` - Remove cliente
 
 #### Dashboard (Admin/Diretor)
-- `GET /dashboard/metrics` - Métricas principais
-- `GET /dashboard/charts` - Dados para gráficos
+- `GET /dashboard/metrics` - Mtricas principais
+- `GET /dashboard/charts` - Dados para grficos
 - `GET /vendas` - Lista de vendas recentes
 
-## 📱 Funcionalidades
+##  Funcionalidades
 
 ### Tela de Login
-- Layout split-screen com imagem de construção
-- Validação em tempo real dos campos
-- Redirecionamento baseado no perfil do usuário
+- Layout split-screen com imagem de construo
+- Validao em tempo real dos campos
+- Redirecionamento baseado no perfil do usurio
 - Toggle para mostrar/ocultar senha
-- Recuperação de senha
+- Recuperao de senha
 
 ### Dashboard (Admin/Diretor)
-- Métricas principais (KPIs)
-- Gráficos de vendas e produtos
+- Mtricas principais (KPIs)
+- Grficos de vendas e produtos
 - Tabelas de clientes e vendas recentes
-- Navegação por abas
-- Atualização automática dos dados
-- Exportação de relatórios
+- Navegao por abas
+- Atualizao automtica dos dados
+- Exportao de relatrios
 
-### Gestão de Clientes
-- Formulário completo de cadastro
-- Busca automática de endereço por CEP
-- Validação de CPF, email e telefone
+### Gesto de Clientes
+- Formulrio completo de cadastro
+- Busca automtica de endereo por CEP
+- Validao de CPF, email e telefone
 - Lista paginada de clientes
 - Busca e filtros
-- Edição e exclusão de clientes
+- Edio e excluso de clientes
 - Layout responsivo
 
-## 🎯 Navegação Baseada em Perfil
+##  Navegao Baseada em Perfil
 
-### Funcionário
-- Login → Página de Cadastro de Clientes
+### Funcionrio
+- Login  Pgina de Cadastro de Clientes
 - Acesso apenas a:
   - Cadastro de clientes
   - Lista de clientes
   - Busca de clientes
 
 ### Admin/Diretor
-- Login → Dashboard
+- Login  Dashboard
 - Acesso completo a:
-  - Dashboard com métricas
-  - Gestão de clientes
-  - Relatórios e gráficos
+  - Dashboard com mtricas
+  - Gesto de clientes
+  - Relatrios e grficos
 
-## 📱 Responsividade
+##  Responsividade
 
-O sistema é totalmente responsivo com breakpoints:
+O sistema  totalmente responsivo com breakpoints:
 - **Desktop**: > 1024px
 - **Tablet**: 768px - 1024px
 - **Mobile**: < 768px
 
-### Adaptações Mobile
-- Menu colapsável
+### Adaptaes Mobile
+- Menu colapsvel
 - Tabelas adaptativas
-- Formulários otimizados
-- Navegação por tabs touch-friendly
+- Formulrios otimizados
+- Navegao por tabs touch-friendly
 
-## 🛠️ Validações Implementadas
+##  Validaes Implementadas
 
 ### Campos de Cliente
-- **Nome**: Obrigatório, mínimo 2 caracteres
-- **Email**: Obrigatório, formato válido
-- **Telefone**: Obrigatório, formato brasileiro
-- **CPF**: Formato e dígitos verificadores
+- **Nome**: Obrigatrio, mnimo 2 caracteres
+- **Email**: Obrigatrio, formato vlido
+- **Telefone**: Obrigatrio, formato brasileiro
+- **CPF**: Formato e dgitos verificadores
 - **CEP**: Formato brasileiro (00000-000)
 
-### Integração CEP
-- Busca automática via API ViaCEP
-- Preenchimento automático do endereço
+### Integrao CEP
+- Busca automtica via API ViaCEP
+- Preenchimento automtico do endereo
 - Tratamento de erros
 
-## 🔧 Customização
+##  Customizao
 
 ### Cores
-Edite as variáveis CSS no arquivo `css/style.css`:
+Edite as variveis CSS no arquivo `css/style.css`:
 
 ```css
 :root {
     --primary: #FF6B35;
     --secondary: #004E89;
-    /* ... outras variáveis */
+    /* ... outras variveis */
 }
 ```
 
 ### Logotipo
-Substitua o ícone Material no header por sua logo:
+Substitua o cone Material no header por sua logo:
 
 ```html
 <!-- Substitua esta linha no index.html -->
@@ -254,62 +268,62 @@ Substitua o ícone Material no header por sua logo:
 ```
 
 ### Textos e Labels
-Todos os textos estão em português e podem ser facilmente alterados nos arquivos HTML e JS.
+Todos os textos esto em portugus e podem ser facilmente alterados nos arquivos HTML e JS.
 
-## 🚨 Tratamento de Erros
+##  Tratamento de Erros
 
 O sistema inclui tratamento completo de erros:
-- Conexão com a API
-- Validação de formulários
+- Conexo com a API
+- Validao de formulrios
 - Estados de carregamento
-- Mensagens de feedback para o usuário
+- Mensagens de feedback para o usurio
 - Fallbacks para dados mockados em desenvolvimento
 
-## 📈 Performance
+##  Performance
 
-### Otimizações Implementadas
-- CSS com variáveis customizadas
+### Otimizaes Implementadas
+- CSS com variveis customizadas
 - JavaScript modular
 - Lazy loading de dados
 - Debounce em buscas
-- Cache de autenticação
+- Cache de autenticao
 
 ### Melhorias Sugeridas
-- Minificação dos arquivos CSS/JS
-- Compressão de imagens
+- Minificao dos arquivos CSS/JS
+- Compresso de imagens
 - Service Worker para cache offline
-- Lazy loading de módulos JS
+- Lazy loading de mdulos JS
 
-## 🔐 Segurança
+##  Segurana
 
 ### Medidas Implementadas
-- Validação client-side e server-side
-- Token JWT para autenticação
-- Sanitização de inputs
-- Prevenção de XSS básica
+- Validao client-side e server-side
+- Token JWT para autenticao
+- Sanitizao de inputs
+- Preveno de XSS bsica
 
-### Recomendações
+### Recomendaes
 - Implementar CSP (Content Security Policy)
 - Validar tokens no servidor
 - Rate limiting para login
-- HTTPS obrigatório em produção
+- HTTPS obrigatrio em produo
 
-## 🤝 Contribuição
+##  Contribuio
 
 Para contribuir com o projeto:
-1. Mantenha o padrão de código estabelecido
+1. Mantenha o padro de cdigo estabelecido
 2. Documente novas funcionalidades
 3. Teste em diferentes dispositivos
-4. Siga as convenções de nomenclatura
+4. Siga as convenes de nomenclatura
 
-## 📞 Suporte
+##  Suporte
 
-Para dúvidas sobre implementação:
+Para dvidas sobre implementao:
 1. Verifique os logs do console do navegador
-2. Confirme se a API está respondendo corretamente
+2. Confirme se a API est respondendo corretamente
 3. Teste com dados mockados primeiro
-4. Verifique a configuração de CORS na API
+4. Verifique a configurao de CORS na API
 
 ---
 
-**Desenvolvido com ❤️ para o setor de construção civil**
+**Desenvolvido com  para o setor de construo civil**

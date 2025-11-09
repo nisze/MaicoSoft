@@ -163,6 +163,7 @@ class LoginManager {
                     codigoAcesso: response.codigoAcesso,
                     tipoUsuario: response.tipoUsuario,
                     roleName: response.tipoUsuario,    // Manter compatibilidade 
+                    profilePhotoPath: response.profilePhotoPath, // Incluir caminho da foto
                     ativo: true, // Usuário logado com sucesso significa que está ativo
                     loginTime: new Date().toISOString()
                 };

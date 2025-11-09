@@ -19,7 +19,7 @@ ON CONFLICT (id_role) DO NOTHING;
 -- ===============================
 -- Usuário: admin@maiconsoft.com (sem autenticação)
 INSERT INTO users (id_user, codigo_acesso, nome, email, cpf, telefone, id_role, senha, created_at, updated_at) VALUES 
-(1, 'ADM001', 'Administrador Sistema', 'admin@maiconsoft.com', '12345678901', '(11) 99999-9999', 1, '$2a$10$Xl0yhvzLIaJCDdKBS0Lld.bnbubE27U0UMcgnvn8hSu.KJ8rA3.hC', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(1, 'ADM001', 'Administrador Sistema', 'admin@maiconsoft.com', '12345678901', '(11) 99999-9999', 1, '$2a$10$gI0mWhw4WoGjt3kKtSLdGe8s/rduhqbNGYgOQqhBgE3mvS1oL9N3u', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (id_user) DO NOTHING;
 
 -- ===============================

@@ -183,4 +183,32 @@ public class EmailService implements IEmailService {
             log.error("Erro ao enviar email para {}: {}", para, e.getMessage(), e);
         }
     }
+
+    /**
+     * Envia token para reset de senha
+     */
+    @Override
+    public void enviarTokenResetSenha(String emailUsuario, String nomeUsuario, String token) {
+        try {
+            Context context = new Context();
+            context.setVariable("nomeUsuario", nomeUsuario);
+            context.setVariable("token", token);
+
+            String htmlContent = templateEngine.process("email/reset-senha", context);
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(emailUsuario);
+            helper.setSubject("Reset de Senha - Maiconsoft");
+            helper.setText(htmlContent, true);
+
+            mailSender.send(mimeMessage);
+            log.info("Email de reset de senha enviado para: {}", emailUsuario);
+        } catch (MessagingException e) {
+            log.error("Erro ao enviar email de reset para {}: {}", emailUsuario, e.getMessage(), e);
+            throw new RuntimeException("Erro ao enviar email de reset de senha", e);
+        }
+    }
 }

@@ -341,11 +341,16 @@ public class VendaService {
         Cliente cliente = clienteService.findEntityById(vendaRequest.clienteId());
         venda.setCliente(cliente);
         
-        // Processar cupom se fornecido
-        Cupom cupom = null;
+        // Processar cupom - PRESERVAR CUPOM EXISTENTE se não vier novo cupom no request
+        Cupom cupom = venda.getCupom(); // Manter cupom existente por padrão
         if (vendaRequest.cupomCodigo() != null && !vendaRequest.cupomCodigo().trim().isEmpty()) {
             cupom = cupomService.findByCodigo(vendaRequest.cupomCodigo().trim());
-            log.info("Cupom aplicado: {} - {}%", cupom.getCodigo(), cupom.getDescontoPercentual());
+            log.info("Cupom aplicado/atualizado: {} - {}%", cupom.getCodigo(), cupom.getDescontoPercentual());
+        } else {
+            // Se não veio cupom no request, preservar o cupom existente
+            if (cupom != null) {
+                log.info("Preservando cupom existente: {} - {}%", cupom.getCodigo(), cupom.getDescontoPercentual());
+            }
         }
         venda.setCupom(cupom);
         
@@ -365,7 +370,7 @@ public class VendaService {
         venda.setDataVenda(vendaRequest.dataVenda());
         venda.setObservacao(vendaRequest.observacao());
         
-        // Recalcular valores
+        // Recalcular valores com o cupom (existente ou novo)
         BigDecimal valorDesconto = BigDecimal.ZERO;
         if (cupom != null) {
             valorDesconto = calcularDesconto(vendaRequest.valorBruto(), cupom);
@@ -374,7 +379,9 @@ public class VendaService {
         venda.setValorTotal(vendaRequest.valorBruto().subtract(valorDesconto));
         
         Venda vendaSalva = vendaRepository.save(venda);
-        log.info("Venda atualizada com sucesso - ID: {} - Status final: {}", vendaSalva.getIdVenda(), vendaSalva.getStatus());
+        log.info("Venda atualizada com sucesso - ID: {} - Status final: {} - Cupom: {}", 
+                 vendaSalva.getIdVenda(), vendaSalva.getStatus(), 
+                 vendaSalva.getCupom() != null ? vendaSalva.getCupom().getCodigo() : "Nenhum");
         
         return vendaMapper.apply(vendaSalva);
     }

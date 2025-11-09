@@ -24,4 +24,9 @@ public interface IEmailService {
      * Envia email genérico
      */
     void enviarEmail(String para, String assunto, String corpo);
+
+    /**
+     * Envia token para reset de senha
+     */
+    void enviarTokenResetSenha(String emailUsuario, String nomeUsuario, String token);
 }
