@@ -1,33 +1,32 @@
-# ===============================
+﻿# ===============================
 # MAICONSOFT FRONTEND - DOCKERFILE
 # ===============================
+
 FROM nginx:alpine
 
-# Instalar dependências necessárias
-RUN apk add --no-cache \
-    curl \
-    sed
+# Instalar wget para healthcheck
+RUN apk add --no-cache wget
 
 # Remover configuração padrão do nginx
-RUN rm /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copiar arquivos do frontend
+COPY pages /usr/share/nginx/html/pages
+COPY css /usr/share/nginx/html/css
+COPY js /usr/share/nginx/html/js
+COPY images /usr/share/nginx/html/images
+COPY assets /usr/share/nginx/html/assets
+
+# Criar um index.html de redirecionamento para a página de login
+RUN echo '<!DOCTYPE html>' > /usr/share/nginx/html/index.html && \
+    echo '<html><head>' >> /usr/share/nginx/html/index.html && \
+    echo '<meta http-equiv="refresh" content="0; url=/pages/login.html">' >> /usr/share/nginx/html/index.html && \
+    echo '</head><body></body></html>' >> /usr/share/nginx/html/index.html
 
 # Copiar configuração customizada do nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar arquivos do frontend
-COPY . /usr/share/nginx/html/
-
-# Criar script para substituir variáveis de ambiente
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-# Expor porta
+# Expor porta 80
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:80 || exit 1
-
-# Comando de inicialização
-ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
