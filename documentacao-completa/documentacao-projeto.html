@@ -1,0 +1,973 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maiconsoft - Documentação Completa do Projeto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: A4;
+            margin: 25mm 20mm 25mm 20mm;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px 0;
+            background: #e0e0e0;
+            counter-reset: page;
+        }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm 20mm 20mm 20mm;
+            margin: 0 auto 10mm auto;
+            background: white;
+            position: relative;
+            page-break-after: always;
+            box-sizing: border-box;
+        }
+        
+        .page:last-child {
+            page-break-after: auto;
+        }
+        
+        @media screen {
+            .page {
+                box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+                position: relative;
+            }
+            
+            .page::before {
+                content: attr(data-page);
+                position: absolute;
+                top: -25px;
+                right: 10px;
+                background: #333;
+                color: white;
+                padding: 5px 15px;
+                border-radius: 3px;
+                font-size: 11pt;
+                font-weight: bold;
+            }
+            
+            .page.capa::before {
+                content: "CAPA";
+            }
+        }
+        
+        .header-page {
+            width: 100%;
+            margin-bottom: 10mm;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 3mm;
+            margin-top: -5mm;
+        }
+        
+        .header-page img {
+            width: 100%;
+            height: 30mm;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .footer-page {
+            position: absolute;
+            bottom: 15mm;
+            left: 20mm;
+            right: 20mm;
+            text-align: center;
+            font-size: 10pt;
+            border-top: 1px solid #ccc;
+            padding-top: 3mm;
+        }
+        
+        .page:not(.capa) .footer-page::before {
+            counter-increment: page;
+            content: "Página " counter(page);
+        }
+        
+        .container {
+            background: white;
+            padding: 0;
+        }
+        
+        .capa {
+            text-align: center;
+            padding-top: 80mm;
+            counter-reset: page 0;
+        }
+        
+        .capa h1 {
+            font-size: 28pt;
+            margin-bottom: 10mm;
+            border: none;
+        }
+        
+        .capa .subtitle {
+            font-size: 16pt;
+            margin: 15mm 0;
+            line-height: 1.4;
+        }
+        
+        .capa .info {
+            margin-top: 60mm;
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+        
+        .capa .info p {
+            margin: 5px 0;
+        }
+        
+        h1 {
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 24pt;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        h2 {
+            color: #000;
+            margin-top: 15mm;
+            margin-bottom: 10mm;
+            font-size: 16pt;
+            font-weight: bold;
+            page-break-after: avoid;
+            border-bottom: 1px solid #000;
+            padding-bottom: 3mm;
+        }
+        
+        h3 {
+            color: #000;
+            margin-top: 10mm;
+            margin-bottom: 5mm;
+            font-size: 13pt;
+            font-weight: bold;
+        }
+        
+        h4 {
+            color: #000;
+            margin-top: 8mm;
+            margin-bottom: 4mm;
+            font-size: 11pt;
+            font-weight: bold;
+            font-style: italic;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            border-bottom: 3px double #000;
+        }
+        
+        .subtitle {
+            color: #000;
+            font-size: 14pt;
+            margin-top: 15px;
+            font-weight: normal;
+        }
+        
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .team-member {
+            background: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        
+        .team-member h4 {
+            color: #000;
+            margin-top: 0;
+            font-size: 11pt;
+        }
+        
+        .team-member .role {
+            color: #000;
+            font-weight: bold;
+            margin: 5px 0;
+            font-size: 10pt;
+        }
+        
+        .team-member .responsibilities {
+            color: #333;
+            font-size: 10pt;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 5px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            color: #000;
+            font-size: 10pt;
+        }
+        
+        pre {
+            background: #f9f9f9;
+            color: #000;
+            padding: 15px;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 10pt;
+        }
+        
+        pre code {
+            background: none;
+            color: #000;
+            padding: 0;
+            border: none;
+        }
+        
+        .info-box {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            border-left: 3px solid #666;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            border-left: 3px solid #666;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            border-left: 3px solid #666;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .command-line {
+            background: #f5f5f5;
+            color: #000;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: #000;
+            text-decoration: underline;
+        }
+        
+        a:hover {
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f0f0f0;
+            color: #000;
+            font-weight: bold;
+            border: 1px solid #000;
+        }
+        
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        td {
+            font-size: 10pt;
+        }
+        
+        .sumario {
+            padding: 0;
+        }
+        
+        .sumario h2 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 18pt;
+            margin-bottom: 20mm;
+            border: none;
+        }
+        
+        .sumario-item {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11pt;
+        }
+        
+        .sumario-item-1 {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .sumario-item-2 {
+            margin-left: 15px;
+        }
+        
+        .sumario-item-3 {
+            margin-left: 30px;
+        }
+        
+        .sumario-dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted #000;
+            margin: 0 10px;
+            height: 0.8em;
+        }
+        
+        .screenshot {
+            max-width: 90%;
+            border: 1px solid #000;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .screenshot-container {
+            text-align: center;
+            margin: 30px 0;
+            page-break-inside: avoid;
+        }
+        
+        .screenshot-caption {
+            color: #000;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        
+        p {
+            text-indent: 0;
+            font-size: 11pt;
+            margin-bottom: 8pt;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            font-size: 11pt;
+        }
+        
+        @media print {
+            body {
+                background: white !important;
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                padding: 0;
+            }
+            
+            .page {
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm 20mm 20mm 20mm;
+                margin: 0 !important;
+                box-shadow: none !important;
+                page-break-after: always;
+                background: white !important;
+            }
+            
+            .page:last-child {
+                page-break-after: auto;
+            }
+            
+            .header-page {
+                margin-top: -5mm;
+            }
+            
+            .header-page img {
+                height: 20mm;
+            }
+            
+            pre, .command-line, .screenshot-container {
+                page-break-inside: avoid;
+            }
+            
+            h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            
+            .screenshot {
+                max-width: 70%;
+            }
+            
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+            
+            .footer-page {
+                border-top: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- CAPA -->
+        <div class="page capa" data-page="CAPA">
+            <h1>MAICOSOFT</h1>
+            <p class="subtitle">Sistema de Gestão Empresarial<br>para Construção Civil</p>
+            <p class="subtitle">Documentação do Projeto</p>
+            <div class="info">
+                <p><strong>Equipe:</strong></p>
+                <p>Denise Korgiski de Oliveira</p>
+                <p>João Vinicius Fonseca Diniz</p>
+                <p>Luiz Antonio Pereira Lima</p>
+                <p>Leandro Nicolas Silveira Gonçalves</p>
+            </div>
+        </div>
+
+        <!-- SUMÁRIO -->
+        <div class="page" data-page="PÁG. 1">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="sumario">
+                <h2>SUMÁRIO</h2>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>1. EQUIPE DE DESENVOLVIMENTO</span>
+                    <span class="sumario-dots"></span>
+                    <span>2</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>2. PROBLEMA E SOLUÇÃO</span>
+                    <span class="sumario-dots"></span>
+                    <span>3</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>2.1 Problema Identificado</span>
+                    <span class="sumario-dots"></span>
+                    <span>3</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>2.2 Solução Proposta</span>
+                    <span class="sumario-dots"></span>
+                    <span>3</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>3. CONFIGURAÇÃO DOCKER E WSL</span>
+                    <span class="sumario-dots"></span>
+                    <span>4</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>3.1 Instalação do Windows Terminal</span>
+                    <span class="sumario-dots"></span>
+                    <span>4</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>3.2 Instalação do WSL</span>
+                    <span class="sumario-dots"></span>
+                    <span>4</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>3.3 Configuração do Ambiente Linux</span>
+                    <span class="sumario-dots"></span>
+                    <span>6</span>
+                </div>
+                <div class="sumario-item sumario-item-3">
+                    <span>3.3.1 Instalar GIT no Ubuntu</span>
+                    <span class="sumario-dots"></span>
+                    <span>6</span>
+                </div>
+                <div class="sumario-item sumario-item-3">
+                    <span>3.3.2 Instalar Docker no Ubuntu</span>
+                    <span class="sumario-dots"></span>
+                    <span>6</span>
+                </div>
+                <div class="sumario-item sumario-item-2">
+                    <span>3.4 Executando o Projeto com Docker</span>
+                    <span class="sumario-dots"></span>
+                    <span>9</span>
+                </div>
+                <div class="sumario-item sumario-item-3">
+                    <span>3.4.1 Estrutura Docker do Projeto</span>
+                    <span class="sumario-dots"></span>
+                    <span>9</span>
+                </div>
+                <div class="sumario-item sumario-item-3">
+                    <span>3.4.2 Criar arquivo docker-compose.yml (WSL)</span>
+                    <span class="sumario-dots"></span>
+                    <span>9</span>
+                </div>
+                <div class="sumario-item sumario-item-3">
+                    <span>3.4.3 Comandos Docker Essenciais</span>
+                    <span class="sumario-dots"></span>
+                    <span>9</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>4. BANCO DE DADOS</span>
+                    <span class="sumario-dots"></span>
+                    <span>9</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>5. BACKEND - API SPRING BOOT</span>
+                    <span class="sumario-dots"></span>
+                    <span>10</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>6. FRONTEND - INTERFACE WEB</span>
+                    <span class="sumario-dots"></span>
+                    <span>11</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>7. FUNCIONALIDADES DO SISTEMA</span>
+                    <span class="sumario-dots"></span>
+                    <span>12</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>8. DEPLOY E PRODUÇÃO</span>
+                    <span class="sumario-dots"></span>
+                    <span>13</span>
+                </div>
+                
+                <div class="sumario-item sumario-item-1">
+                    <span>9. RESOLUÇÃO DE PROBLEMAS</span>
+                    <span class="sumario-dots"></span>
+                    <span>14</span>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- Página 2: Equipe de Desenvolvimento -->
+        <div class="page" data-page="2">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho Maicosoft">
+            </div>
+            
+            <div class="content-page">
+                <h2>1. EQUIPE DE DESENVOLVIMENTO</h2>
+            
+                <div class="team">
+                    <div class="team-member">
+                        <h4>João Vinícius Fonseca Diniz</h4>
+                        <p class="role">Líder do Projeto</p>
+                        <p class="responsibilities">Gestão, Planejamento, Organização</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h4>Denise Korgiski de Oliveira</h4>
+                        <p class="role">Dev Full Stack / DBA</p>
+                        <p class="responsibilities">Backend, Banco de Dados, Arquitetura</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h4>Luiz Antonio Pereira Lima</h4>
+                        <p class="role">Dev Front-end</p>
+                        <p class="responsibilities">Interface, UX/UI, Responsividade</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h4>Leandro Nicolas Silveira Gonçalves</h4>
+                        <p class="role">QA Specialist</p>
+                        <p class="responsibilities">Testes, Qualidade, Validação</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- Página 3: Problema e Solução -->
+        <div class="page" data-page="3">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho Maicosoft">
+            </div>
+            
+            <div class="content-page">
+                <h2>2. PROBLEMA E SOLUÇÃO</h2>
+                
+                <h3>2.1 Problema Identificado</h3>
+                <p>
+                    A Maicosoft enfrenta desafios na gestão de seus processos comerciais, incluindo:
+                </p>
+                <ul>
+                    <li>Controle manual e descentralizado de vendas</li>
+                    <li>Dificuldade no acompanhamento de clientes e histórico de compras</li>
+                    <li>Gestão inadequada de cupons promocionais</li>
+                    <li>Falta de relatórios consolidados para tomada de decisão</li>
+                    <li>Processos operacionais lentos e suscetíveis a erros</li>
+                </ul>
+                
+                <h3>2.2 Solução Proposta</h3>
+                <p>
+                    Sistema web integrado que oferece:
+                </p>
+                <ul>
+                    <li><strong>Gestão Completa de Clientes:</strong> Cadastro, edição e histórico detalhado</li>
+                    <li><strong>Controle de Vendas:</strong> Registro e acompanhamento de todas as transações</li>
+                    <li><strong>Sistema de Cupons:</strong> Criação e validação de promoções</li>
+                    <li><strong>Dashboard Analítico:</strong> Visualização em tempo real de indicadores</li>
+                    <li><strong>Relatórios Gerenciais:</strong> Exportação de dados para análise</li>
+                    <li><strong>Gestão de Usuários:</strong> Controle de acesso e perfis</li>
+                </ul>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 4: DOCKER E WSL - PARTE 1 -->
+        <div class="page" data-page="PÁG. 4">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h2>3. CONFIGURAÇÃO DOCKER E WSL</h2>
+            
+                <p>
+                    O projeto utiliza <strong>Docker</strong> para containerização, garantindo portabilidade e 
+                    consistência entre ambientes de desenvolvimento e produção. Para Windows, utilizamos o 
+                    <strong>WSL (Windows Subsystem for Linux)</strong> para evitar o uso do Docker Desktop.
+                </p>
+
+                <h3>3.1 Instalação do Windows Terminal</h3>
+                <p>Primeiro, instale o Windows Terminal para uma melhor experiência com linha de comando:</p>
+                <div class="info-box">
+                    <strong>Link de Download:</strong><br>
+                    <a href="https://apps.microsoft.com/detail/9n0dx20hk701" target="_blank">
+                        https://apps.microsoft.com/detail/9n0dx20hk701
+                    </a>
+                </div>
+                
+                <div class="screenshot-container">
+                    <img src="images/Imagem1.png" alt="Windows Terminal" class="screenshot">
+                    <p class="screenshot-caption">Figura 1: Windows Terminal instalado</p>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 5: DOCKER E WSL - PARTE 2 -->
+        <div class="page" data-page="PÁG. 5">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h3>3.2 Instalação do WSL</h3>
+                <p>
+                    O WSL permite executar um ambiente Linux diretamente no Windows, sendo essencial para 
+                    desenvolvimento com Docker sem overhead do Docker Desktop.
+                </p>
+                
+                <h4>Passo 1: Instalar WSL</h4>
+                <div class="command-line">
+                    wsl --install
+                </div>
+                
+                <h4>Passo 2: Instalar Ubuntu</h4>
+                <div class="command-line">
+                    wsl --install -d Ubuntu
+                </div>
+                
+                <h4>Passo 3: Definir Ubuntu como padrão</h4>
+                <div class="command-line">
+                    wsl --set-default Ubuntu
+                </div>
+                
+                <div class="info-box">
+                    <strong>Documentação Oficial:</strong><br>
+                    <a href="https://learn.microsoft.com/pt-br/windows/wsl/install" target="_blank">
+                        https://learn.microsoft.com/pt-br/windows/wsl/install
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 6: DOCKER E WSL - PARTE 3 -->
+        <div class="page" data-page="PÁG. 6">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h3>3.2 Instalação do WSL (continuação)</h3>
+                
+                <div class="screenshot-container">
+                    <img src="images/Imagem2.png" alt="Ubuntu no Windows Terminal" class="screenshot">
+                    <p class="screenshot-caption">Figura 2: Acessando Ubuntu via Windows Terminal</p>
+                </div>
+                
+                <div class="screenshot-container">
+                    <img src="images/Imagem3.png" alt="Ubuntu rodando no WSL" class="screenshot">
+                    <p class="screenshot-caption">Figura 3: Ambiente Ubuntu rodando no WSL</p>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 7: DOCKER E WSL - PARTE 4 -->
+        <div class="page" data-page="PÁG. 7">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h3>3.3 Configuração do Ambiente Linux</h3>
+                
+                <h4>3.3.1 Instalar GIT no Ubuntu</h4>
+                <p>Após abrir o Ubuntu no Windows Terminal, instale o GIT:</p>
+                <pre><code># Atualizar lista de pacotes
+sudo apt-get update
+
+# Instalar GIT
+sudo apt-get install git-all</code></pre>
+
+                <h4>3.3.2 Instalar Docker no Ubuntu</h4>
+                <p>Siga o guia oficial de instalação do Docker no Ubuntu:</p>
+                <div class="info-box">
+                    <strong>Documentação Oficial:</strong><br>
+                    <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">
+                        https://docs.docker.com/engine/install/ubuntu/
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 8: DOCKER E WSL - PARTE 5 -->
+        <div class="page" data-page="PÁG. 8">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h3>3.3.2 Instalar Docker no Ubuntu (continuação)</h3>
+                
+                <pre><code># Adicionar repositorio Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu  stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Instalar Docker
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Permitir usar Docker sem sudo
+sudo usermod -aG docker $USER
+
+# Reiniciar para aplicar permissões
+exit
+# Abra o terminal novamente</code></pre>
+
+                <div class="warning-box">
+                    <strong>Importante:</strong> Após executar o comando <code>usermod</code>, é necessário 
+                    reiniciar o terminal ou fazer logout/login para que as permissões sejam aplicadas.
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 9: DOCKER E WSL - PARTE 6 -->
+        <div class="page" data-page="PÁG. 9">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h3>3.4 Executando o Projeto com Docker</h3>
+                
+                <h4>3.4.1 Estrutura Docker do Projeto</h4>
+                <p>O projeto possui uma stack completa com 3 containers:</p>
+                
+                <table>
+                    <tr>
+                        <th>Container</th>
+                        <th>Imagem</th>
+                        <th>Porta</th>
+                        <th>Descrição</th>
+                    </tr>
+                    <tr>
+                        <td>postgres</td>
+                        <td>postgres:15-alpine</td>
+                        <td>5432</td>
+                        <td>Banco de dados PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td>backend</td>
+                        <td>Custom (Spring Boot)</td>
+                        <td>8090</td>
+                        <td>API REST Java</td>
+                    </tr>
+                    <tr>
+                        <td>frontend</td>
+                        <td>nginx:alpine</td>
+                        <td>3000</td>
+                        <td>Servidor web Nginx</td>
+                    </tr>
+                </table>
+
+                <h4>3.4.2 Criar arquivo docker-compose.yml (WSL)</h4>
+                <p>No ambiente WSL/Linux, é necessário criar manualmente o arquivo de configuração:</p>
+                
+                <pre><code># Navegar até a pasta do projeto
+cd ~/projetos/MAICOSOFT
+
+# Criar o arquivo docker-compose.yml
+touch docker-compose.yml
+
+# Editar o arquivo com nano
+nano docker-compose.yml</code></pre>
+
+                <div class="info-box">
+                    <strong>Nota:</strong> Se você estiver usando <strong>Docker Desktop no Windows</strong>, 
+                    o arquivo <code>docker-compose.yml</code> já existe na raiz do projeto e este passo 
+                    não é necessário. Esta etapa é específica para o ambiente WSL com Docker nativo do Linux.
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 10: DOCKER E WSL - PARTE 7 -->
+        <div class="page" data-page="PÁG. 10">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <h4>3.4.3 Comandos Docker Essenciais</h4>
+                
+                <pre><code># Iniciar todos os containers
+docker compose up -d
+
+# Ver status dos containers
+docker ps
+
+# Ver logs de um container
+docker logs -f maiconsoft-backend</code></pre>
+                
+                <h4>3.4.3 Comandos Docker Essenciais (continuação)</h4>
+                
+                <pre><code># Parar todos os containers
+docker compose down
+
+# Parar e remover volumes (apaga dados)
+docker compose down -v
+
+# Reconstruir containers
+docker compose up -d --build
+
+# Acessar terminal de um container
+docker exec -it maiconsoft-postgres bash</code></pre>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PÁGINA 11: DOCKER E WSL - PARTE 8 -->
+        <div class="page" data-page="PÁG. 11">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <div class="content-page">
+                <div class="screenshot-container">
+                    <img src="images/TesteContainerSql.png" alt="Container do Banco de Dados" class="screenshot">
+                    <p class="screenshot-caption">Figura 4: Container do banco de dados criado</p>
+                </div>
+                
+                <h4>Scripts Prontos</h4>
+                
+                <div class="success-box">
+                    <strong>Scripts Prontos:</strong> O projeto inclui scripts automatizados na pasta 
+                    <code>scripts/</code> para facilitar o gerenciamento:
+                    <ul style="margin-top: 10px;">
+                        <li><code>start.bat</code> - Inicia todos os containers</li>
+                        <li><code>stop.bat</code> - Para todos os containers</li>
+                        <li><code>logs.bat</code> - Mostra logs em tempo real</li>
+                        <li><code>status.bat</code> - Exibe status e recursos</li>
+                        <li><code>rebuild.bat</code> - Reconstrói os containers</li>
+                        <li><code>reset.bat</code> - Reset completo do sistema</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-page"></div>
+        </div>
+
+        <!-- PLACEHOLDER PARA PROXIMAS SECOES -->
+        <div class="page" data-page="PÁG. X">
+            <div class="header-page">
+                <img src="images/cabecario.png" alt="Cabeçalho">
+            </div>
+            
+            <p style="color: #999; font-style: italic; margin-top: 50px; text-align: center;">
+                [Continuação da documentação será adicionada nas próximas seções...]
+            </p>
+            
+            <div class="footer-page"></div>
+        </div>
+
+    </div>
+</body>
+</html>
