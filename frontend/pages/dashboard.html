@@ -18,13 +18,40 @@
     <link rel="stylesheet" href="../css/navigation.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/notifications.css">
+    
+    <style>
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+        
+        /* Responsividade do Hero */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 300px !important;
+            }
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            .hero-subtitle {
+                font-size: 1rem !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Container de Alertas -->
     <div id="alert-container"></div>
 
     <!-- Navigation Bar -->
-    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8); border-bottom: 2px solid #f59e0b;">
+    <nav style="background: #000000; padding: 1rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); border-bottom: 3px solid #F59E0B;">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
             <div style="display: flex; align-items: center;">
                 <a href="dashboard.html" style="text-decoration: none;">
@@ -32,36 +59,36 @@
                 </a>
             </div>
             <div style="display: flex; gap: 0.5rem;">
-                <a href="dashboard.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #f59e0b; font-weight: 600; border-radius: 6px;">
+                <a href="dashboard.html" style="color: #000000; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; background: #F59E0B; font-weight: 600; border-radius: 6px; transition: all 0.3s;">
                     <span class="material-icons" style="font-size: 1.1rem;">dashboard</span>
                     Dashboard
                 </a>
-                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                <a href="clientes.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='transparent'">
                     <span class="material-icons" style="font-size: 1.1rem;">people</span>
                     Clientes
                 </a>
-                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                <a href="vendas.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='transparent'">
                     <span class="material-icons" style="font-size: 1.1rem;">trending_up</span>
                     Vendas
                 </a>
-                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                <a href="cupons.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='transparent'">
                     <span class="material-icons" style="font-size: 1.1rem;">local_offer</span>
                     Cupons
                 </a>
-                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                <a href="usuarios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='transparent'">
                     <span class="material-icons" style="font-size: 1.1rem;">group</span>
                     Usuários
                 </a>
-                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='transparent'">
+                <a href="relatorios.html" style="color: #ffffff; text-decoration: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: all 0.3s; border-radius: 6px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='transparent'">
                     <span class="material-icons" style="font-size: 1.1rem;">assessment</span>
                     Relatórios
                 </a>
                 
                 <!-- Menu do Usuário -->
                 <div style="position: relative; display: inline-block;">
-                    <button id="userMenuBtn" onclick="toggleUserMenu()" style="background: #333333; color: #ffffff; border: none; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='#444444'" onmouseout="this.style.background='#333333'">
+                    <button id="userMenuBtn" onclick="toggleUserMenu()" style="background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; border-radius: 6px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
                         <!-- Avatar do usuário -->
-                        <div id="userAvatarNav" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #ffffff;">
+                        <div id="userAvatarNav" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #F59E0B;">
                             <img id="userAvatarImage" style="width: 100%; height: 100%; object-fit: cover; display: none;" alt="Foto do usuário">
                             <span id="userAvatarPlaceholder" class="material-icons" style="font-size: 1rem; color: white;">person</span>
                         </div>
@@ -97,25 +124,55 @@
         </div>
     </nav>
 
+    <!-- Hero Banner Section -->
+    <div style="position: relative; height: 400px; overflow: hidden; background: #1a1a1a;">
+        <!-- Imagem de fundo - VOCÊ PODE SUBSTITUIR ESTA IMAGEM -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('../images/dashboard.jpg'); background-size: cover; background-position: center; opacity: 0.4;"></div>
+        
+        <!-- Conteúdo do Hero -->
+        <div style="position: relative; max-width: 1200px; margin: 0 auto; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 2rem; z-index: 10;">
+            <div style="max-width: 700px;">
+                <h1 style="margin: 0 0 1rem 0; font-size: 3rem; font-weight: 700; color: white; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                    Planeje, execute, evolua
+                </h1>
+                <p style="margin: 0 0 2rem 0; font-size: 1.25rem; color: rgba(255, 255, 255, 0.95); font-weight: 400; line-height: 1.6;">
+                    Busque abaixo a ferramenta perfeita para o seu trabalho
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="window.location.href='clientes.html'" style="background: #f59e0b; color: #000000; border: none; padding: 1rem 2rem; cursor: pointer; font-size: 1rem; font-weight: 600; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(245, 158, 11, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.4)'">
+                        <span class="material-icons">people</span>
+                        Gerenciar Clientes
+                    </button>
+                    <button onclick="window.location.href='vendas.html'" style="background: transparent; color: white; border: 2px solid rgba(255, 255, 255, 0.3); padding: 1rem 2rem; cursor: pointer; font-size: 1rem; font-weight: 600; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.borderColor='rgba(255, 255, 255, 0.5)'" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(255, 255, 255, 0.3)'">
+                        <span class="material-icons">trending_up</span>
+                        Nova Venda
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Container Principal -->
-    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; background: #f8fafc; min-height: calc(100vh - 470px);">
         
         <!-- Header do Dashboard -->
-        <div style="background: white; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <h1 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="material-icons" style="font-size: 2rem; color: #3b82f6;">dashboard</span>
+        <div style="background: #e5e7eb; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <!-- Título -->
+                <div style="text-align: center;">
+                    <h2 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937;">
                         Dashboard Executivo
-                    </h1>
-                    <p style="margin: 0; color: #6b7280; font-size: 1rem;">Visão geral e métricas principais do negócio - <span id="dashboard-date" style="font-weight: 500; color: #3b82f6;"></span></p>
+                    </h2>
+                    <p style="margin: 0; color: #000000; font-size: 0.95rem;">Visão geral e métricas principais do negócio - <span id="dashboard-date" style="font-weight: 500;"></span></p>
                 </div>
+                
+                <!-- Botões abaixo do título -->
                 <div style="display: flex; gap: 1rem;">
-                    <button onclick="atualizarDados()" style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                    <button onclick="atualizarDados()" style="background: transparent; color: #000000; border: 2px solid #000000; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#F59E0B'; this.style.borderColor='#F59E0B'; this.style.color='#000000'" onmouseout="this.style.background='transparent'; this.style.borderColor='#000000'; this.style.color='#000000'">
                         <span class="material-icons" style="font-size: 1rem;">refresh</span>
                         Atualizar
                     </button>
-                    <button onclick="window.location.href='relatorios.html'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                    <button onclick="window.location.href='relatorios.html'" style="background: transparent; color: #000000; border: 2px solid #000000; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#F59E0B'; this.style.borderColor='#F59E0B'; this.style.color='#000000'" onmouseout="this.style.background='transparent'; this.style.borderColor='#000000'; this.style.color='#000000'">
                         <span class="material-icons" style="font-size: 1rem;">assessment</span>
                         Relatórios
                     </button>
@@ -123,85 +180,125 @@
             </div>
         </div>
 
-        <!-- Métricas Principais (KPIs) -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <!-- Total Clientes -->
-            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Total de Clientes</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="total-clientes">...</h3>
-                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
-                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
-                            +12 esta semana
-                        </p>
-                    </div>
-                    <div style="background: #dbeafe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                        <span class="material-icons" style="color: #3b82f6; font-size: 1.5rem;">people</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vendas do Mês -->
-            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Vendas do Mês</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="vendas-mes">...</h3>
-                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
-                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
-                            +15% vs anterior
-                        </p>
-                    </div>
-                    <div style="background: #d1fae5; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                        <span class="material-icons" style="color: #10b981; font-size: 1.5rem;">attach_money</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Orçamentos Ativos -->
-            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Orçamentos Ativos</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="orcamentos-ativos">...</h3>
-                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #f59e0b; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
-                            <span class="material-icons" style="font-size: 0.9rem;">schedule</span>
-                            18 pendentes
-                        </p>
-                    </div>
-                    <div style="background: #fef3c7; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                        <span class="material-icons" style="color: #f59e0b; font-size: 1.5rem;">assignment</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Receita Total -->
-            <div style="background: white; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Receita Total</p>
-                        <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1f2937;" id="receita-total">...</h3>
-                        <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
-                            <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
-                            +22% este ano
-                        </p>
-                    </div>
-                    <div style="background: #ede9fe; padding: 0.75rem; display: flex; align-items: center; justify-content: center;">
-                        <span class="material-icons" style="color: #8b5cf6; font-size: 1.5rem;">account_balance</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Seta Toggle -->
+        <div style="display: flex; justify-content: center; margin: 1rem 0;">
+            <button id="toggleDashboard" onclick="toggleDashboardContent()" style="background: transparent; color: #000000; border: none; padding: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; transition: all 0.3s;" onmouseover="this.style.color='#F59E0B'" onmouseout="this.style.color='#000000'">
+                <span class="material-icons" id="toggleIcon" style="font-size: 2.5rem; transition: transform 0.3s;">expand_more</span>
+            </button>
         </div>
 
-        <!-- Seção Principal Simplificada -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+        <!-- Layout de 3 Colunas -->
+        <div id="dashboardContent" style="display: none; grid-template-columns: 1fr 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2rem; overflow: hidden; transition: all 0.3s ease;">
             
-            <!-- Coluna Esquerda: Atividades Recentes -->
-            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <!-- Coluna 1: KPIs Empilhados -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                
+                <!-- Total Clientes -->
+                <div style="background: white; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748B; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Total de Clientes</p>
+                            <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1E293B;" id="total-clientes">...</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                                <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                                +12 esta semana
+                            </p>
+                        </div>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">people</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendas do Mês -->
+                <div style="background: white; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748B; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Vendas do Mês</p>
+                            <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1E293B;" id="vendas-mes">...</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                                <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                                +15% vs anterior
+                            </p>
+                        </div>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">attach_money</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receita Total -->
+                <div style="background: white; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748B; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Receita Total</p>
+                            <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1E293B;" id="receita-total">...</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                                <span class="material-icons" style="font-size: 0.9rem;">trending_up</span>
+                                +22% este ano
+                            </p>
+                        </div>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">account_balance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orçamentos Ativos -->
+                <div style="background: white; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 0; font-size: 0.75rem; color: #64748B; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Orçamentos Ativos</p>
+                            <h3 style="margin: 0.25rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: #1E293B;" id="orcamentos-ativos">...</h3>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                                <span class="material-icons" style="font-size: 0.9rem;">schedule</span>
+                                18 pendentes
+                            </p>
+                        </div>
+                        <div style="background: transparent; padding: 0.75rem; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <span class="material-icons" style="color: #6b7280; font-size: 1.5rem;">assignment</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Coluna 2: Resumo do Dia e Meta Mensal -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                
+                <!-- Resumo do Dia -->
+                <div style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; flex: 1; display: flex; flex-direction: column;">
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #6b7280;">today</span>
+                            Resumo do Dia
+                        </h3>
+                    </div>
+                    <div style="padding: 1.5rem; flex: 1; display: flex; align-items: center;" id="resumo-dia">
+                        <!-- Conteúdo carregado via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Meta de Vendas -->
+                <div style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; flex: 1; display: flex; flex-direction: column;">
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="material-icons" style="font-size: 1.1rem; color: #6b7280;">target</span>
+                            Meta Mensal
+                        </h3>
+                    </div>
+                    <div style="padding: 1.5rem; flex: 1; display: flex; align-items: center;" id="meta-vendas">
+                        <!-- Conteúdo carregado via JavaScript -->
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Coluna 3: Atividades Recentes -->
+            <div style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px;">
                 <div style="padding: 1.25rem; border-bottom: 1px solid #e5e7eb;">
                     <h2 style="margin: 0; font-size: 1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">history</span>
+                        <span class="material-icons" style="font-size: 1.2rem; color: #6b7280;">history</span>
                         Atividades Recentes
                     </h2>
                 </div>
@@ -209,36 +306,7 @@
                     <!-- Conteúdo carregado via JavaScript -->
                 </div>
             </div>
-
-            <!-- Coluna Direita: Resumo e Status -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                
-                <!-- Resumo do Dia -->
-                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
-                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.1rem; color: #10b981;">today</span>
-                            Resumo do Dia
-                        </h3>
-                    </div>
-                    <div style="padding: 1rem;" id="resumo-dia">
-                        <!-- Conteúdo carregado via JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Meta de Vendas -->
-                <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
-                        <h3 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.1rem; color: #f59e0b;">target</span>
-                            Meta Mensal
-                        </h3>
-                    </div>
-                    <div style="padding: 1rem;" id="meta-vendas">
-                        <!-- Conteúdo carregado via JavaScript -->
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
     </div>
@@ -265,15 +333,28 @@
                 font-weight: 500;
                 z-index: 10001;
                 max-width: 400px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                background: ${type === 'success' ? '#059669' : type === 'error' ? '#DC2626' : type === 'warning' ? '#D97706' : '#1E3A8A'};
                 transform: translateX(400px);
                 transition: transform 0.3s ease-out;
             `;
             
-            // Adicionar ícone baseado no tipo
-            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
-            toast.textContent = `${icon} ${message}`;
+            // Adicionar ícone baseado no tipo usando Material Icons
+            const iconMap = {
+                'success': 'check_circle',
+                'error': 'error',
+                'warning': 'warning',
+                'info': 'info'
+            };
+            const iconName = iconMap[type] || 'info';
+            
+            toast.innerHTML = `
+                <span class="material-icons" style="font-size: 1.25rem;">${iconName}</span>
+                <span>${message}</span>
+            `;
             
             document.body.appendChild(toast);
             
@@ -321,29 +402,28 @@
             // Criar card de logout
             const logoutCard = document.createElement('div');
             logoutCard.style.cssText = `
-                background: #1a1a1a;
-                border: 2px solid #f59e0b;
+                background: white;
                 border-radius: 16px;
-                padding: 2rem;
+                padding: 2.5rem;
                 text-align: center;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
                 animation: slideIn 0.4s ease-out;
-                max-width: 350px;
+                max-width: 400px;
             `;
             
             logoutCard.innerHTML = `
-                <div style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">
-                    <span class="material-icons" style="font-size: 3rem;">logout</span>
+                <div style="color: #1E3A8A; font-size: 3rem; margin-bottom: 1rem;">
+                    <span class="material-icons" style="font-size: 4rem;">logout</span>
                 </div>
-                <h3 style="color: white; margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 600;">
-                    Saindo do sistema...
+                <h3 style="color: #1E293B; margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 600;">
+                    Saindo do sistema
                 </h3>
-                <p style="color: #cccccc; margin: 0 0 1.5rem 0; font-size: 0.9rem;">
-                    Obrigado por usar o Sistema Maiconsoft!
+                <p style="color: #64748B; margin: 0 0 1.5rem 0; font-size: 1rem;">
+                    Obrigado por usar o Sistema Maiconsoft
                 </p>
-                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #f59e0b;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #1E3A8A;">
                     <div class="loading-spinner"></div>
-                    <span style="font-size: 0.85rem; font-weight: 500;">Redirecionando...</span>
+                    <span style="font-size: 0.9rem; font-weight: 500;">Redirecionando...</span>
                 </div>
             `;
             
@@ -364,10 +444,10 @@
                 }
                 
                 .loading-spinner {
-                    width: 16px;
-                    height: 16px;
-                    border: 2px solid #333;
-                    border-top: 2px solid #f59e0b;
+                    width: 20px;
+                    height: 20px;
+                    border: 3px solid #E2E8F0;
+                    border-top: 3px solid #1E3A8A;
                     border-radius: 50%;
                     animation: spin 1s linear infinite;
                 }
@@ -535,24 +615,24 @@
         function loadAtividadesRecentes() {
             const atividades = `
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #3b82f6;">
-                        <span class="material-icons" style="color: #3b82f6; font-size: 1rem;">person_add</span>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #d1d5db;">
+                        <span class="material-icons" style="color: #6b7280; font-size: 1rem;">person_add</span>
                         <div style="flex: 1;">
                             <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Cliente cadastrado</div>
                             <div style="color: #9ca3af; font-size: 0.7rem;">14:30</div>
                         </div>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #10b981;">
-                        <span class="material-icons" style="color: #10b981; font-size: 1rem;">shopping_cart</span>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #d1d5db;">
+                        <span class="material-icons" style="color: #6b7280; font-size: 1rem;">shopping_cart</span>
                         <div style="flex: 1;">
                             <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Venda R$ 125.400</div>
                             <div style="color: #9ca3af; font-size: 0.7rem;">11:15</div>
                         </div>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #8b5cf6;">
-                        <span class="material-icons" style="color: #8b5cf6; font-size: 1rem;">assignment</span>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: #f8fafc; border-left: 3px solid #d1d5db;">
+                        <span class="material-icons" style="color: #6b7280; font-size: 1rem;">assignment</span>
                         <div style="flex: 1;">
                             <div style="font-weight: 500; color: #374151; font-size: 0.8rem;">Orçamento enviado</div>
                             <div style="color: #9ca3af; font-size: 0.7rem;">Ontem</div>
@@ -565,18 +645,18 @@
         
         function loadResumoDia() {
             const resumo = `
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
-                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Vendas</span>
-                        <span style="color: #3b82f6; font-weight: 600; font-size: 0.9rem;">3</span>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.9rem;">Vendas</span>
+                        <span style="color: #1E293B; font-weight: 600; font-size: 1rem;">3</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
-                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Receita</span>
-                        <span style="color: #10b981; font-weight: 600; font-size: 0.9rem;">R$ 18.500</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.9rem;">Receita</span>
+                        <span style="color: #1E293B; font-weight: 600; font-size: 1rem;">R$ 18.500</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem;">
-                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Clientes</span>
-                        <span style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">+2</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem;">
+                        <span style="color: #374151; font-weight: 500; font-size: 0.9rem;">Clientes</span>
+                        <span style="color: #1E293B; font-weight: 600; font-size: 1rem;">+2</span>
                     </div>
                 </div>
             `;
@@ -585,16 +665,16 @@
         
         function loadMetaVendas() {
             const meta = `
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #374151; font-weight: 500; font-size: 0.8rem;">Meta R$ 150k</span>
-                        <span style="color: #3b82f6; font-weight: 600; font-size: 0.9rem;">59.7%</span>
+                        <span style="color: #374151; font-weight: 500; font-size: 0.9rem;">Meta R$ 150k</span>
+                        <span style="color: #1E293B; font-weight: 600; font-size: 1rem;">59.7%</span>
                     </div>
-                    <div style="background: #f0f9ff; height: 0.4rem;">
-                        <div style="background: #3b82f6; height: 100%; width: 59.7%; transition: width 0.3s ease;"></div>
+                    <div style="background: #e5e7eb; height: 0.5rem; border-radius: 4px; overflow: hidden;">
+                        <div style="background: #6b7280; height: 100%; width: 59.7%; transition: width 0.3s ease;"></div>
                     </div>
                     <div style="text-align: center;">
-                        <span style="color: #6b7280; font-size: 0.75rem;">R$ 89.543 alcançado</span>
+                        <span style="color: #6b7280; font-size: 0.85rem;">R$ 89.543 alcançado</span>
                     </div>
                 </div>
             `;
@@ -620,24 +700,27 @@
         
         // Carregar dados do usuário logado
         async function loadUserData() {
+            console.log('🚀 Iniciando loadUserData...');
             const userData = localStorage.getItem('maiconsoft_user') || localStorage.getItem('userData');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
+                    console.log('👤 Dados do localStorage:', user);
                     
                     // Tentar buscar dados atualizados do backend
                     if (user.id || user.idUser) {
                         try {
-                            console.log('🔄 Buscando dados atualizados do usuário...');
                             const response = await APIService.users.getById(user.id || user.idUser);
                             const updatedUser = response.data || response;
                             
                             // Atualizar localStorage com dados atualizados
                             const mergedUser = {
                                 ...user,
+                                ...updatedUser,  // Incluir TODOS os dados atualizados incluindo profilePhotoPath
                                 tipoUsuario: updatedUser.roleName || user.tipoUsuario,
                                 roleName: updatedUser.roleName || user.roleName
                             };
+                            console.log('🔀 Dados mesclados para navbar:', mergedUser);
                             
                             localStorage.setItem('maiconsoft_user', JSON.stringify(mergedUser));
                             console.log('✅ Dados do usuário atualizados:', mergedUser);
@@ -681,40 +764,47 @@
             const avatarImage = document.getElementById('userAvatarImage');
             const avatarPlaceholder = document.getElementById('userAvatarPlaceholder');
             
-            console.log('🔍 Debug foto de perfil:', {
+            console.log('🔍 Debug foto de perfil NA NAVBAR:', {
                 user: user,
-                userCode: user?.codigo || user?.id,
+                userCode: user?.codigo || user?.id || user?.idUser,
                 profilePhotoPath: user?.profilePhotoPath,
                 baseURL: APIService?.baseURL,
-                fullImageURL: user?.profilePhotoPath ? `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}` : 'N/A'
+                fullImageURL: user?.profilePhotoPath ? `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}` : 'N/A',
+                avatarImageElement: avatarImage,
+                avatarPlaceholderElement: avatarPlaceholder
             });
             
-            if (user?.profilePhotoPath) {
+            if (user?.profilePhotoPath && avatarImage && avatarPlaceholder) {
                 const imageUrl = `${APIService.baseURL.replace('/api', '')}/${user.profilePhotoPath}`;
-                console.log('📸 Tentando carregar imagem:', imageUrl);
                 
                 // Configurar eventos de carregamento
                 avatarImage.onload = () => {
-                    console.log('✅ Foto de perfil carregada com sucesso');
                     avatarImage.style.display = 'block';
                     avatarPlaceholder.style.display = 'none';
                 };
                 
                 avatarImage.onerror = () => {
-                    console.error('❌ Erro ao carregar foto de perfil:', imageUrl);
+                    console.error('❌ Erro ao carregar foto de perfil NA NAVBAR:', imageUrl);
                     avatarImage.style.display = 'none';
                     avatarPlaceholder.style.display = 'flex';
                 };
                 
                 avatarImage.src = imageUrl;
             } else {
+                console.log('⚠️ Mostrando placeholder NA NAVBAR - razão:', {
+                    hasProfilePhotoPath: !!user?.profilePhotoPath,
+                    hasAvatarImage: !!avatarImage,
+                    hasAvatarPlaceholder: !!avatarPlaceholder
+                });
                 // Mostrar placeholder com inicial do nome
-                avatarImage.style.display = 'none';
-                avatarPlaceholder.style.display = 'flex';
-                
-                const firstLetter = (user?.nome || user?.name || 'U').charAt(0).toUpperCase();
-                avatarPlaceholder.textContent = firstLetter;
-                avatarPlaceholder.style.fontSize = '1rem';
+                if (avatarImage) avatarImage.style.display = 'none';
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'flex';
+                    
+                    const firstLetter = (user?.nome || user?.name || 'U').charAt(0).toUpperCase();
+                    avatarPlaceholder.textContent = firstLetter;
+                    avatarPlaceholder.style.fontSize = '1rem';
+                }
             }
         }
         
@@ -728,10 +818,26 @@
         
         // Função para atualizar dados manualmente
         async function atualizarDados() {
-            showNotification('🔄 Atualizando dados...', 'info', 2000);
+            showNotification('Atualizando dados...', 'info', 2000);
             showLoadingIndicators();
             await loadDashboardData();
-            showNotification('✅ Dados atualizados!', 'success', 2000);
+            showNotification('Dados atualizados com sucesso', 'success', 2000);
+        }
+        
+        // Função para mostrar/ocultar conteúdo do dashboard
+        function toggleDashboardContent() {
+            const content = document.getElementById('dashboardContent');
+            const icon = document.getElementById('toggleIcon');
+            
+            if (content.style.display === 'none' || content.style.display === '') {
+                // Expandir
+                content.style.display = 'grid';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                // Colapsar
+                content.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
         }
         
         // Função para obter nome do cargo

@@ -48,7 +48,7 @@
         }
         
         .notification.info {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, #F59E0B, #D97706);
         }
 
         /* Status Badges */
@@ -61,18 +61,21 @@
         }
         
         .status-ativo {
-            background: #dcfce7;
+            background: transparent;
             color: #166534;
+            border: 2px solid #166534;
         }
         
         .status-prospecto {
-            background: #fef3c7;
+            background: transparent;
             color: #92400e;
+            border: 2px solid #92400e;
         }
         
         .status-inativo {
-            background: #fee2e2;
+            background: transparent;
             color: #991b1b;
+            border: 2px solid #991b1b;
         }
         
         @keyframes slideIn {
@@ -116,6 +119,26 @@
         
         .no-results {
             opacity: 0.7;
+        }
+        
+        /* Estilos para botões de tab - IMPORTANTE: Sobrescrever qualquer CSS externo */
+        .tab-button {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            transition: all 0.2s !important;
+        }
+        
+        .tab-button.active {
+            background: #F59E0B !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+        }
+        
+        .tab-button:hover:not(.active) {
+            background: #f3f4f6 !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
         }
     </style>
 </head>
@@ -177,7 +200,7 @@
                         </div>
                         
                         <a href="perfil.html" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #374151; text-decoration: none; transition: all 0.3s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
-                            <span class="material-icons" style="font-size: 1.1rem; color: #3b82f6;">person</span>
+                            <span class="material-icons" style="font-size: 1.1rem; color: #F59E0B;">person</span>
                             Meu Perfil
                         </a>
                         
@@ -202,27 +225,28 @@
     <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8fafc; min-height: calc(100vh - 70px);">
         
         <!-- Header da Página -->
-        <div style="background: white; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="material-icons" style="font-size: 1.75rem; color: #3b82f6;">people</span>
+        <div style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/clientes.jpg') center/cover; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 2rem; border-radius: 8px; position: relative;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
+                <!-- Título -->
+                <div style="text-align: center;">
+                    <h1 style="margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; color: #ffffff;">
                         Gestão de Clientes
                     </h1>
-                    <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Cadastre e gerencie informações completas dos seus clientes</p>
+                    <p style="margin: 0; color: #ffffff; font-size: 0.95rem;">Cadastre e gerencie informações completas dos seus clientes</p>
                 </div>
                 
-                <!-- Tabs de Navegação -->
-                <div style="display: flex; background: #f3f4f6; padding: 0.25rem;">
+                <!-- Botões abaixo do título -->
+                <div style="display: flex; gap: 1rem;">
                     <button id="tab-cadastro-btn" class="tab-button" data-tab="tab-cadastro" onclick="console.log('🎯 ONCLICK Cadastrar!'); showTab('cadastro');"
-                            style="background: transparent; color: #6b7280; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                            style="background: #f3f4f6; border: 2px solid #000000; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px; color: #000000;">
                         <span class="material-icons" style="font-size: 1rem;">person_add</span>
                         Cadastrar
                     </button>
+                    
                     <button id="tab-lista-btn" class="tab-button active" data-tab="tab-lista" onclick="console.log('🎯 ONCLICK Lista!'); showTab('lista');"
-                            style="background: #3b82f6; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
-                        <span class="material-icons" style="font-size: 1rem;">search</span>
-                        Buscar
+                            style="background: #f3f4f6; border: 2px solid #000000; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px; color: #000000;">
+                        <span class="material-icons" style="font-size: 1rem;">list</span>
+                        Todos os Clientes
                     </button>
                 </div>
             </div>
@@ -230,13 +254,12 @@
 
         <!-- Conteúdo das Tabs -->
         <div id="tab-cadastro" class="tab-content" style="display: none;">
-            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+            <div style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); overflow: hidden; border-radius: 8px;">
 
                 <form id="clienteForm" style="padding: 0;">
                     <!-- Dados Básicos -->
                     <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
-                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">person</span>
+                        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 0.75rem 1rem; border-radius: 6px;">
                             Dados Básicos
                         </h3>
                         
@@ -277,8 +300,7 @@
 
                     <!-- Contatos -->
                     <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
-                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.2rem; color: #10b981;">contact_phone</span>
+                        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 0.75rem 1rem; border-radius: 6px;">
                             Contatos
                         </h3>
                         
@@ -311,8 +333,7 @@
 
                     <!-- Endereço -->
                     <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
-                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.2rem; color: #f59e0b;">location_on</span>
+                        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 0.75rem 1rem; border-radius: 6px;">
                             Endereço
                         </h3>
                         
@@ -357,8 +378,7 @@
 
                     <!-- Informações Comerciais -->
                     <div style="padding: 1.5rem;">
-                        <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.2rem; color: #8b5cf6;">business</span>
+                        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 0.75rem 1rem; border-radius: 6px;">
                             Informações Comerciais
                         </h3>
                         
@@ -407,17 +427,17 @@
 
                     <!-- Botões de Ação -->
                     <div style="padding: 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-                        <button type="button" onclick="limparFormulario()" style="background: #ef4444; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                        <button type="button" onclick="limparFormulario()" style="background: transparent; color: #ef4444; border: 2px solid #ef4444; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px;" onmouseover="this.style.background='#ef4444'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#ef4444';">
                             <span class="material-icons" style="font-size: 1rem;">clear</span>
                             Limpar
                         </button>
                         
                         <div style="display: flex; gap: 0.75rem;">
-                            <button type="button" onclick="salvarRascunho()" style="background: #f59e0b; color: white; border: none; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">
+                            <button type="button" onclick="salvarRascunho()" style="background: transparent; color: #f59e0b; border: 2px solid #f59e0b; padding: 0.7rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px;" onmouseover="this.style.background='#f59e0b'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#f59e0b';">
                                 <span class="material-icons" style="font-size: 1rem;">save</span>
                                 Rascunho
                             </button>
-                            <button type="submit" onclick="console.log('📝 ONCLICK Submit!'); event.preventDefault(); cadastrarCliente();" style="background: #10b981; color: white; border: none; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                            <button type="submit" onclick="console.log('📝 ONCLICK Submit!'); event.preventDefault(); cadastrarCliente();" style="background: transparent; color: #10b981; border: 2px solid #10b981; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border-radius: 6px;" onmouseover="this.style.background='#10b981'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#10b981';">
                                 <span class="material-icons" style="font-size: 1rem;">save</span>
                                 Cadastrar Cliente
                             </button>
@@ -429,12 +449,12 @@
 
         <!-- Tab: Lista de Clientes -->
         <div id="tab-lista" class="tab-content" style="display: block;">
-            <div style="background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem;">
+            <div style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 1.5rem; border-radius: 8px;">
                 <!-- Filtros e Busca -->
-                <div style="background: #f8fafc; padding: 1rem; margin-bottom: 1rem; border: 1px solid #e5e7eb;">
+                <div style="background: #f8fafc; padding: 1rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; border-radius: 6px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
                         <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                            <span class="material-icons" style="font-size: 1.2rem; color: #3b82f6;">search</span>
+                            <span class="material-icons" style="font-size: 1.2rem; color: #F59E0B;">search</span>
                             Buscar Clientes
                         </h3>
                         <div style="display: flex; gap: 0.75rem; align-items: center;">
@@ -445,17 +465,16 @@
                                 <option value="inativo">Inativo</option>
                             </select>
                             <input type="text" id="searchInput" placeholder="Nome, email ou CPF/CNPJ..." style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; font-size: 0.85rem; min-width: 250px;">
-                            <button onclick="console.log('🔍 Botão buscar clicado!'); buscarClientes();" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                            <button onclick="console.log('🔍 Botão buscar clicado!'); buscarClientes();" style="background: #F59E0B; color: #000000; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#D97706'" onmouseout="this.style.background='#F59E0B'">
                                 <span class="material-icons" style="font-size: 0.9rem;">search</span>
                                 Buscar
-                            </button>
-                            <button onclick="console.log('🔄 Botão recarregar clicado!'); loadClientesList();" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
-                                <span class="material-icons" style="font-size: 0.9rem;">refresh</span>
-                                Recarregar
                             </button>
                             <button onclick="console.log('🧹 Botão limpar filtros clicado!'); limparFiltros();" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
                                 <span class="material-icons" style="font-size: 0.9rem;">clear</span>
                                 Limpar
+                            </button>
+                            <button onclick="console.log('🔄 Botão recarregar clicado!'); loadClientesList();" style="background: #10b981; color: white; border: none; padding: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'" title="Recarregar lista">
+                                <span class="material-icons" style="font-size: 0.9rem;">refresh</span>
                             </button>
                         </div>
                     </div>
@@ -508,10 +527,10 @@
 
     <!-- Modal de Visualização -->
     <div id="viewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: white; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="background: white; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2); border-radius: 12px;">
             <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
                 <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="material-icons" style="color: #3b82f6;">visibility</span>
+                    <span class="material-icons" style="color: #F59E0B;">visibility</span>
                     Detalhes do Cliente
                 </h2>
                 <button onclick="closeViewModal()" style="background: none; border: none; cursor: pointer; color: #6b7280; padding: 0.5rem;">
@@ -526,7 +545,7 @@
 
     <!-- Modal de Edição -->
     <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: white; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="background: white; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2); border-radius: 12px;">
             <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
                 <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
                     <span class="material-icons" style="color: #f59e0b;">edit</span>
@@ -544,7 +563,7 @@
                     <button type="button" onclick="closeEditModal()" style="padding: 0.75rem 1.5rem; border: 1px solid #d1d5db; background: white; color: #374151; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
                         Cancelar
                     </button>
-                    <button type="submit" id="editSubmitBtn" style="padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                    <button type="submit" id="editSubmitBtn" style="padding: 0.75rem 1.5rem; background: #F59E0B; color: #000000; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
                         <span class="material-icons" style="font-size: 1rem; margin-right: 0.5rem;">save</span>
                         Salvar Alterações
                     </button>
@@ -595,15 +614,15 @@
             const allButtons = document.querySelectorAll('.tab-button');
             allButtons.forEach(btn => {
                 btn.classList.remove('active');
-                btn.style.background = 'transparent';
-                btn.style.color = '#6b7280';
+                btn.style.background = '#ffffff';
+                btn.style.color = '#000000';
             });
             
             const activeButton = document.getElementById('tab-' + tabName + '-btn');
             if (activeButton) {
                 activeButton.classList.add('active');
-                activeButton.style.background = '#3b82f6';
-                activeButton.style.color = 'white';
+                activeButton.style.background = '#F59E0B';
+                activeButton.style.color = '#000000';
             }
         }
         
@@ -919,10 +938,10 @@
                             <p style="margin: 1rem 0 0 0; font-size: 1.1rem;">Erro ao carregar clientes</p>
                             <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #6b7280;">${error.message}</p>
                             <div style="margin-top: 1rem;">
-                                <button onclick="loadClientesList()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem; margin-right: 0.5rem;">
+                                <button onclick="loadClientesList()" style="background: #F59E0B; color: #000000; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem; margin-right: 0.5rem;">
                                     Tentar Novamente
                                 </button>
-                                <button onclick="testarAPIDirecta()" style="background: #f59e0b; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
+                                <button onclick="testarAPIDirecta()" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
                                     Debug API
                                 </button>
                             </div>
@@ -948,7 +967,7 @@
                         <span class="material-icons" style="font-size: 3rem; color: #d1d5db;">people</span>
                         <p style="margin: 1rem 0 0 0; font-size: 1.1rem;">Nenhum cliente cadastrado</p>
                         <div style="margin-top: 1rem;">
-                            <button onclick="loadClientesList()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
+                            <button onclick="loadClientesList()" style="background: #F59E0B; color: #000000; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 0.25rem;">
                                 Recarregar
                             </button>
                         </div>
@@ -982,18 +1001,18 @@
                         <td style="padding: 0.75rem; color: #374151;">${cliente.telefone || 'N/A'}</td>
                         <td style="padding: 0.75rem; color: #374151;">${cliente.email || 'N/A'}</td>
                         <td style="padding: 0.75rem;">
-                            <span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 500;">
+                            <span style="background: transparent; color: #10b981; border: 2px solid #10b981; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 500;">
                                 ATIVO
                             </span>
                         </td>
                         <td style="padding: 0.75rem; text-align: center;">
-                            <button onclick="viewCliente(${cliente.idCliente})" style="background: #3b82f6; color: white; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem;" title="Visualizar">
+                            <button onclick="viewCliente(${cliente.idCliente})" style="background: transparent; color: #6b7280; border: 2px solid #6b7280; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem; transition: all 0.2s;" onmouseover="this.style.background='#6b7280'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#6b7280';" title="Visualizar">
                                 <span class="material-icons" style="font-size: 1rem;">visibility</span>
                             </button>
-                            <button onclick="editCliente(${cliente.idCliente})" style="background: #f59e0b; color: white; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem;" title="Editar">
+                            <button onclick="editCliente(${cliente.idCliente})" style="background: transparent; color: #6b7280; border: 2px solid #6b7280; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem; transition: all 0.2s;" onmouseover="this.style.background='#6b7280'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#6b7280';" title="Editar">
                                 <span class="material-icons" style="font-size: 1rem;">edit</span>
                             </button>
-                            <button onclick="deleteCliente(${cliente.idCliente})" style="background: #ef4444 !important; color: white !important; border: none; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem; display: inline-block !important; visibility: visible !important;" title="Excluir">
+                            <button onclick="deleteCliente(${cliente.idCliente})" style="background: transparent; color: #6b7280; border: 2px solid #6b7280; padding: 0.25rem 0.5rem; margin: 0 0.25rem; cursor: pointer; border-radius: 0.25rem; transition: all 0.2s;" onmouseover="this.style.background='#ef4444'; this.style.borderColor='#ef4444'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.borderColor='#6b7280'; this.style.color='#6b7280';" title="Excluir">
                                 <span class="material-icons" style="font-size: 1rem;">delete</span>
                             </button>
                         </td>
@@ -1047,7 +1066,8 @@
                     if (response.ok) {
                         const data = await response.json();
                         console.log(`📊 ${url} - Dados:`, data);
-                        alert(`API funcionando! Encontrados ${Array.isArray(data) ? data.length : 'dados'} registros em ${url}`);
+                        // alert(`API funcionando! Encontrados ${Array.isArray(data) ? data.length : 'dados'} registros em ${url}`);
+                        console.log(`✅ API funcionando! Encontrados ${Array.isArray(data) ? data.length : 'dados'} registros em ${url}`);
                         return;
                     }
                 } catch (error) {
@@ -1055,7 +1075,8 @@
                 }
             }
             
-            alert('Nenhuma URL da API está funcionando. Verifique se o backend está rodando na porta 8090.');
+            // alert('Nenhuma URL da API está funcionando. Verifique se o backend está rodando na porta 8090.');
+            console.error('❌ Nenhuma URL da API está funcionando. Verifique se o backend está rodando na porta 8090.');
         }
         
         // Função melhorada para verificar se há dados no backend
@@ -1287,7 +1308,7 @@
                             <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
                                 ${error.message}
                             </div>
-                            <button onclick="buscarClientes()" style="margin-top: 1rem; background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                            <button onclick="buscarClientes()" style="margin-top: 1rem; background: #F59E0B; color: #000000; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                                 Tentar Novamente
                             </button>
                         </div>
@@ -1571,7 +1592,8 @@
         
         function salvarRascunho() {
             console.log('💾 Salvando rascunho...');
-            alert('Funcionalidade de rascunho será implementada');
+            // alert('Funcionalidade de rascunho será implementada');
+            showAlert('Funcionalidade de rascunho será implementada', 'info');
         }
         
         // Função para deletar cliente
@@ -1619,14 +1641,16 @@
                 }
                 
                 console.log('✅ Cliente deletado com sucesso!', responseData);
-                alert('Cliente excluído com sucesso!');
+                // alert('Cliente excluído com sucesso!');
+                // showAlert('Cliente excluído com sucesso!', 'success');
                 
                 // Recarregar a lista
                 loadClientesList();
                 
             } catch (error) {
                 console.error('❌ Erro ao deletar cliente:', error);
-                alert('Erro ao excluir cliente: ' + error.message);
+                // alert('Erro ao excluir cliente: ' + error.message);
+                showAlert('Erro ao excluir cliente: ' + error.message, 'error');
             }
         }
         
@@ -1800,6 +1824,20 @@
                 verificarDadosBackend: typeof verificarDadosBackend,
                 testarAPIDirecta: typeof testarAPIDirecta
             });
+            
+            // Inicializar estilos dos botões de tab
+            const cadastroBtn = document.getElementById('tab-cadastro-btn');
+            const listaBtn = document.getElementById('tab-lista-btn');
+            
+            if (cadastroBtn) {
+                cadastroBtn.style.background = '#ffffff';
+                cadastroBtn.style.color = '#000000';
+            }
+            
+            if (listaBtn) {
+                listaBtn.style.background = '#F59E0B';
+                listaBtn.style.color = '#000000';
+            }
             
             // Configurar listeners de busca
             setupSearchListeners();

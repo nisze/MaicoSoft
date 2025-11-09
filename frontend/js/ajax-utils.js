@@ -427,4 +427,4 @@ window.ajax = {
     clearCache: () => window.ajaxUtils.clearCache()
 };
 
-console.log('✅ Ajax Utils carregado com sucesso');
+// console.log('✅ Ajax Utils carregado com sucesso');
