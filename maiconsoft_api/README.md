@@ -122,9 +122,9 @@ java -jar target/maiconsoft_api-0.0.1-SNAPSHOT.jar
 `
 
 ### Docker:
-`ash
+`ash
 # Na raiz do projeto
-docker-compose -f docker/docker-compose.yml up --build
+docker-compose up --build
 `
 
 ##  Testes
@@ -155,7 +155,6 @@ Logs so salvos em:
 
 - /docs/README.md - Viso geral do projeto
 - /docs/SETUP.md - Guia de instalao detalhado
-- /docker/README.md - Documentao do Docker
 - /scripts/README.md - Scripts de gerenciamento
 
 ##  Troubleshooting

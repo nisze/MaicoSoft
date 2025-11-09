@@ -6,9 +6,7 @@
 
 ```
 MAICOSOFT/
-  docker/              # Docker Compose completo
-    docker-compose.yml  # 3 containers (DB + API + Frontend)
-    README.md           # Documentao Docker
+  docker-compose.yml   # Docker Compose (DB + API + Frontend)
   scripts/             # Scripts utilitrios
     start.bat           # Iniciar tudo
     stop.bat            # Parar tudo
@@ -327,7 +325,7 @@ Desenvolvido por estudantes da faculdade.
 ##  Suporte
 
 Para dvidas ou problemas:
-1. Verifique a documentao em `docker/README.md`
+1. Verifique a documentao do projeto
 2. Verifique logs: `scripts\logs.bat`
 3. Use o reset: `scripts\reset.bat`
 
@@ -345,6 +343,5 @@ scripts\rebuild.bat
 
 ##  Mais Informao
 
-- [Docker README](../docker/README.md) - Documentao Docker completa
 - [Scripts README](../scripts/README.md) - Guia dos scripts
 - [SETUP.md](SETUP.md) - Setup detalhado passo a passo

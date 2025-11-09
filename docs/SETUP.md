@@ -45,7 +45,7 @@ cd MaicoSoft
 
 ```
 MaicoSoft/
- docker/            Deve existir
+ docker-compose.yml Deve existir
  scripts/           Deve existir
  frontend/          Deve existir
  maiconsoft_api/    Deve existir
@@ -249,7 +249,7 @@ server.port=8090  # Mudar para outra porta
 
 #### Frontend (Docker)
 
-Editar `docker/docker-compose.yml`:
+Editar `docker-compose.yml`:
 ```yaml
 frontend:
   ports:
@@ -258,7 +258,7 @@ frontend:
 
 #### PostgreSQL (Docker)
 
-Editar `docker/docker-compose.yml`:
+Editar `docker-compose.yml`:
 ```yaml
 postgres:
   ports:
@@ -450,7 +450,6 @@ Aps setup completo:
 ##  Recursos Adicionais
 
 - [README Principal](README.md)
-- [Docker README](../docker/README.md)
 - [Scripts README](../scripts/README.md)
 
 ##  Dicas de Desenvolvimento

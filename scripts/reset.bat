@@ -22,7 +22,7 @@ if /i not "%confirm%"=="S" (
     exit /b 0
 )
 
-cd /d "%~dp0..\docker"
+cd /d "%~dp0.."
 
 echo.
 echo [1/3] Parando e removendo containers...

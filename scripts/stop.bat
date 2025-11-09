@@ -9,7 +9,7 @@ echo  MAICONSOFT - Parar Aplicacao
 echo ====================================
 echo.
 
-cd /d "%~dp0..\docker"
+cd /d "%~dp0.."
 
 echo Parando containers...
 docker-compose down

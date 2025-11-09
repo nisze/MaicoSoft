@@ -11,6 +11,6 @@ echo.
 echo Pressione Ctrl+C para sair
 echo.
 
-cd /d "%~dp0..\docker"
+cd /d "%~dp0.."
 
 docker-compose logs -f --tail=100

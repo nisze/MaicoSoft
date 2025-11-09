@@ -23,8 +23,8 @@ if %errorlevel% neq 0 (
 echo [OK] Docker esta rodando
 echo.
 
-REM Ir para pasta docker
-cd /d "%~dp0..\docker"
+REM Ir para pasta raiz do projeto
+cd /d "%~dp0.."
 
 echo Iniciando containers...
 echo.

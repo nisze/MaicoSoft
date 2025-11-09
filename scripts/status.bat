@@ -9,7 +9,7 @@ echo  MAICONSOFT - Status dos Containers
 echo ====================================
 echo.
 
-cd /d "%~dp0..\docker"
+cd /d "%~dp0.."
 
 docker-compose ps
 
