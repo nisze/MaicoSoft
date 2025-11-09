@@ -868,10 +868,9 @@
                     location: window.location.href
                 });
                 
-                // Testar múltiplas URLs
+                // Usar URL relativa para funcionar em qualquer ambiente
                 const testUrls = [
-                    'http://localhost:8090/api/clientes',
-                    'http://127.0.0.1:8090/api/clientes'
+                    '/api/clientes'
                 ];
                 
                 let successUrl = null;
@@ -1046,10 +1045,8 @@
             console.log('🧪 Testando API diretamente...');
             
             const urls = [
-                'http://localhost:8090/api/clientes',
-                'http://127.0.0.1:8090/api/clientes',
-                window.APIService?.baseURL + '/clientes'
-            ].filter(Boolean);
+                '/api/clientes'
+            ];
             
             for (const url of urls) {
                 console.log(`🔗 Testando: ${url}`);
@@ -1084,7 +1081,7 @@
             console.log('🔍 Verificando dados no backend...');
             
             try {
-                const url = 'http://localhost:8090/api/clientes';
+                const url = '/api/clientes';
                 const response = await fetch(url);
                 
                 if (response.ok) {
@@ -1611,7 +1608,7 @@
                 console.log('🔄 Deletando cliente...');
                 
                 // Usar fetch direto para ter controle total da resposta
-                const response = await fetch(`http://localhost:8090/api/clientes/${id}`, {
+                const response = await fetch(`/api/clientes/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
