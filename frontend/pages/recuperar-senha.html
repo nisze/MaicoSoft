@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - Maiconsoft</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            background: #111111;
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #f59e0b;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 0.95rem;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid #444444;
+            border-radius: 8px;
+            background: #222222;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #2a2a2a;
+        }
+
+        input::placeholder {
+            color: #666666;
+        }
+
+        .token-input {
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #000000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #cccccc;
+            border: 1px solid #444444;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #222222;
+            border-color: #666666;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .password-requirements {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-requirements h4 {
+            color: #f59e0b;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .password-requirements li {
+            color: #cccccc;
+            font-size: 0.85rem;
+            padding: 0.25rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .password-requirements li:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: #f59e0b;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .progress-steps:before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: #333333;
+            z-index: 0;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+        }
+
+        .progress-step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #222222;
+            border: 2px solid #444444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            color: #666666;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .progress-step.active .progress-step-circle {
+            background: #f59e0b;
+            border-color: #f59e0b;
+            color: #000000;
+        }
+
+        .progress-step.completed .progress-step-circle {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .progress-step-label {
+            color: #666666;
+            font-size: 0.75rem;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .progress-step.completed .progress-step-label {
+            color: #10b981;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-top-color: #000000;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-to-login {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-to-login a {
+            color: #f59e0b;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-to-login a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Recuperar Senha</h1>
+            <p id="headerDescription">Validação de token</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-step active" id="step1Progress">
+                <div class="progress-step-circle">1</div>
+                <div class="progress-step-label">Token</div>
+            </div>
+            <div class="progress-step" id="step2Progress">
+                <div class="progress-step-circle">2</div>
+                <div class="progress-step-label">Nova Senha</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Validar Token -->
+        <div class="step active" id="step1">
+            <div class="alert alert-info">
+                ℹ️ Digite o token de 6 caracteres que você recebeu no seu email.
+            </div>
+
+            <form id="validateTokenForm">
+                <div class="form-group">
+                    <label for="token">Token de Recuperação</label>
+                    <input 
+                        type="text" 
+                        id="token" 
+                        name="token" 
+                        class="token-input"
+                        placeholder="ABC123" 
+                        maxlength="6"
+                        required
+                        autocomplete="off">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="validateBtn">
+                    Validar Token
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='login.html'">
+                    Voltar ao Login
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Redefinir Senha -->
+        <div class="step" id="step2">
+            <div class="alert alert-success">
+                ✅ Token validado com sucesso! Agora defina sua nova senha.
+            </div>
+
+            <div class="password-requirements">
+                <h4>Requisitos da senha:</h4>
+                <ul>
+                    <li>Mínimo de 6 caracteres</li>
+                    <li>As senhas devem coincidir</li>
+                </ul>
+            </div>
+
+            <form id="resetPasswordForm">
+                <input type="hidden" id="validatedToken" name="validatedToken">
+
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha</label>
+                    <input 
+                        type="password" 
+                        id="newPassword" 
+                        name="newPassword" 
+                        placeholder="Digite sua nova senha"
+                        minlength="6"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Nova Senha</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="Digite novamente sua senha"
+                        minlength="6"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="resetBtn">
+                    Redefinir Senha
+                </button>
+            </form>
+        </div>
+
+        <div class="back-to-login">
+            <a href="login.html">← Voltar ao login</a>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script>
+        const API_URL = CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
+        let validToken = null;
+
+        // Step 1: Validar Token
+        document.getElementById('validateTokenForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const token = document.getElementById('token').value.trim().toUpperCase();
+            const validateBtn = document.getElementById('validateBtn');
+            
+            if (token.length !== 6) {
+                showAlert('error', '❌ O token deve ter 6 caracteres');
+                return;
+            }
+
+            validateBtn.disabled = true;
+            validateBtn.innerHTML = 'Validando...<span class="loading"></span>';
+
+            try {
+                const response = await fetch(`${API_URL}/password-reset/validate/${token}`);
+                const data = await response.json();
+
+                if (data.valid) {
+                    validToken = token;
+                    document.getElementById('validatedToken').value = token;
+                    
+                    // Atualizar progress
+                    document.getElementById('step1Progress').classList.add('completed');
+                    document.getElementById('step1Progress').classList.remove('active');
+                    document.getElementById('step2Progress').classList.add('active');
+                    
+                    // Trocar steps
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
+                    
+                    // Atualizar header
+                    document.getElementById('headerDescription').textContent = 'Defina sua nova senha';
+                } else {
+                    showAlert('error', '❌ Token inválido ou expirado. Solicite um novo token.');
+                }
+            } catch (error) {
+                console.error('Erro ao validar token:', error);
+                showAlert('error', '❌ Erro ao conectar com o servidor');
+            } finally {
+                validateBtn.disabled = false;
+                validateBtn.textContent = 'Validar Token';
+            }
+        });
+
+        // Step 2: Redefinir Senha
+        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const token = document.getElementById('validatedToken').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const resetBtn = document.getElementById('resetBtn');
+
+            // Validações
+            if (newPassword.length < 6) {
+                showAlert('error', '❌ A senha deve ter no mínimo 6 caracteres');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showAlert('error', '❌ As senhas não coincidem');
+                return;
+            }
+
+            resetBtn.disabled = true;
+            resetBtn.innerHTML = 'Redefinindo...<span class="loading"></span>';
+
+            try {
+                const response = await fetch(`${API_URL}/password-reset/reset`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                        novaSenha: newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Sucesso!
+                    document.getElementById('step2').innerHTML = `
+                        <div class="alert alert-success" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                            <h3 style="color: #86efac; margin-bottom: 1rem;">Senha Redefinida!</h3>
+                            <p style="color: #cccccc; margin-bottom: 1.5rem;">
+                                Sua senha foi alterada com sucesso. Você será redirecionado para o login.
+                            </p>
+                            <div class="loading" style="margin: 0 auto;"></div>
+                        </div>
+                    `;
+
+                    // Redirecionar após 3 segundos
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                } else {
+                    showAlert('error', `❌ ${data.message || 'Erro ao redefinir senha'}`);
+                    resetBtn.disabled = false;
+                    resetBtn.textContent = 'Redefinir Senha';
+                }
+            } catch (error) {
+                console.error('Erro ao redefinir senha:', error);
+                showAlert('error', '❌ Erro ao conectar com o servidor');
+                resetBtn.disabled = false;
+                resetBtn.textContent = 'Redefinir Senha';
+            }
+        });
+
+        // Converter token para maiúsculas automaticamente
+        document.getElementById('token').addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Função auxiliar para mostrar alertas
+        function showAlert(type, message) {
+            const alertClass = `alert-${type}`;
+            const existingAlert = document.querySelector('.alert-error, .alert-success');
+            
+            if (existingAlert && existingAlert.classList.contains('alert-info') === false) {
+                existingAlert.remove();
+            }
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${alertClass}`;
+            alert.textContent = message;
+            alert.style.animation = 'fadeIn 0.3s ease-in';
+
+            const activeStep = document.querySelector('.step.active form');
+            activeStep.insertBefore(alert, activeStep.firstChild);
+
+            // Remover após 5 segundos
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

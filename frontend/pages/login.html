@@ -126,9 +126,9 @@
                             <span style="color: #cccccc;">👨‍💼 Admin Sistema</span>
                             <span style="color: #f59e0b; font-weight: 600;">ADM001</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #222222; border-radius: 4px; cursor: pointer; transition: background 0.3s;" onclick="preencherCodigo('RNXOXS')" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'">
-                            <span style="color: #cccccc;">👤 Maria Santos</span>
-                            <span style="color: #f59e0b; font-weight: 600;">RNXOXS</span>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #222222; border-radius: 4px; cursor: pointer; transition: background 0.3s;" onclick="preencherCodigo('W36K0D')" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'">
+                            <span style="color: #cccccc;">👤 Maico</span>
+                            <span style="color: #f59e0b; font-weight: 600;">W36K0D</span>
                         </div>
                     </div>
                     <p style="color: #666666; font-size: 0.75rem; margin: 0.75rem 0 0 0; text-align: center; font-style: italic;">
@@ -273,6 +273,13 @@
                                 Cancelar
                             </button>
                         </div>
+                        
+                        <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #333;">
+                            <p style="color: #999; font-size: 0.85rem; margin-bottom: 0.5rem;">Já recebeu o token?</p>
+                            <a href="recuperar-senha.html" style="color: #f59e0b; text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+                                Clique aqui para validar →
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -347,6 +354,107 @@
                 });
             } else {
                 console.warn('⚠️ Função checkBackendConnection não encontrada');
+            }
+
+            // ========================================
+            // MODAL ESQUECI MINHA SENHA
+            // ========================================
+            console.log('🔑 Inicializando modal de recuperação de senha...');
+            
+            const forgotBtn = document.getElementById('forgotPasswordBtn');
+            const forgotModal = document.getElementById('forgotPasswordModal');
+            const closeForgotBtn = document.getElementById('closeForgotModal');
+            const cancelForgotBtn = document.getElementById('cancelForgotBtn');
+            const forgotForm = document.getElementById('forgotPasswordForm');
+
+            console.log('🔍 Elementos do modal:', {
+                forgotBtn: !!forgotBtn,
+                forgotModal: !!forgotModal,
+                forgotForm: !!forgotForm
+            });
+
+            // Abrir modal
+            if (forgotBtn) {
+                forgotBtn.addEventListener('click', function() {
+                    console.log('🔓 Abrindo modal de recuperação de senha');
+                    forgotModal.style.display = 'flex';
+                });
+            }
+
+            // Fechar modal
+            function fecharModal() {
+                console.log('🔒 Fechando modal');
+                forgotModal.style.display = 'none';
+                forgotForm.reset();
+            }
+
+            if (closeForgotBtn) {
+                closeForgotBtn.addEventListener('click', fecharModal);
+            }
+
+            if (cancelForgotBtn) {
+                cancelForgotBtn.addEventListener('click', fecharModal);
+            }
+
+            // Fechar ao clicar fora
+            if (forgotModal) {
+                forgotModal.addEventListener('click', function(e) {
+                    if (e.target === forgotModal) {
+                        fecharModal();
+                    }
+                });
+            }
+
+            // Processar formulário
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const identifier = document.getElementById('forgotIdentifier').value.trim();
+                    
+                    if (!identifier) {
+                        alert('Por favor, digite seu código de acesso ou email');
+                        return;
+                    }
+
+                    console.log('🔄 Solicitando reset para:', identifier);
+
+                    try {
+                        const apiUrl = CONFIG?.API_BASE_URL || 'http://localhost:8090/api';
+                        const url = `${apiUrl}/password-reset/request`;
+                        
+                        console.log('📡 Fazendo requisição para:', url);
+                        
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                codigoAcesso: identifier
+                            })
+                        });
+
+                        console.log('📥 Status da resposta:', response.status);
+                        
+                        const data = await response.json();
+                        console.log('📥 Dados recebidos:', data);
+
+                        if (data.success) {
+                            alert(`✅ Solicitação enviada com sucesso!\n\n� Se o código de acesso existir e tiver email cadastrado, você receberá um token no seu email.\n\n⏰ O token é válido por 15 minutos.\n\n💡 Verifique sua caixa de entrada e spam.`);
+                            
+                            console.log('✅ Solicitação processada');
+                            
+                            fecharModal();
+                        } else {
+                            alert(`❌ ${data.message || 'Erro ao processar solicitação'}`);
+                            console.error('❌ Erro na resposta:', data);
+                        }
+                    } catch (error) {
+                        console.error('❌ Erro ao solicitar reset:', error);
+                        alert('❌ Erro ao conectar com o servidor.\n\nVerifique:\n- Se a API está rodando\n- Se está na porta 8090\n- Console do navegador para mais detalhes');
+                    }
+                });
             }
         });
     </script>
