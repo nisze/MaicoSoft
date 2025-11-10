@@ -14,7 +14,7 @@ const ENV_CONFIG = {
     
     // Configuração para produção
     production: {
-        API_BASE_URL: '/api', // URL relativa em produção
+        API_BASE_URL: 'http://localhost:8090/api', // URL relativa em produção
         ENABLE_MOCK: false,
         DEBUG: false
     }
