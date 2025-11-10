@@ -24,7 +24,7 @@ const ENV_CONFIG = {
 window.FORCE_DEVELOPMENT = true;
 const CURRENT_ENV = 'development';
 const CONFIG = {
-    API_BASE_URL: '/api',  // Usar proxy do Nginx em Docker
+    API_BASE_URL: 'http://localhost:8090/api',  // Usar proxy do Nginx em Docker
     ENABLE_MOCK: false,
     DEBUG: true
 };
