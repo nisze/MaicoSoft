@@ -922,18 +922,49 @@
             }
 
             async updateProfile(data) {
-                // Update current user data
-                if (this.currentUser) {
-                    Object.assign(this.currentUser, data);
-                    localStorage.setItem('maiconsoft_user', JSON.stringify(this.currentUser));
-                    localStorage.setItem('userData', JSON.stringify(this.currentUser));
-                }
+                try {
+                    // Preparar dados para envio (incluindo profilePhotoPath se existir)
+                    const userData = {
+                        nome: data.nome,
+                        email: data.email,
+                        telefone: data.telefone,
+                        cpf: data.cpf,
+                        profilePhotoPath: this.currentUser.profilePhotoPath || null
+                    };
 
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                this.updateUserInfo();
-                this.addActivityItem('Perfil atualizado', 'Informações do perfil foram modificadas', new Date());
+                    // Incluir senha apenas se foi fornecida
+                    if (data.newPassword && data.newPassword.trim()) {
+                        userData.senha = data.newPassword;
+                    }
+
+                    // Atualizar no backend
+                    const response = await APIService.users.update(this.currentUser.id, userData);
+                    
+                    // Update current user data with response
+                    if (this.currentUser) {
+                        // Manter o profilePhotoPath atual
+                        const currentPhotoPath = this.currentUser.profilePhotoPath;
+                        
+                        Object.assign(this.currentUser, {
+                            nome: response.nome || data.nome,
+                            email: response.email || data.email,
+                            telefone: response.telefone || data.telefone,
+                            cpf: response.cpf || data.cpf,
+                            profilePhotoPath: currentPhotoPath
+                        });
+                        
+                        // Salvar no localStorage sem a senha
+                        const { senha, newPassword, confirmPassword, ...userDataToSave } = this.currentUser;
+                        localStorage.setItem('maiconsoft_user', JSON.stringify(userDataToSave));
+                        localStorage.setItem('userData', JSON.stringify(userDataToSave));
+                    }
+                    
+                    this.updateUserInfo();
+                    this.addActivityItem('Perfil atualizado', 'Informações do perfil foram modificadas', new Date());
+                } catch (error) {
+                    console.error('Erro ao atualizar perfil no backend:', error);
+                    throw error;
+                }
             }
 
             async handleAvatarUpload(event) {

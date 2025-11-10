@@ -195,8 +195,9 @@ class UserProfileManager {
                 preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
             }
             
-            // Salvar imagem no localStorage (temporariamente)
+            // Salvar imagem em data URL para upload posterior
             this.profileData.profileImage = e.target.result;
+            console.log('📸 Imagem selecionada para upload');
         };
         reader.readAsDataURL(file);
     }
@@ -280,24 +281,69 @@ class UserProfileManager {
     }
 
     async saveProfile(profileData) {
-        // Simular chamada para API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Atualizar dados locais
-        if (this.currentUser) {
-            Object.assign(this.currentUser, profileData);
-            
-            // Remover senha dos dados salvos
-            const { senha, ...userDataToSave } = this.currentUser;
-            localStorage.setItem('usuarioLogado', JSON.stringify(userDataToSave));
-
-            // Salvar imagem separadamente se existir
-            if (profileData.profileImage) {
-                localStorage.setItem(`profile_image_${this.currentUser.codigo || this.currentUser.id}`, profileData.profileImage);
+        const userId = this.currentUser.id;
+        
+        // Se houver uma nova imagem de perfil, fazer upload primeiro
+        if (profileData.profileImage && profileData.profileImage.startsWith('data:image')) {
+            try {
+                // Converter data URL para Blob
+                const response = await fetch(profileData.profileImage);
+                const blob = await response.blob();
+                
+                // Criar FormData para upload
+                const formData = new FormData();
+                formData.append('file', blob, 'profile.jpg');
+                formData.append('userId', userId);
+                
+                // Fazer upload da imagem
+                const uploadResponse = await fetch(`${window.API_BASE_URL}/api/uploads/profile-photo`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    profileData.profilePhotoPath = uploadData.filePath;
+                    console.log('✅ Foto de perfil enviada:', uploadData.filePath);
+                } else {
+                    throw new Error('Falha no upload da foto');
+                }
+            } catch (error) {
+                console.error('Erro no upload da imagem:', error);
+                throw new Error('Não foi possível fazer upload da foto de perfil');
             }
         }
 
-        console.log('✅ Perfil salvo:', profileData);
+        // Atualizar perfil no backend
+        const { profileImage, ...dataToSend } = profileData;
+        
+        const response = await fetch(`${window.API_BASE_URL}/api/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao atualizar perfil');
+        }
+
+        const updatedUser = await response.json();
+
+        // Atualizar dados locais
+        Object.assign(this.currentUser, updatedUser);
+        
+        // Remover senha dos dados salvos
+        const { senha, ...userDataToSave } = this.currentUser;
+        localStorage.setItem('usuarioLogado', JSON.stringify(userDataToSave));
+
+        // Salvar imagem no localStorage também (para preview imediato)
+        if (profileData.profileImage) {
+            localStorage.setItem(`profile_image_${userId}`, profileData.profileImage);
+        }
+
+        console.log('✅ Perfil salvo:', updatedUser);
     }
 
     async handleForgotPasswordSubmit(event) {
