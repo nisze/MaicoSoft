@@ -221,7 +221,7 @@ docker-compose up -d --build
 
 ## Licença
 
-Este projeto foi desenvolvido como Trabalho de Conclusão de Curso (TCC) para fins acadêmicos.
+Este projeto foi desenvolvido como Trabalho de Conclusão de semestre das matérias Programação WEB e Laboratório de Engenharia de Software.
 
 **Fatec Itapetininga - Análise e Desenvolvimento de Sistemas - 2025**
 
