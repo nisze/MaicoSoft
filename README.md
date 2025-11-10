@@ -172,7 +172,7 @@ MaicoSoft/
 
 A documentação técnica completa do projeto (92 páginas) está disponível em PDF:
 
-- **PDF:** [Maiconsoft - Documentação Completa do Projeto.pdf](./Maiconsoft%20-%20Documentação%20Completa%20do%20Projeto.pdf)
+- **PDF:** [Maicosoft - Documentação Completa do Projeto.pdf](./Maicosoft%20-%20Documentação%20Completa%20do%20Projeto.pdf)
 
 ### Conteúdo da Documentação:
 1. Equipe de Desenvolvimento
