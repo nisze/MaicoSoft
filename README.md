@@ -2,6 +2,8 @@
 
 Sistema de Gestão Empresarial para Construção Civil
 
+![Demo do Sistema](https://github.com/nisze/MaicoSoft/blob/master/Imagens/cut.gif)
+
 ---
 
 ## Sobre o Projeto
